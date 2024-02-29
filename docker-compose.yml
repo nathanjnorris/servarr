@@ -1,0 +1,18 @@
+services:
+  plex:
+    image: plexinc/pms-docker
+    container_name: plex
+    network_mode: host
+    ports:
+      - 32000:32000
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/GMT-8
+      - VERSION=docker
+      - PLEX_CLAIM=<token>
+    volumes:
+      - /mnt/c/plex/config:/config
+      - /mnt/c/plex/tv:/tv
+      - /mnt/c/plex/movies:/movies
+    restart: unless-stopped
