@@ -16,4 +16,4 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         private_key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        commands: '/bin/bash -c "cat file.txt < input.txt"'
+        commands: '/bin/bash -c "cat fie.txt < input.txt"'
