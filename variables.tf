@@ -14,13 +14,21 @@ variable "account_id" {
 }
 
 variable "ssh_host" {
+    sensitive = true
+    type = string
 }
 
 variable "ssh_username" {
+    sensitive = true
+    type = string
 }
 
 variable "ssh_private_key" {
+    sensitive = true
+    type = string
 }
 
 variable "ssh_port" {
+    sensitive = true
+    type = number
 }
