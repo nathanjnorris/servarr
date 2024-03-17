@@ -1,4 +1,4 @@
-name: "Automatic release"
+name: "SSH to server"
 on:
   push:
     branches:
@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: connect to remote server
-      uses: nathanjnorris/cloudflared-ssh-action@latest
+      uses: npgy/cloudflared-ssh-action@v2.0
       with:
         host: ${{ vars.SSH_HOST }}
         username: ${{ secrets.SSH_SERNAME }}
         private_key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        commands: cd /home/nathan mkdir hello_world
+        commands: cd repo_dir; git pull; /usr/local/bin/docker compose up --build -d
