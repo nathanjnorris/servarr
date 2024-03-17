@@ -1,0 +1,19 @@
+name: "Automatic release"
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Run SSH command
+    runs-on: ubuntu-latest
+    steps:
+    - name: connect to remote server
+      uses: nathanjnorris/cloudflared-ssh-action@latest
+      with:
+        host: ${{ vars.SSH_HOST }}
+        username: ${{ secrets.SSH_SERNAME }}
+        private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        commands: cd /home/nathan mkdir hello_world
