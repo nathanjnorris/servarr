@@ -12,8 +12,8 @@ jobs:
     - name: connect to remote server
       uses: npgy/cloudflared-ssh-action@v2.0
       with:
-        host: ${{ vars.SSH_HOST }}
+        host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_SERNAME }}
         private_key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        commands: cd repo_dir; git pull; /usr/local/bin/docker compose up --build -d
+        commands: cd /home/nathan mkdir hello_world
