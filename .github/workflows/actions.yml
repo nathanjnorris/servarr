@@ -16,4 +16,4 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         private_key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        commands: "$( cat <<'EOT' echo "These commands will be run on: $( uname -a )" echo "They are executed by: $( whoami )" EOT )"
+        commands: "/bin/bash <<'EOT' echo \"These commands will be run on: $( uname -a )\" EOT"
