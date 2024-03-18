@@ -16,4 +16,6 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         private_key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.SSH_PORT }}
-        commands: "whoami "
+        service_token_id: ${{ secrets.SERVICE_TOKEN_ID }}
+        service_token_secret: ${{ secrets.SERVICE_TOKEN_SECRET }}
+        commands: "whoami"
