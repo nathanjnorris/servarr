@@ -1,5 +1,6 @@
 name: Check on pull request
-on: pull_request
+on: 
+  pull_request:
 permissions: read-all
 jobs:
   tf_format_and_docs:
