@@ -106,7 +106,8 @@ resource "cloudflare_ruleset" "bots_nathanjn_com" {
 
   rules {
     action = "managed_challenge"
-    expression  = "(not cf.client.bot)"
+    expression  = "(not cf.client.bot and not http.user_agent contains \"cloudflared\")"
+    description = "Present bots a managed challenge, except for the cloudflared user agent"
     enabled     = true
   }
 }
