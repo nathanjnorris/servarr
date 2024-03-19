@@ -8,9 +8,14 @@
 # Zone configuration 
 ###
 
-# Create a zone
+# Import zone
 data "cloudflare_zone" "nathanjn_com" {
   name = "nathanjn.com"
+}
+
+# Enable DNSSEC
+resource "cloudflare_zone_dnssec" "example" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
 }
 
 # Customize zone settings
@@ -24,7 +29,6 @@ resource "cloudflare_zone_settings_override" "nathanjn_com" {
     automatic_https_rewrites = "on"
   }
 }
-
 
 ###
 # DNS records
