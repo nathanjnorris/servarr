@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     cloudflare = {
-      source = "cloudflare/cloudflare"
+      source  = "cloudflare/cloudflare"
       version = ">= 4.9.0"
     }
     random = {
@@ -23,5 +23,5 @@ provider "random" {
 }
 
 provider "github" {
-    token = var.github_access_token
+  token = var.github_access_token
 }
