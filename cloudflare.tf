@@ -8,16 +8,37 @@
 # Zone configuration 
 ###
 
-# Create a zone
+# Import zone
 data "cloudflare_zone" "nathanjn_com" {
   name = "nathanjn.com"
 }
+
+# Enable DNSSEC
+resource "cloudflare_zone_dnssec" "example" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+}
+
+# Customize zone settings
+resource "cloudflare_zone_settings_override" "nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  settings {
+    always_use_https         = "on"
+    min_tls_version          = "1.2"
+    opportunistic_encryption = "on"
+    tls_1_3                  = "on"
+    automatic_https_rewrites = "on"
+  }
+}
+
+###
+# DNS records
+###
 
 # Create a CNAME record that routes plex.nathanjn.com to the tunnel.
 resource "cloudflare_record" "plex_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "plex"
-  value   = "${cloudflare_tunnel.servarr_tunnel.cname}"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -26,7 +47,7 @@ resource "cloudflare_record" "plex_nathanjn_com" {
 resource "cloudflare_record" "servarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "servarr"
-  value   = "${cloudflare_tunnel.servarr_tunnel.cname}"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -49,20 +70,20 @@ resource "cloudflare_tunnel" "servarr_tunnel" {
 
 # Create the Plex configuration for the tunnel.
 resource "cloudflare_tunnel_config" "servarr_tunnel" {
-  tunnel_id = cloudflare_tunnel.servarr_tunnel.id
+  tunnel_id  = cloudflare_tunnel.servarr_tunnel.id
   account_id = var.account_id
   config {
-   ingress_rule {
-     hostname = "plex.nathanjn.com"
-     service  = "http://plex:32400"
-   }
     ingress_rule {
-     hostname = "servarr.nathanjn.com"
-     service  = "ssh://172.17.0.1"
-   }
-   ingress_rule {
-     service  = "http_status:404"
-   }
+      hostname = "plex.nathanjn.com"
+      service  = "http://plex:32400"
+    }
+    ingress_rule {
+      hostname = "servarr.nathanjn.com"
+      service  = "ssh://172.17.0.1"
+    }
+    ingress_rule {
+      service = "http_status:404"
+    }
   }
 }
 
@@ -81,7 +102,7 @@ resource "cloudflare_ruleset" "cache_nathanjn_com" {
   rules {
     action = "set_cache_settings"
     action_parameters {
-        cache = false
+      cache = false
       browser_ttl {
         mode = "bypass"
       }
@@ -105,9 +126,9 @@ resource "cloudflare_ruleset" "bots_nathanjn_com" {
   phase       = "http_request_firewall_custom"
 
   rules {
-    action = "managed_challenge"
+    action      = "managed_challenge"
     expression  = "(not cf.client.bot and not http.user_agent contains \"cloudflared\")"
-    description = "Present bots a managed challenge, except for the cloudflared user agent"
+    description = "Present bots a managed challenge (except cloudflared user agent)"
     enabled     = true
   }
 }
@@ -130,7 +151,7 @@ resource "cloudflare_access_application" "servarr_nathanjn_com" {
   name             = "Access application for servarr.nathanjn.com"
   domain           = "servarr.nathanjn.com"
   session_duration = "30m"
-  type = "ssh"
+  type             = "ssh"
 }
 
 # Creates an Access policy for SSH.
