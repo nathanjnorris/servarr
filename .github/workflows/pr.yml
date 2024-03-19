@@ -1,0 +1,26 @@
+name: Check on pull request
+on: pull_request
+permissions: read-all
+jobs:
+  tf_format_and_docs:
+    name: Terraform formatting and documentation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout
+        with: 
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Terraform Setup
+        uses: hashicorp/setip-terraform@v2
+      - name: Terraform Format
+        run: terraform fmt -recursive .
+      - name: Terraform Docs
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          find-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: true
+          git-commit-message: Terraform formatting and documentation

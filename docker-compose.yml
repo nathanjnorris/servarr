@@ -1,18 +1,70 @@
+version: "3.8"
+name: servarr
 services:
+  cloudflare:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    command: tunnel run --token <token>
+    restart: unless-stopped
   plex:
-    image: plexinc/pms-docker
+    image: lscr.io/linuxserver/plex:latest
     container_name: plex
-    network_mode: host
+    environment:
+      - device=/dev/dri:/dev/dri
+      - PUID=1000
+      - PGID=1000
+      - TZ=Canada/Pacific
+      - VERSION=docker
+    volumes: 
+      - plex-config:/config
+      - data:/data
+    restart: unless-stopped
     ports:
-      - 32000:32000
+      - 32400:32400
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Etc/GMT-8
-      - VERSION=docker
-      - PLEX_CLAIM=<token>
+      - TZ=Canada/Pacific
     volumes:
-      - /mnt/c/plex/config:/config
-      - /mnt/c/plex/tv:/tv
-      - /mnt/c/plex/movies:/movies
+      - sonarr-config:/config
+      - data:/data
+    ports:
+      - 8989:8989
     restart: unless-stopped
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Canada/Pacific
+    volumes:
+      - radarr-config:/config
+      - data:/data
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+  # gluetun:
+  #   image: qmcgaw/gluetun:latest
+  #   container_name: gluetun
+  #   cap_add:
+  #     - NET_ADMIN
+  #   environment:
+  #     - VPN_SERVICE_PROVIDER=mullvad
+  #     - VPN_TYPE=wireguard
+  #     - WIREGUARD_PRIVATE_KEY=<key>
+  #     - WIREGUARD_ADDRESSES=10.69.232.169/32
+  #     - SERVER_CITIES=Vancouver
+  # watchtower:
+  #   image: containrrr/watchtower
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   command: --interval 30
+volumes:
+  plex-config:
+  sonarr-config:
+  radarr-config:
+  data:
