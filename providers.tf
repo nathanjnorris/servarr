@@ -1,4 +1,11 @@
 terraform {
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "nathanjnorris-org"
+    workspaces {
+      name = "servarr"
+    }
+  }
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
@@ -12,16 +19,16 @@ terraform {
       version = "~> 6.0"
     }
   }
-  required_version = ">= 0.13"
+  required_version = "~> 1.7.0"
 }
 
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-provider "random" {
-}
-
 provider "github" {
   token = var.github_access_token
+}
+
+provider "random" {
 }
