@@ -22,10 +22,10 @@ resource "cloudflare_record" "plex_nathanjn_com" {
   proxied = true
 }
 
-# Create a CNAME record that routes ssh.nathanjn.com to the tunnel.
-resource "cloudflare_record" "ssh_nathanjn_com" {
+# Create a CNAME record that routes servarr.nathanjn.com to the tunnel.
+resource "cloudflare_record" "servarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
-  name    = "ssh"
+  name    = "servarr"
   value   = "${cloudflare_tunnel.servarr_tunnel.cname}"
   type    = "CNAME"
   proxied = true
@@ -48,7 +48,7 @@ resource "cloudflare_tunnel" "servarr_tunnel" {
 }
 
 # Create the Plex configuration for the tunnel.
-resource "cloudflare_tunnel_config" "servarr_tunnel_plex" {
+resource "cloudflare_tunnel_config" "servarr_tunnel" {
   tunnel_id = cloudflare_tunnel.servarr_tunnel.id
   account_id = var.account_id
   config {
@@ -57,8 +57,8 @@ resource "cloudflare_tunnel_config" "servarr_tunnel_plex" {
      service  = "http://plex:32400"
    }
     ingress_rule {
-     hostname = "ssh.nathanjn.com/servarr"
-     service  = "ssh://172.17.0.1:22"
+     hostname = "servarr.nathanjn.com"
+     service  = "ssh://172.17.0.1"
    }
    ingress_rule {
      service  = "http_status:404"
@@ -71,9 +71,9 @@ resource "cloudflare_tunnel_config" "servarr_tunnel_plex" {
 ###
 
 # Bypass the cache
-resource "cloudflare_ruleset" "nathanjn_com" {
+resource "cloudflare_ruleset" "cache_nathanjn_com" {
   zone_id     = data.cloudflare_zone.nathanjn_com.id
-  name        = "Cache Bypass Ruleset"
+  name        = "Cache bypass"
   description = "Ruleset to bypass cache"
   kind        = "zone"
   phase       = "http_request_cache_settings"
@@ -93,34 +93,62 @@ resource "cloudflare_ruleset" "nathanjn_com" {
 }
 
 ###
-# Bot management 
+# WAF rules
 ###
 
-# Enable the free tier of bot management
+# Challenge bots
+resource "cloudflare_ruleset" "bots_nathanjn_com" {
+  zone_id     = data.cloudflare_zone.nathanjn_com.id
+  name        = "Challenge bots"
+  description = "Ruleset to present bots a managed challenge"
+  kind        = "zone"
+  phase       = "http_request_firewall_custom"
 
-resource "cloudflare_bot_management" "nathanjn_com" {
-  zone_id    = data.cloudflare_zone.nathanjn_com.id
-  fight_mode = true
+  rules {
+    action = "managed_challenge"
+    expression  = "(not cf.client.bot)"
+    enabled     = true
+  }
 }
 
 ###
 # Zero Trust 
 ###
 
+# Create an service token for GitHub Actions to authenticate
+resource "cloudflare_access_service_token" "github_actions" {
+  account_id = var.account_id
+  name       = "GitHub Actions"
+  duration   = "forever"
+}
+
+
 # Create an Access application to control who can connect to SSH.
-resource "cloudflare_access_application" "ssh_nathanjn_com" {
+resource "cloudflare_access_application" "servarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "Access application for ssh.nathanjn.com"
-  domain           = "ssh.nathanjn.com"
-  session_duration = "4h"
+  name             = "Access application for servarr.nathanjn.com"
+  domain           = "servarr.nathanjn.com"
+  session_duration = "1h"
 }
 
 # Creates an Access policy for SSH.
-resource "cloudflare_access_policy" "ssh_nathanjn_com" {
-  application_id = cloudflare_access_application.ssh_nathanjn_com.id
+resource "cloudflare_access_policy" "service_servarr" {
+  application_id = cloudflare_access_application.servarr_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Access policy for ssh.nathanjn.com"
+  name           = "Service auth"
   precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.github_actions.id]
+  }
+}
+
+# Creates an Access policy for SSH.
+resource "cloudflare_access_policy" "user_servarr" {
+  application_id = cloudflare_access_application.servarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]

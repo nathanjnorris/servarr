@@ -1,18 +1,22 @@
-name: Pull down and compose up
-on: 
+name: "SSH to server"
+on:
   push:
-    branches: 
-    - main
+    branches:
+      - main
+
 jobs:
   deploy:
-    name: Deploy
+    name: Run SSH command
     runs-on: ubuntu-latest
     steps:
-    - name: Connect to servarr
-      uses: nathanjnorris/cloudflared-ssh-action@v1.0
+    - name: connect to remote server
+      uses: nathanjnorris/cloudflared-ssh-action@latest
       with:
-        host: ${{ vars.HOST }}
-        username: ${{ secrets.USERNAME }}
-        private_key: ${{ secrets.PRIVKEY }}
-        port: ${{ secrets.PORT }}
-        commands: cd repo_dir; git pull; /usr/local/bin/docker compose up --build -d
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        private_key_filename: ${{ secrets.SSH_PRIVATE_KEY_FILENAME }}
+        private_key_value: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
+        port: ${{ secrets.SSH_PORT }}
+        service_token_id: ${{ secrets.SERVICE_TOKEN_ID }}
+        service_token_secret: ${{ secrets.SERVICE_TOKEN_SECRET }}
+        commands: "whoami"
