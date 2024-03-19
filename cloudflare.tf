@@ -129,7 +129,8 @@ resource "cloudflare_access_application" "servarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "Access application for servarr.nathanjn.com"
   domain           = "servarr.nathanjn.com"
-  session_duration = "1h"
+  session_duration = "30m"
+  type = "ssh"
 }
 
 # Creates an Access policy for SSH.
