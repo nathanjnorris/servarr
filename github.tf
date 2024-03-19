@@ -1,7 +1,7 @@
 resource "github_actions_secret" "servar_tunnel_token" {
   repository      = "servarr"
   secret_name     = "servarr_tunnel_token"
-  encrypted_value = "${cloudflare_tunnel.servarr_tunnel.tunnel_token}"
+  plaintext_value = "${cloudflare_tunnel.servarr_tunnel.tunnel_token}"
 }
 
 resource "github_actions_secret" "service_token_id" {
@@ -13,7 +13,7 @@ resource "github_actions_secret" "service_token_id" {
 resource "github_actions_secret" "service_token_secret" {
   repository      = "servarr"
   secret_name     = "service_token_secret"
-  encrypted_value = "${cloudflare_access_service_token.github_actions.client_secret}"
+  plaintext_value = "${cloudflare_access_service_token.github_actions.client_secret}"
 }
 
 resource "github_actions_secret" "ssh_private_key_value" {
@@ -39,8 +39,6 @@ resource "github_actions_secret" "ssh_private_key_filename" {
   secret_name     = "ssh_private_key_filename"
   plaintext_value = var.ssh_private_key_filename
 }
-
-
 
 resource "github_actions_secret" "ssh_port" {
   repository      = "servarr"
