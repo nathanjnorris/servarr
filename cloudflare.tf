@@ -13,6 +13,23 @@ data "cloudflare_zone" "nathanjn_com" {
   name = "nathanjn.com"
 }
 
+# Customize zone settings
+resource "cloudflare_zone_settings_override" "nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  settings {
+    always_use_https = "on"
+    min_tls_version = "1.2"
+    opportunistic_encryption = "on"
+    tls_1_3 = "on"
+    automatic_https_rewrites = "on"
+  }
+}
+
+
+###
+# DNS records
+###
+
 # Create a CNAME record that routes plex.nathanjn.com to the tunnel.
 resource "cloudflare_record" "plex_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
