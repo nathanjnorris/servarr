@@ -10,16 +10,6 @@ variable "github_access_token" {
   sensitive   = true
 }
 
-variable "zone_id" {
-  type        = string
-  description = "The zone identifier, the basic resource for working with Cloudflare and is roughly equivalent to a domain name that the user purchases."
-}
-
-variable "zone" {
-  type        = string
-  description = "The DNS zone name"
-}
-
 variable "account_id" {
   type        = string
   description = "The account identifier, the basic resource for working with Cloudflare zones, teams and users"

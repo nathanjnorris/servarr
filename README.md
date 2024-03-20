@@ -1,5 +1,5 @@
 # servarr
- 
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -60,8 +60,6 @@ No modules.
 | <a name="input_ssh_private_key_filename"></a> [ssh\_private\_key\_filename](#input\_ssh\_private\_key\_filename) | The filename of the private key used for authentication | `string` | n/a | yes |
 | <a name="input_ssh_private_key_value"></a> [ssh\_private\_key\_value](#input\_ssh\_private\_key\_value) | The value of the private key used for authentication. Use '<br>' to escape new lines. | `string` | n/a | yes |
 | <a name="input_ssh_username"></a> [ssh\_username](#input\_ssh\_username) | The username used for authentication | `string` | n/a | yes |
-| <a name="input_zone"></a> [zone](#input\_zone) | The DNS zone name | `string` | n/a | yes |
-| <a name="input_zone_id"></a> [zone\_id](#input\_zone\_id) | The zone identifier, the basic resource for working with Cloudflare and is roughly equivalent to a domain name that the user purchases. | `string` | n/a | yes |
 
 ## Outputs
 
