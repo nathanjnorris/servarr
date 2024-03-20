@@ -1,11 +1,11 @@
 terraform {
-  backend "remote" {
-    hostname     = "app.terraform.io"
-    organization = "nathanjnorris-org"
-    workspaces {
-      name = "servarr"
-    }
-  }
+  # backend "remote" {
+  #   hostname     = "app.terraform.io"
+  #   organization = "nathanjnorris-org"
+  #   workspaces {
+  #     name = "servarr"
+  #   }
+  # }
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
