@@ -28,10 +28,10 @@ resource "github_actions_variable" "ssh_port" {
   value         = var.ssh_port
 }
 
-resource "github_actions_secret" "ssh_username" {
+resource "github_actions_variable" "ssh_username" {
   repository      = "servarr"
-  secret_name     = "ssh_username"
-  plaintext_value = var.ssh_username
+  variable_name   = "ssh_username"
+  value           = var.ssh_username
 }
 
 resource "github_actions_variable" "ssh_private_key_filename" {
