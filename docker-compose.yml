@@ -1,11 +1,11 @@
 version: "3.8"
 name: servarr
 services:
-  cloudflare:
-    image: cloudflare/cloudflared:latest
-    container_name: cloudflared
-    command: tunnel run --token <token>
-    restart: unless-stopped
+  # cloudflare:
+  #   image: cloudflare/cloudflared:latest
+  #   container_name: cloudflared
+  #   command: tunnel run --token <token>
+  #   restart: unless-stopped
   plex:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
