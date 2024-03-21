@@ -11,11 +11,6 @@ jobs:
     name: Run SSH command
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    - name: ls
-      run: |
-          ls
     - name: connect to remote server
       uses: nathanjnorris/cloudflared-ssh-action@latest
       with:
@@ -26,4 +21,4 @@ jobs:
         port: ${{ vars.SSH_PORT }}
         service_token_id: ${{ vars.SERVICE_TOKEN_ID }}
         service_token_secret: ${{ secrets.SERVICE_TOKEN_SECRET }}
-        commands: mkdir hello_world -v
+        commands: cd servarr; git pull; /usr/local/bin/docker compose up --build -d
