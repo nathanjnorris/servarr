@@ -63,5 +63,7 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_servarr_tunnel_token"></a> [servarr\_tunnel\_token](#output\_servarr\_tunnel\_token) | Token used by a connector to authenticate and run the tunnel. |
 <!-- END_TF_DOCS -->
