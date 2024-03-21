@@ -11,6 +11,11 @@ jobs:
     name: Run SSH command
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: ls
+      run: |
+          ls
     - name: connect to remote server
       uses: nathanjnorris/cloudflared-ssh-action@latest
       with:
