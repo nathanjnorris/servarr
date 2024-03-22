@@ -21,4 +21,4 @@ jobs:
         port: ${{ vars.SSH_PORT }}
         service_token_id: ${{ vars.SERVICE_TOKEN_ID }}
         service_token_secret: ${{ secrets.SERVICE_TOKEN_SECRET }}
-        commands: cd servarr; git pull; echo TUNNEL_TOKEN=${{ secrets.SERVICE_TOKEN_SECRET }} > .env; docker compose up --build -d
+        commands: cd servarr; git pull; echo "TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}" > .env; docker compose up --build -d

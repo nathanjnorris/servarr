@@ -70,6 +70,3 @@ volumes:
   sonarr-config:
   radarr-config:
   data:
-secrets:
-  token:
-    environment: "SERVICE_TOKEN_SECRET"
