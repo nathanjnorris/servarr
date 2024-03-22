@@ -5,8 +5,6 @@ services:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
     command: tunnel run --token ${TUNNEL_TOKEN}
-    secrets:
-      - token
     restart: unless-stopped
   plex:
     image: lscr.io/linuxserver/plex:latest
