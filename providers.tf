@@ -8,7 +8,7 @@ terraform {
       name = "servarr"
     }
   }
-  
+
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
