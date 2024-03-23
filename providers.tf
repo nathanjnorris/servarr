@@ -1,12 +1,14 @@
 terraform {
   required_version = "~> 1.7.0"
-  backend "remote" {
-    hostname     = "app.terraform.io"
+
+  cloud {
     organization = "nathanjnorris-org"
+
     workspaces {
       name = "servarr"
     }
   }
+
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"

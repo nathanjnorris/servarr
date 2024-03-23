@@ -4,14 +4,52 @@ on:
       - closed
     branches:
       - 'main'
+
+env:
+  TF_CLOUD_ORGANIZATION: "nathanjnorris-org"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  TF_WORKSPACE: "servarr"
+  CONFIG_DIRECTORY: "./"
     
 jobs:
-  if_merged:
+  terraform_apply:
+    if: github.event.pull_request.merged == true
+    name: Terraform apply
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload configuration
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        id: apply-upload
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.CONFIG_DIRECTORY }}
+
+      - name: Create apply run
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+        id: apply-run
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
+
+      - name: Apply run
+        uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.0
+        if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
+        id: apply
+        with:
+          run: ${{ steps.apply-run.outputs.run_id }}
+          comment: "Apply Run from GitHub Actions CI ${{ github.sha }}"
+  
+  ssh_command:
     if: github.event.pull_request.merged == true
     name: Run SSH command
     runs-on: ubuntu-latest
     steps:
-    - name: connect to remote server
+    - name: Connect and run command on remote server
       uses: nathanjnorris/cloudflared-ssh-action@latest
       with:
         host: ${{ vars.SSH_HOST }}
@@ -21,4 +59,4 @@ jobs:
         port: ${{ vars.SSH_PORT }}
         service_token_id: ${{ vars.SERVICE_TOKEN_ID }}
         service_token_secret: ${{ secrets.SERVICE_TOKEN_SECRET }}
-        commands: cd servarr; git pull; echo "TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}" > .env; docker compose up --build -d
+        commands: cd servarr; git pull; echo "TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}" > tunnel_token.txt; echo "MULLVAD_PRIVATE_KEY=${{ secrets.MULLVAD_PRIVATE_KEY }}" > mullvad_private_key.txt; docker compose pull; docker compose up --build -d
