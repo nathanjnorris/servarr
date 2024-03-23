@@ -45,3 +45,9 @@ resource "github_actions_secret" "ssh_private_key_value" {
   secret_name     = "ssh_private_key_value"
   plaintext_value = var.ssh_private_key_value
 }
+
+resource "github_actions_secret" "mullvad_private_key" {
+  repository      = "servarr"
+  secret_name     = "mullvad_private_key"
+  plaintext_value = var.mullvad_private_key
+}

@@ -37,6 +37,12 @@ variable "ssh_private_key_filename" {
 
 variable "ssh_private_key_value" {
   type        = string
-  description = "The value of the private key used for authentication. Use '\n' to escape new lines."
+  description = "The value of the private key used for authentication"
+  sensitive   = true
+}
+
+variable "mullvad_private_key" {
+  type        = string
+  description = "The base64 encoded value of the private key used for the Mullvad VPN"
   sensitive   = true
 }

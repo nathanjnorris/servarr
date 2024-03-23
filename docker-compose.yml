@@ -4,8 +4,10 @@ services:
   cloudflare:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
-    command: tunnel run --token ${TUNNEL_TOKEN}
+    command: tunnel run --token /run/secrets/tunnel_token
     restart: unless-stopped
+    secrets:
+      - tunnel_token
   plex:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
@@ -47,22 +49,31 @@ services:
     ports:
       - 7878:7878
     restart: unless-stopped
-  # gluetun:
-  #   image: qmcgaw/gluetun:latest
-  #   container_name: gluetun
-  #   cap_add:
-  #     - NET_ADMIN
-  #   environment:
-  #     - VPN_SERVICE_PROVIDER=mullvad
-  #     - VPN_TYPE=wireguard
-  #     - WIREGUARD_PRIVATE_KEY=<key>
-  #     - WIREGUARD_ADDRESSES=10.69.232.169/32
-  #     - SERVER_CITIES=Vancouver
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=/run/secrets/mullvad_private_key
+      - WIREGUARD_ADDRESSES=10.69.232.169/32
+      - SERVER_CITIES=Vancouver
+    secrets:
+      - mullvad_private_key
   # watchtower:
   #   image: containrrr/watchtower
   #   volumes:
   #     - /var/run/docker.sock:/var/run/docker.sock
   #   command: --interval 30
+
+secrets:
+   tunnel_token:
+     file: tunnel_token.txt
+   mullvad_private_key:
+     file: mullvad_private_key.txt
+
 volumes:
   plex-config:
   sonarr-config:
