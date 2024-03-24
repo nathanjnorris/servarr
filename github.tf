@@ -51,3 +51,9 @@ resource "github_actions_secret" "mullvad_private_key" {
   secret_name     = "mullvad_private_key"
   plaintext_value = var.mullvad_private_key
 }
+
+resource "github_actions_secret" "s3_token" {
+  repository      = "servarr"
+  secret_name     = "s3_token"
+  plaintext_value = var.s3_token
+}
