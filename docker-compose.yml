@@ -1,6 +1,7 @@
 version: "3.8"
 name: servarr
 services:
+  # Networking
   cloudflare:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
@@ -8,47 +9,7 @@ services:
     restart: unless-stopped
     secrets:
       - tunnel_token
-  plex:
-    image: lscr.io/linuxserver/plex:latest
-    container_name: plex
-    environment:
-      - device=/dev/dri:/dev/dri
-      - PUID=1000
-      - PGID=1000
-      - TZ=Canada/Pacific
-      - VERSION=docker
-    volumes: 
-      - plex-config:/config
-      - data:/data
-    restart: unless-stopped
-    ports:
-      - 32400:32400
-  sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Canada/Pacific
-    volumes:
-      - sonarr-config:/config
-      - data:/data
-    ports:
-      - 8989:8989
-    restart: unless-stopped
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Canada/Pacific
-    volumes:
-      - radarr-config:/config
-      - data:/data
-    ports:
-      - 7878:7878
-    restart: unless-stopped
+
   gluetun:
     image: qmcgaw/gluetun:latest
     container_name: gluetun
@@ -62,20 +23,288 @@ services:
       - SERVER_CITIES=Vancouver
     secrets:
       - mullvad_private_key
-  # watchtower:
-  #   image: containrrr/watchtower
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   command: --interval 30
 
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - TZ=Canada/Pacific
+    ports:
+      - 8191:8191
+    restart: unless-stopped
+
+  # User-facing apps
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    environment:
+      - device=/dev/dri:/dev/dri
+      - PUID=13001
+      - PGID=13000
+      - TZ=Canada/Pacific
+      - VERSION=docker
+    volumes: 
+      - plex-config:/config
+      - /mnt/data/media:/media
+    labels:
+      - docker-volume-backup.stop-during-backup=plex
+    ports:
+      - 32400:32400
+    restart: unless-stopped
+  
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=13002
+      - PGID=13000
+      - TZ=Canada/Pacific
+    volumes:
+      - overseerr-config:/config
+    labels:
+      - docker-volume-backup.stop-during-backup=overseerr
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+
+  # Media management
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=13003
+      - PGID=13000
+      - UMASK=002
+      - TZ=Canada/Pacific
+    volumes:
+      - sonarr-config:/config
+      - data:/data
+    labels:
+      - docker-volume-backup.stop-during-backup=sonarr
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=13004
+      - PGID=13000
+      - UMASK=002
+      - TZ=Canada/Pacific
+    volumes:
+      - radarr-config:/config
+      - data:/data
+    labels:
+      - docker-volume-backup.stop-during-backup=radarr
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  bazarr: 
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=13005
+      - PGID=13000
+      - TZ=Canada/Pacific
+    volumes:
+      - bazarr-config:/config
+      - mnt/data/media:/media
+    labels:
+      - docker-volume-backup.stop-during-backup=bazarr
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=13006
+      - PGID=13000
+      - UMASK=002
+      - TZ=Canada/Pacific
+    volumes:
+      - prowlarr-config:/config
+    labels:
+      - docker-volume-backup.stop-during-backup=prowlarr
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: service:gluetun
+    environment:
+      - PUID=13007
+      - PGID=13000
+      - UMASK=002
+      - TZ=Canada/Pacific
+      - WEBUI_PORT=8080
+    volumes:
+      - qbittorrent-config:/config
+      - /mnt/data/torrents:/data/torrents
+    labels:
+      - docker-volume-backup.stop-during-backup=qbittorrent
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+
+  # User management
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    depends_on:
+      - plex
+    environment:
+      - PUID=${UID}
+      - PGID=13000
+      - TZ=Canada/Pacific
+    volumes:
+      - tautulli-config:/config
+    labels:
+      - docker-volume-backup.stop-during-backup=tautulli
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+
+  wizarr:
+    container_name: wizarr
+    image: ghcr.io/wizarrrr/wizarr
+    volumes:
+      - wizarr-config:/data/database
+    labels:
+      - docker-volume-backup.stop-during-backup=wizarr
+    ports:
+      - 5690:5690
+    restart: unless-stopped
+
+  # Container updates
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 86400 --rolling-restart true
+    restart: unless-stopped
+  
+  # Backups
+  backup_plex: &backup_service
+    image: offen/docker-volume-backup:latest
+    secrets:
+      - S3_secret
+    environment: &backup_environment
+      AWS_ENDPOINT: r2
+      AWS_S3_BUCKET_NAME: backup-bucket
+      AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
+      AWS_SECRET_ACCESS_KEY: /run/secrets/S3_secret
+      BACKUP_CRON_EXPRESSION: "0 10 * * *"
+      BACKUP_PRUNING_PREFIX: backup-
+      BACKUP_RETENTION_DAYS: 7
+      BACKUP_FILENAME: backup-plex-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_STOP_DURING_BACKUP_LABEL: plex
+    volumes:
+      - plex-config:/backup/plex-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  backup_overseerr:
+    <<: *backup_service
+    environment:
+      <<: *backup_environment
+      BACKUP_FILENAME: backup-overseerr-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_STOP_DURING_BACKUP_LABEL: overseerr
+    volumes:
+      - overseerr-config:/backup/overseerr-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  backup_sonarr:
+    <<: *backup_service
+    environment:
+      <<: *backup_environment
+      BACKUP_FILENAME: backup-sonarr-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_STOP_DURING_BACKUP_LABEL: sonarr
+    volumes:
+      - sonarr-config:/backup/sonarr-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  backup_radarr:
+    <<: *backup_service
+    environment:
+      <<: *backup_environment
+      BACKUP_FILENAME: backup-radarr-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_STOP_DURING_BACKUP_LABEL: radarr
+    volumes:
+      - radarr-config:/backup/radarr-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  backup_bazarr:
+    <<: *backup_service
+    environment:
+      <<: *backup_environment
+      BACKUP_FILENAME: backup-bazarr-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_STOP_DURING_BACKUP_LABEL: bazarr
+    volumes:
+      - bazarr-config:/backup/bazarr-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  backup_prowlarr:
+    <<: *backup_service
+    environment:
+      <<: *backup_environment
+      BACKUP_FILENAME: backup-prowlarr-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_STOP_DURING_BACKUP_LABEL: prowlarr
+    volumes:
+      - prowlarr-config:/backup/prowlarr-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  backup_qbittorrent:
+    <<: *backup_service
+    environment:
+      <<: *backup_environment
+      BACKUP_FILENAME: backup-qbittorrent-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_STOP_DURING_BACKUP_LABEL: qbittorrent
+    volumes:
+      - qbittorrent-config:/backup/radarr-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  backup_tautulli:
+    <<: *backup_service
+    environment:
+      <<: *backup_environment
+      BACKUP_FILENAME: backup-tautulli-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_STOP_DURING_BACKUP_LABEL: tautulli
+    volumes:
+      - tautulli-config:/backup/radarr-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  backup_wizarr:
+    <<: *backup_service
+    environment:
+      <<: *backup_environment
+      BACKUP_FILENAME: backup-wizarr-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_STOP_DURING_BACKUP_LABEL: wizarr
+    volumes:
+      - wizarr-config:/backup/radarr-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  
+  
+# Docker environment
 secrets:
-   tunnel_token:
-     file: tunnel_token.txt
-   mullvad_private_key:
-     file: mullvad_private_key.txt
+  tunnel_token:
+    file: tunnel_token.txt
+  mullvad_private_key:
+    file: mullvad_private_key.txt
+  S3_secret:
+    file: S3_secret.txt
 
 volumes:
   plex-config:
+  overseerr-config:
   sonarr-config:
   radarr-config:
+  bazarr-config:
+  prowlarr-config:
+  qbittorrent-config:
+  tautulli-config:
+  wizarr-config:
   data:

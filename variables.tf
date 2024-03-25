@@ -46,3 +46,9 @@ variable "mullvad_private_key" {
   description = "The base64 encoded value of the private key used for the Mullvad VPN"
   sensitive   = true
 }
+
+variable "s3_token" {
+  type        = string
+  description = "The token used for S3-compatible storage authentication"
+  sensitive   = true
+}
