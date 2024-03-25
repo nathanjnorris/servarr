@@ -47,8 +47,8 @@ variable "mullvad_private_key" {
   sensitive   = true
 }
 
-variable "s3_token" {
-  type        = string
-  description = "The token used for S3-compatible storage authentication"
-  sensitive   = true
-}
+# variable "s3_token" {
+#   type        = string
+#   description = "The token used for S3-compatible storage authentication"
+#   sensitive   = true
+# }

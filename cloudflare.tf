@@ -182,8 +182,8 @@ resource "cloudflare_access_policy" "user_servarr" {
 # R2 (S3-compatible storage)
 ###
 
-resource "cloudflare_r2_bucket" "bucker-servarr" {
-  account_id = var.account_id
-  name       = "servarr"
-  location   = "wnam"
-}
+# resource "cloudflare_r2_bucket" "bucker-servarr" {
+#   account_id = var.account_id
+#   name       = "servarr"
+#   location   = "WNAM"
+# }
