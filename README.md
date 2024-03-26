@@ -20,7 +20,9 @@
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_r2-api-token"></a> [r2-api-token](#module\_r2-api-token) | Cyb3r-Jak3/r2-api-token/cloudflare | 3.0.1 |
 
 ## Resources
 
@@ -30,6 +32,7 @@ No modules.
 | [cloudflare_access_policy.service_servarr](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.user_servarr](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_service_token.github_actions](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_service_token) | resource |
+| [cloudflare_r2_bucket.bucker-servarr](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/r2_bucket) | resource |
 | [cloudflare_record.plex_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
 | [cloudflare_record.servarr_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
 | [cloudflare_ruleset.bots_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/ruleset) | resource |
@@ -39,9 +42,12 @@ No modules.
 | [cloudflare_zone_dnssec.example](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/zone_dnssec) | resource |
 | [cloudflare_zone_settings_override.nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/zone_settings_override) | resource |
 | [github_actions_secret.mullvad_private_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
+| [github_actions_secret.r2_secret_access_token](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.servar_tunnel_token](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.service_token_secret](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.ssh_private_key_value](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
+| [github_actions_secret.sudo_password](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
+| [github_actions_variable.r2_access_key_id](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.service_token_id](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.ssh_host](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.ssh_port](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
@@ -63,6 +69,7 @@ No modules.
 | <a name="input_ssh_private_key_filename"></a> [ssh\_private\_key\_filename](#input\_ssh\_private\_key\_filename) | The filename of the private key used for authentication | `string` | n/a | yes |
 | <a name="input_ssh_private_key_value"></a> [ssh\_private\_key\_value](#input\_ssh\_private\_key\_value) | The value of the private key used for authentication | `string` | n/a | yes |
 | <a name="input_ssh_username"></a> [ssh\_username](#input\_ssh\_username) | The username used for authentication | `string` | n/a | yes |
+| <a name="input_sudo_password"></a> [sudo\_password](#input\_sudo\_password) | The password of the permitted user, to execute a command as the superuser | `string` | n/a | yes |
 
 ## Outputs
 
