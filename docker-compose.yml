@@ -203,8 +203,8 @@ services:
       - r2_access_key_id
       - r2_secret_access_token
     environment: &backup_environment
-      AWS_ENDPOINT: r2
-      AWS_S3_BUCKET_NAME: backup-bucket
+      AWS_ENDPOINT: https://379797533e7b9ba2c2a633dae38e285c.r2.cloudflarestorage.com
+      AWS_S3_BUCKET_NAME: servarr
       AWS_ACCESS_KEY_ID: /run/secrets/r2_access_key_id
       AWS_SECRET_ACCESS_KEY: /run/secrets/r2_secret_access_token
       BACKUP_CRON_EXPRESSION: "0 10 * * *"
