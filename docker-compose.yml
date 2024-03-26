@@ -24,14 +24,14 @@ services:
     secrets:
       - mullvad_private_key
     ports:
-      - 8191:8191
-      - 8989:8989
-      - 7878:7878
-      - 6767:6767
-      - 9696:9696
-      - 8080:8080
-      - 6881:6881
-      - 6881:6881/udp
+      - 8191:8191 # flaresolverr
+      - 8989:8989 # sonarr
+      - 7878:7878 # radarr
+      - 6767:6767 # bazarr
+      - 9696:9696 # prowlarr
+      - 8080:8080 # qbittorrent
+      - 6881:6881 # qbittorrent
+      - 6881:6881/udp # qbittorrent
     restart: unless-stopped
 
   flaresolverr:
@@ -40,8 +40,6 @@ services:
     network_mode: service:gluetun
     environment:
       - TZ=Canada/Pacific
-    ports:
-      - 8191:8191
     restart: unless-stopped
 
   # User-facing apps
@@ -93,8 +91,6 @@ services:
       - data:/data
     labels:
       - docker-volume-backup.stop-during-backup=sonarr
-    ports:
-      - 8989:8989
     restart: unless-stopped
 
   radarr:
@@ -111,8 +107,6 @@ services:
       - data:/data
     labels:
       - docker-volume-backup.stop-during-backup=radarr
-    ports:
-      - 7878:7878
     restart: unless-stopped
 
   bazarr: 
@@ -128,8 +122,6 @@ services:
       - /mnt/data/media:/media
     labels:
       - docker-volume-backup.stop-during-backup=bazarr
-    ports:
-      - 6767:6767
     restart: unless-stopped
 
   prowlarr:
@@ -145,8 +137,6 @@ services:
       - prowlarr-config:/config
     labels:
       - docker-volume-backup.stop-during-backup=prowlarr
-    ports:
-      - 9696:9696
     restart: unless-stopped
 
   qbittorrent:
@@ -164,10 +154,6 @@ services:
       - /mnt/data/torrents:/data/torrents
     labels:
       - docker-volume-backup.stop-during-backup=qbittorrent
-    ports:
-      - 8080:8080
-      - 6881:6881
-      - 6881:6881/udp
     restart: unless-stopped
 
   # User management
