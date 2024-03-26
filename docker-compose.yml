@@ -114,7 +114,7 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - bazarr-config:/config
-      - mnt/data/media:/media
+      - /mnt/data/media:/media
     labels:
       - docker-volume-backup.stop-during-backup=bazarr
     ports:
