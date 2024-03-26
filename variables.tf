@@ -47,8 +47,8 @@ variable "mullvad_private_key" {
   sensitive   = true
 }
 
-# variable "s3_token" {
-#   type        = string
-#   description = "The token used for S3-compatible storage authentication"
-#   sensitive   = true
-# }
+variable "sudo_password" {
+  type        = string
+  description = "The password of the permitted user, to execute a command as the superuser"
+  sensitive   = true
+}

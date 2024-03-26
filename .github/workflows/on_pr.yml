@@ -10,7 +10,7 @@ permissions: read-all
 
 jobs:
   terraform_format_and_docs:
-    name: Terraform formatting and documentation
+    name: Terraform format and docs
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -27,14 +27,14 @@ jobs:
         run: terraform fmt -recursive .
       
       - name: Terraform Docs
-        uses: terraform-docs/gh-actions@v1.0.0
+        uses: terraform-docs/gh-actions@v1.1.0
         with:
           find-dir: .
           output-file: README.md
           output-method: inject
           git-push: true
-          git-commit-message: Terraform formatting and documentation
-  
+          git-commit-message: Terraform format and docs
+          
   terraform_plan:
     name: Terraform plan
     needs: terraform_format_and_docs

@@ -52,8 +52,20 @@ resource "github_actions_secret" "mullvad_private_key" {
   plaintext_value = var.mullvad_private_key
 }
 
-# resource "github_actions_secret" "s3_token" {
-#   repository      = "servarr"
-#   secret_name     = "s3_token"
-#   plaintext_value = var.s3_token
-# }
+resource "github_actions_secret" "sudo_password" {
+  repository      = "servarr"
+  secret_name     = "sudo_password"
+  plaintext_value = var.sudo_password
+}
+
+resource "github_actions_variable" "r2_access_key_id" {
+  repository    = "servarr"
+  variable_name = "r2_access_key_id"
+  value         = module.r2-api-token.id
+}
+
+resource "github_actions_secret" "r2_secret_access_token" {
+  repository      = "servarr"
+  secret_name     = "r2_secret_access_token"
+  plaintext_value = module.r2-api-token.secret
+}
