@@ -34,7 +34,15 @@ resource "cloudflare_zone_settings_override" "nathanjn_com" {
 # DNS records
 ###
 
-# Create a CNAME record that routes plex.nathanjn.com to the tunnel.
+# Create a CNAME record that routes servarr.nathanjn.com to the tunnel.
+resource "cloudflare_record" "servarr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "servarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
 resource "cloudflare_record" "plex_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "plex"
@@ -43,10 +51,65 @@ resource "cloudflare_record" "plex_nathanjn_com" {
   proxied = true
 }
 
-# Create a CNAME record that routes servarr.nathanjn.com to the tunnel.
-resource "cloudflare_record" "servarr_nathanjn_com" {
+resource "cloudflare_record" "overseerr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
-  name    = "servarr"
+  name    = "overseerr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "sonarr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "sonarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "radarr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "radarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "bazarr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "bazarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "prowlarr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "prowlarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "qbittorrent_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "qbittorrent"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "tautulli_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "tautulli"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "wizarr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "wizarr"
   value   = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
@@ -74,12 +137,44 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
   account_id = var.account_id
   config {
     ingress_rule {
+      hostname = "servarr.nathanjn.com"
+      service  = "ssh://172.17.0.1"
+    }
+    ingress_rule {
       hostname = "plex.nathanjn.com"
       service  = "http://plex:32400"
     }
     ingress_rule {
-      hostname = "servarr.nathanjn.com"
-      service  = "ssh://172.17.0.1"
+      hostname = "overseerr.nathanjn.com"
+      service  = "http://overseerr:5055"
+    }
+    ingress_rule {
+      hostname = "sonarr.nathanjn.com"
+      service  = "http://gluetun:8989"
+    }
+    ingress_rule {
+      hostname = "radarr.nathanjn.com"
+      service  = "http://gluetun:7878"
+    }
+    ingress_rule {
+      hostname = "bazarr.nathanjn.com"
+      service  = "http://gluetun:6767"
+    }
+    ingress_rule {
+      hostname = "prowlarr.nathanjn.com"
+      service  = "http://gluetun:6767"
+    }
+    ingress_rule {
+      hostname = "qbittorrent.nathanjn.com"
+      service  = "http://gluetun:8080"
+    }
+    ingress_rule {
+      hostname = "tautulli.nathanjn.com"
+      service  = "http://tautulli:8181"
+    }
+    ingress_rule {
+      hostname = "wizarr.nathanjn.com"
+      service  = "http://wizarr:5690"
     }
     ingress_rule {
       service = "http_status:404"
