@@ -200,7 +200,8 @@ services:
   backup_plex: &backup_service
     image: offen/docker-volume-backup:latest
     secrets:
-      - S3_secret
+      - r2_access_key_id
+      - r2_secret_access_token
     environment: &backup_environment
       AWS_ENDPOINT: r2
       AWS_S3_BUCKET_NAME: backup-bucket
