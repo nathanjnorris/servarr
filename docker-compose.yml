@@ -2,13 +2,14 @@ version: "3.8"
 name: servarr
 services:
   # Networking
-  cloudflare:
+  cloudflared:
     image: cloudflare/cloudflared:latest
-    container_name: cloudflared
-    command: tunnel run --token /run/secrets/tunnel_token
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    deploy:
+      replicas: 2
     restart: unless-stopped
-    secrets:
-      - tunnel_token
 
   gluetun:
     image: qmcgaw/gluetun:latest
@@ -19,8 +20,8 @@ services:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY=/run/secrets/mullvad_private_key
-      - WIREGUARD_ADDRESSES=10.69.232.169/32
-      - SERVER_CITIES=Vancouver
+      - WIREGUARD_ADDRESSES=10.70.151.218/32
+      - SERVER_CITIES=Seattle WA
     secrets:
       - mullvad_private_key
     ports:
@@ -190,121 +191,10 @@ services:
     image: containrrr/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 86400 --rolling-restart true
+      - /etc/localtime:/etc/localtime:ro
+    command: --cleanup true --remove-volumes true --schedule "30 9 * * *" --rolling-restart true
     restart: unless-stopped
   
-  # Backups
-  backup_plex: &backup_service
-    image: offen/docker-volume-backup:latest
-    secrets:
-      - r2_access_key_id
-      - r2_secret_access_token
-    environment: &backup_environment
-      AWS_ENDPOINT: https://379797533e7b9ba2c2a633dae38e285c.r2.cloudflarestorage.com
-      AWS_S3_BUCKET_NAME: servarr
-      AWS_ACCESS_KEY_ID: /run/secrets/r2_access_key_id
-      AWS_SECRET_ACCESS_KEY: /run/secrets/r2_secret_access_token
-      BACKUP_CRON_EXPRESSION: "0 10 * * *"
-      BACKUP_PRUNING_PREFIX: backup-
-      BACKUP_RETENTION_DAYS: 7
-      BACKUP_FILENAME: backup-plex-%Y-%m-%dT%H-%M-%S.tar.gz
-      BACKUP_STOP_DURING_BACKUP_LABEL: plex
-    volumes:
-      - plex-config:/backup/plex-backup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  backup_overseerr:
-    <<: *backup_service
-    environment:
-      <<: *backup_environment
-      BACKUP_FILENAME: backup-overseerr-%Y-%m-%dT%H-%M-%S.tar.gz
-      BACKUP_STOP_DURING_BACKUP_LABEL: overseerr
-    volumes:
-      - overseerr-config:/backup/overseerr-backup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  backup_sonarr:
-    <<: *backup_service
-    environment:
-      <<: *backup_environment
-      BACKUP_FILENAME: backup-sonarr-%Y-%m-%dT%H-%M-%S.tar.gz
-      BACKUP_STOP_DURING_BACKUP_LABEL: sonarr
-    volumes:
-      - sonarr-config:/backup/sonarr-backup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  backup_radarr:
-    <<: *backup_service
-    environment:
-      <<: *backup_environment
-      BACKUP_FILENAME: backup-radarr-%Y-%m-%dT%H-%M-%S.tar.gz
-      BACKUP_STOP_DURING_BACKUP_LABEL: radarr
-    volumes:
-      - radarr-config:/backup/radarr-backup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  backup_bazarr:
-    <<: *backup_service
-    environment:
-      <<: *backup_environment
-      BACKUP_FILENAME: backup-bazarr-%Y-%m-%dT%H-%M-%S.tar.gz
-      BACKUP_STOP_DURING_BACKUP_LABEL: bazarr
-    volumes:
-      - bazarr-config:/backup/bazarr-backup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  backup_prowlarr:
-    <<: *backup_service
-    environment:
-      <<: *backup_environment
-      BACKUP_FILENAME: backup-prowlarr-%Y-%m-%dT%H-%M-%S.tar.gz
-      BACKUP_STOP_DURING_BACKUP_LABEL: prowlarr
-    volumes:
-      - prowlarr-config:/backup/prowlarr-backup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  backup_qbittorrent:
-    <<: *backup_service
-    environment:
-      <<: *backup_environment
-      BACKUP_FILENAME: backup-qbittorrent-%Y-%m-%dT%H-%M-%S.tar.gz
-      BACKUP_STOP_DURING_BACKUP_LABEL: qbittorrent
-    volumes:
-      - qbittorrent-config:/backup/radarr-backup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  backup_tautulli:
-    <<: *backup_service
-    environment:
-      <<: *backup_environment
-      BACKUP_FILENAME: backup-tautulli-%Y-%m-%dT%H-%M-%S.tar.gz
-      BACKUP_STOP_DURING_BACKUP_LABEL: tautulli
-    volumes:
-      - tautulli-config:/backup/radarr-backup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  backup_wizarr:
-    <<: *backup_service
-    environment:
-      <<: *backup_environment
-      BACKUP_FILENAME: backup-wizarr-%Y-%m-%dT%H-%M-%S.tar.gz
-      BACKUP_STOP_DURING_BACKUP_LABEL: wizarr
-    volumes:
-      - wizarr-config:/backup/radarr-backup:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-  
-  
 # Docker environment
-secrets:
-  tunnel_token:
-    file: tunnel_token.txt
   mullvad_private_key:
     file: mullvad_private_key.txt
-  r2_access_key_id:
-    file: r2_access_key_id.txt
-  r2_secret_access_token:
-    file: r2_secret_access_token.txt
-
-volumes:
-  plex-config:
-  overseerr-config:
-  sonarr-config:
-  radarr-config:
-  bazarr-config:
-  prowlarr-config:
-  qbittorrent-config:
-  tautulli-config:
-  wizarr-config:
-  data:
