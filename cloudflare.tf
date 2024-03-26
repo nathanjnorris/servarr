@@ -196,5 +196,5 @@ module "r2-api-token" {
   token_name   = "servarr-r2-api-token"
   buckets      = [cloudflare_r2_bucket.bucket-servarr.name]
   bucket_read  = true
-  bucket_write = random_password.servarr_tunnel_secret
+  bucket_write = true
 }
