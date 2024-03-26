@@ -60,4 +60,4 @@ jobs:
         port: ${{ vars.SSH_PORT }}
         service_token_id: ${{ vars.SERVICE_TOKEN_ID }}
         service_token_secret: ${{ secrets.SERVICE_TOKEN_SECRET }}
-        commands: cd servarr; git reset --hard HEAD; git pull; echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash setup.sh; echo "${{ secrets.SERVARR_TUNNEL_TOKEN }}" > tunnel_token.txt; echo "${{ secrets.MULLVAD_PRIVATE_KEY }}" > mullvad_private_key.txt; echo "${{ secrets.S3_TOKEN }}" > S3_TOKEN.txt; docker compose up --build -d
+        commands: cd servarr; git reset --hard HEAD; git pull; echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash setup.sh; echo "${{ secrets.SERVARR_TUNNEL_TOKEN }}" > tunnel_token.txt; echo "${{ secrets.MULLVAD_PRIVATE_KEY }}" > mullvad_private_key.txt; echo "${{ vars.r2_access_key_id }}" > r2_access_key_id.txt; echo "${{ secrets.r2_secret_access_token }}" > r2_secret_access_token.txt; docker compose up --build -d
