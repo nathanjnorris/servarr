@@ -1,9 +1,6 @@
 #!/bin/bash
 # 
 
-# Mount disk
-mount /dev/sda /mnt/data/
-
 # Make users and groups
 useradd plex -u 13001
 useradd overseerr -u 13002
@@ -32,8 +29,8 @@ mkdir -p /mnt/data/{torrents,media}/{tv,movies}
 mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,tautulli,wizarr,recyclarr}-config
     
 # Set permissions
-chmod -R 775 /mnt/data/
-chown -R nathan:servarr /mnt/data/
+chmod -R 777 /mnt/data
+chown -R nathan:servarr /mnt/data
 chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
