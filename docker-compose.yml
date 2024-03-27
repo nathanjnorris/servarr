@@ -54,8 +54,6 @@ services:
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/media
-    labels:
-      - docker-volume-backup.stop-during-backup=plex
     ports:
       - 32400:32400
     restart: unless-stopped
@@ -69,8 +67,6 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/overseerr-config:/config
-    labels:
-      - docker-volume-backup.stop-during-backup=overseerr
     ports:
       - 5055:5055
     restart: unless-stopped
@@ -88,8 +84,6 @@ services:
     volumes:
       - /home/nathan/servarr/config/sonarr-config:/config
       - /mnt/data:/data
-    labels:
-      - docker-volume-backup.stop-during-backup=sonarr
     restart: unless-stopped
 
   radarr:
@@ -104,8 +98,6 @@ services:
     volumes:
       - /home/nathan/servarr/config/radarr-config:/config
       - /mnt/data:/data
-    labels:
-      - docker-volume-backup.stop-during-backup=radarr
     restart: unless-stopped
 
   bazarr: 
@@ -119,8 +111,6 @@ services:
     volumes:
       - /home/nathan/servarr/config/bazarr-config:/config
       - /mnt/data/media:/media
-    labels:
-      - docker-volume-backup.stop-during-backup=bazarr
     restart: unless-stopped
 
   prowlarr:
@@ -134,8 +124,6 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/prowlarr-config:/config
-    labels:
-      - docker-volume-backup.stop-during-backup=prowlarr
     restart: unless-stopped
 
   qbittorrent:
@@ -151,8 +139,6 @@ services:
     volumes:
       - /home/nathan/servarr/config/qbittorrent-config:/config
       - /mnt/data/torrents:/data/torrents
-    labels:
-      - docker-volume-backup.stop-during-backup=qbittorrent
     restart: unless-stopped
 
   # User management
@@ -167,8 +153,6 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/tautulli-config:/config
-    labels:
-      - docker-volume-backup.stop-during-backup=tautulli
     ports:
       - 8181:8181
     restart: unless-stopped
@@ -178,8 +162,6 @@ services:
     container_name: wizarr
     volumes:
       - /home/nathan/servarr/config/wizarr-config:/data/database
-    labels:
-      - docker-volume-backup.stop-during-backup=wizarr
     ports:
       - 5690:5690
     restart: unless-stopped
