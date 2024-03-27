@@ -196,5 +196,6 @@ services:
     restart: unless-stopped
   
 # Docker environment
+secrets:
   mullvad_private_key:
     file: mullvad_private_key.txt
