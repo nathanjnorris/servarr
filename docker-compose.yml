@@ -53,6 +53,7 @@ services:
       - PGID=13000
       - TZ=Canada/Pacific
       - VERSION=docker
+      - PLEX_CLAIM=claim-pPQtQLHVaQcvDibfB8HR
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/media
