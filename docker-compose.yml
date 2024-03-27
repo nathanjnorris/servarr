@@ -1,45 +1,6 @@
 version: "3.8"
 name: servarr
 services:
-  # Networking
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: cloudflared
-    command: tunnel run
-    environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
-    restart: unless-stopped
-
-  gluetun:
-    image: qmcgaw/gluetun:latest
-    container_name: gluetun
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - VPN_SERVICE_PROVIDER=mullvad
-      - VPN_TYPE=wireguard
-      - WIREGUARD_PRIVATE_KEY=${MULLVAD_PRIVATE_KEY}
-      - WIREGUARD_ADDRESSES=10.70.151.218/32
-      - SERVER_CITIES=Seattle WA
-    ports:
-      - 8191:8191 # flaresolverr
-      - 8989:8989 # sonarr
-      - 7878:7878 # radarr
-      - 6767:6767 # bazarr
-      - 9696:9696 # prowlarr
-      - 8080:8080 # qbittorrent
-      - 6881:6881 # qbittorrent
-      - 6881:6881/udp # qbittorrent
-    restart: unless-stopped
-
-  flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: flaresolverr
-    network_mode: service:gluetun
-    environment:
-      - TZ=Canada/Pacific
-    restart: unless-stopped
-
   # User-facing apps
   plex:
     image: lscr.io/linuxserver/plex:latest
@@ -48,12 +9,12 @@ services:
       - device=/dev/dri:/dev/dri
       - PUID=13001
       - PGID=13000
+      - UMASK=002
       - TZ=Canada/Pacific
       - VERSION=docker
-      - PLEX_CLAIM=claim-pPQtQLHVaQcvDibfB8HR
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
-      - /mnt/data/media:/media
+      - /mnt/data/media:/data/media
     ports:
       - 32400:32400
     restart: unless-stopped
@@ -64,6 +25,7 @@ services:
     environment:
       - PUID=13002
       - PGID=13000
+      - UMASK=002
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/overseerr-config:/config
@@ -107,10 +69,11 @@ services:
     environment:
       - PUID=13005
       - PGID=13000
+      - UMASK=002
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/bazarr-config:/config
-      - /mnt/data/media:/media
+      - /mnt/data/media:/data/media
     restart: unless-stopped
 
   prowlarr:
@@ -157,8 +120,9 @@ services:
     depends_on:
       - plex
     environment:
-      - PUID=1000
+      - PUID=13009
       - PGID=13000
+      - UMASK=002
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/tautulli-config:/config
@@ -167,17 +131,58 @@ services:
     restart: unless-stopped
 
   wizarr:
-    image: ghcr.io/wizarrrr/wizarr
+    image: ghcr.io/wizarrrr/wizarr:latest
     container_name: wizarr
+    user: 13010:13000
     volumes:
       - /home/nathan/servarr/config/wizarr-config:/data/database
     ports:
       - 5690:5690
     restart: unless-stopped
+  
+  # Networking
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    restart: unless-stopped
+
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${MULLVAD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=10.70.151.218/32
+      - SERVER_CITIES=Seattle WA
+      - TZ=Canada/Pacific
+    ports:
+      - 8191:8191 # flaresolverr
+      - 8989:8989 # sonarr
+      - 7878:7878 # radarr
+      - 6767:6767 # bazarr
+      - 9696:9696 # prowlarr
+      - 8080:8080 # qbittorrent
+      - 6881:6881 # qbittorrent
+      - 6881:6881/udp # qbittorrent
+    restart: unless-stopped
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    network_mode: service:gluetun
+    environment:
+      - TZ=Canada/Pacific
+    restart: unless-stopped
 
   # Container updates
   watchtower:
-    image: containrrr/watchtower
+    image: containrrr/watchtower:latest
     container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
