@@ -19,11 +19,9 @@ services:
     environment:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
-      - WIREGUARD_PRIVATE_KEY=/run/secrets/mullvad_private_key
+      - WIREGUARD_PRIVATE_KEY=${MULLVAD_PRIVATE_KEY}
       - WIREGUARD_ADDRESSES=10.70.151.218/32
       - SERVER_CITIES=Seattle WA
-    secrets:
-      - mullvad_private_key
     ports:
       - 8191:8191 # flaresolverr
       - 8989:8989 # sonarr
@@ -195,8 +193,3 @@ services:
       - /etc/localtime:/etc/localtime:ro
     command: --cleanup true --remove-volumes true --schedule "30 9 * * *" --rolling-restart true
     restart: unless-stopped
-  
-# Docker environment
-secrets:
-  mullvad_private_key:
-    file: mullvad_private_key.txt
