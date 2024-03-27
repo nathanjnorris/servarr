@@ -4,11 +4,10 @@ services:
   # Networking
   cloudflared:
     image: cloudflare/cloudflared:latest
+    container_name: cloudflared
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
-    deploy:
-      replicas: 2
     restart: unless-stopped
 
   gluetun:
@@ -175,8 +174,8 @@ services:
     restart: unless-stopped
 
   wizarr:
-    container_name: wizarr
     image: ghcr.io/wizarrrr/wizarr
+    container_name: wizarr
     volumes:
       - /home/nathan/servarr/config/wizarr-config:/data/database
     labels:
@@ -188,6 +187,7 @@ services:
   # Container updates
   watchtower:
     image: containrrr/watchtower
+    container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
