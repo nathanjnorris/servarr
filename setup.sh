@@ -29,7 +29,7 @@ mkdir -p /mnt/data/{torrents,media}/{tv,movies}
 mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,tautulli,wizarr,recyclarr}-config
     
 # Set permissions
-chmod -R 777 /mnt/data/
+chmod -R 777 /mnt/data
 chown -R nathan:servarr /mnt/data
 chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
