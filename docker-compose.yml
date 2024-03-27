@@ -54,7 +54,7 @@ services:
       - TZ=Canada/Pacific
       - VERSION=docker
     volumes: 
-      - plex-config:/config
+      - config/plex-config:/config
       - /mnt/data/media:/media
     labels:
       - docker-volume-backup.stop-during-backup=plex
@@ -70,7 +70,7 @@ services:
       - PGID=13000
       - TZ=Canada/Pacific
     volumes:
-      - overseerr-config:/config
+      - config/overseerr-config:/config
     labels:
       - docker-volume-backup.stop-during-backup=overseerr
     ports:
@@ -88,7 +88,7 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - sonarr-config:/config
+      - config/sonarr-config:/config
       - data:/data
     labels:
       - docker-volume-backup.stop-during-backup=sonarr
@@ -104,7 +104,7 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - radarr-config:/config
+      - config/radarr-config:/config
       - data:/data
     labels:
       - docker-volume-backup.stop-during-backup=radarr
@@ -119,7 +119,7 @@ services:
       - PGID=13000
       - TZ=Canada/Pacific
     volumes:
-      - bazarr-config:/config
+      - config/bazarr-config:/config
       - /mnt/data/media:/media
     labels:
       - docker-volume-backup.stop-during-backup=bazarr
@@ -135,7 +135,7 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - prowlarr-config:/config
+      - config/prowlarr-config:/config
     labels:
       - docker-volume-backup.stop-during-backup=prowlarr
     restart: unless-stopped
@@ -151,7 +151,7 @@ services:
       - TZ=Canada/Pacific
       - WEBUI_PORT=8080
     volumes:
-      - qbittorrent-config:/config
+      - config/qbittorrent-config:/config
       - /mnt/data/torrents:/data/torrents
     labels:
       - docker-volume-backup.stop-during-backup=qbittorrent
@@ -168,7 +168,7 @@ services:
       - PGID=13000
       - TZ=Canada/Pacific
     volumes:
-      - tautulli-config:/config
+      - config/tautulli-config:/config
     labels:
       - docker-volume-backup.stop-during-backup=tautulli
     ports:
@@ -179,7 +179,7 @@ services:
     container_name: wizarr
     image: ghcr.io/wizarrrr/wizarr
     volumes:
-      - wizarr-config:/data/database
+      - config/wizarr-config:/data/database
     labels:
       - docker-volume-backup.stop-during-backup=wizarr
     ports:
