@@ -169,7 +169,7 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
       service  = "http://gluetun:8080"
     }
     ingress_rule {
-      hostname = "tautulli.nathanjn.com"  
+      hostname = "tautulli.nathanjn.com"
       service  = "http://tautulli:8181"
     }
     ingress_rule {
