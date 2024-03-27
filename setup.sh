@@ -1,7 +1,6 @@
 #!/bin/bash
 # 
 
-
 # Make users and groups
 useradd plex -u 13001
 useradd overseerr -u 13002

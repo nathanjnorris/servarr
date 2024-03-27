@@ -245,7 +245,7 @@ resource "cloudflare_access_application" "servarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "servarr.nathanjn.com"
   domain           = "servarr.nathanjn.com"
-  session_duration = "30m"
+  session_duration = "2h"
   type             = "ssh"
 }
 
@@ -277,7 +277,7 @@ resource "cloudflare_access_application" "sonarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "sonarr.nathanjn.com"
   domain           = "sonarr.nathanjn.com"
-  session_duration = "30m"
+  session_duration = "2h"
 }
 
 resource "cloudflare_access_policy" "user_sonarr" {
@@ -295,7 +295,7 @@ resource "cloudflare_access_application" "radarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "radarr.nathanjn.com"
   domain           = "radarr.nathanjn.com"
-  session_duration = "30m"
+  session_duration = "2h"
 }
 
 resource "cloudflare_access_policy" "user_radarr" {
@@ -313,7 +313,7 @@ resource "cloudflare_access_application" "bazarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "bazarr.nathanjn.com"
   domain           = "bazarr.nathanjn.com"
-  session_duration = "30m"
+  session_duration = "2h"
 }
 
 resource "cloudflare_access_policy" "user_bazarr" {
@@ -331,7 +331,7 @@ resource "cloudflare_access_application" "prowlarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "prowlarr.nathanjn.com"
   domain           = "prowlarr.nathanjn.com"
-  session_duration = "30m"
+  session_duration = "2h"
 }
 
 resource "cloudflare_access_policy" "user_prowlarr" {
@@ -349,7 +349,7 @@ resource "cloudflare_access_application" "qbittorrent_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "qbittorrent.nathanjn.com"
   domain           = "qbittorrent.nathanjn.com"
-  session_duration = "30m"
+  session_duration = "2h"
 }
 
 resource "cloudflare_access_policy" "user_qbittorrent" {
@@ -367,7 +367,7 @@ resource "cloudflare_access_application" "tautulli_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "tautulli.nathanjn.com"
   domain           = "tautulli.nathanjn.com"
-  session_duration = "30m"
+  session_duration = "2h"
 }
 
 resource "cloudflare_access_policy" "user_tautulli" {
@@ -385,7 +385,7 @@ resource "cloudflare_access_application" "wizarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "wizarr.nathanjn.com"
   domain           = "wizarr.nathanjn.com"
-  session_duration = "30m"
+  session_duration = "2h"
 }
 
 resource "cloudflare_access_policy" "user_wizarr" {
