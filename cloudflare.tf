@@ -162,7 +162,7 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     }
     ingress_rule {
       hostname = "prowlarr.nathanjn.com"
-      service  = "http://gluetun:6767"
+      service  = "http://gluetun:9696"
     }
     ingress_rule {
       hostname = "qbittorrent.nathanjn.com"
