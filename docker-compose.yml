@@ -141,6 +141,15 @@ services:
       - /mnt/data/torrents:/data/torrents
     restart: unless-stopped
 
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:latest
+    container_name: recyclarr
+    user: 13008:13000
+    volumes:
+      - /home/nathan/servarr/config/recyclarr-config:/config
+    environment:
+      - TZ=Canada/Pacific
+
   # User management
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest

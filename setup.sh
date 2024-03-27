@@ -12,6 +12,7 @@ useradd radarr -u 13004
 useradd bazarr -u 13005
 useradd prowlarr -u 13006
 useradd qbittorrent -u 13007
+useradd recyclarr -u 13008
 
 # Make group
 groupadd servarr -g 13000
@@ -24,10 +25,11 @@ usermod -a -G servarr radarr
 usermod -a -G servarr bazarr
 usermod -a -G servarr prowlarr
 usermod -a -G servarr qbittorrent
+usermod -a -G servarr recyclarr
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies}
-mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,tautulli,wizarr}-config
+mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,tautulli,wizarr,recyclarr}-config
     
 # Set permissions
 chmod -R 775 /mnt/data/
@@ -39,3 +41,4 @@ chown -R radarr:servarr config/radarr-config
 chown -R bazarr:servarr config/bazarr-config
 chown -R prowlarr:servarr config/prowlarr-config
 chown -R qbittorrent:servarr config/qbittorrent-config
+chown -R recyclarr:servarr config/recyclarr-config
