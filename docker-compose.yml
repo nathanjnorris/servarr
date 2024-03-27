@@ -89,7 +89,7 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/sonarr-config:/config
-      - data:/data
+      - /mnt/data:/data
     labels:
       - docker-volume-backup.stop-during-backup=sonarr
     restart: unless-stopped
@@ -105,7 +105,7 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/radarr-config:/config
-      - data:/data
+      - /mnt/data:/data
     labels:
       - docker-volume-backup.stop-during-backup=radarr
     restart: unless-stopped
@@ -164,7 +164,7 @@ services:
     depends_on:
       - plex
     environment:
-      - PUID=${UID}
+      - PUID=1000
       - PGID=13000
       - TZ=Canada/Pacific
     volumes:

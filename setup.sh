@@ -31,7 +31,7 @@ mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,tautul
     
 # Set permissions
 chmod -R 775 /mnt/data/
-chown -R $(id -u):servarr /mnt/data/
+chown -R nathan:servarr /mnt/data/
 chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
@@ -39,5 +39,3 @@ chown -R radarr:servarr config/radarr-config
 chown -R bazarr:servarr config/bazarr-config
 chown -R prowlarr:servarr config/prowlarr-config
 chown -R qbittorrent:servarr config/qbittorrent-config
-
-echo "UID=$(id -u)" >> .env
