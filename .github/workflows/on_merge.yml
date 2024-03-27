@@ -60,4 +60,4 @@ jobs:
         port: ${{ vars.SSH_PORT }}
         service_token_id: ${{ vars.SERVICE_TOKEN_ID }}
         service_token_secret: ${{ secrets.SERVICE_TOKEN_SECRET }}
-        commands: cd servarr; git reset --hard HEAD; git pull; echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash setup.sh > /dev/null; echo "TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}" > .env; echo "MULLVAD_PRIVATE_KEY=${{ secrets.MULLVAD_PRIVATE_KEY }}" >> .env; docker pull; docker compose up --build -d; docker system prune
+        commands: cd servarr; git reset --hard HEAD; git pull; echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash setup.sh > /dev/null; echo "TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}" > .env; echo "MULLVAD_PRIVATE_KEY=${{ secrets.MULLVAD_PRIVATE_KEY }}" >> .env; docker pull; docker compose up --build -d; docker system prune -f
