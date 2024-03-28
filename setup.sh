@@ -11,7 +11,6 @@ useradd prowlarr -u 13006
 useradd qbittorrent -u 13007
 useradd maintainerr -u 13008
 useradd tautulli -u 13009
-useradd wizarr -u 13010
 
 # Make group
 groupadd servarr -g 13000
@@ -27,7 +26,6 @@ usermod -a -G servarr prowlarr
 usermod -a -G servarr qbittorrent
 usermod -a -G servarr maintainerr
 usermod -a -G servarr tautulli
-usermod -a -G servarr wizarr
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies}
@@ -52,4 +50,3 @@ chown -R prowlarr:servarr config/prowlarr-config
 chown -R qbittorrent:servarr config/qbittorrent-config
 chown -R maintainerr:servarr config/maintainerr-config
 chown -R tautulli:servarr config/tautulli-config
-chown -R wizarr:servarr config/wizarr-config
