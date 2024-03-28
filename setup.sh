@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 
-# Make users and groups
+# Make users
 useradd plex -u 13001
 useradd overseerr -u 13002
 useradd sonarr -u 13003
@@ -29,15 +29,14 @@ usermod -a -G servarr maintainerr
 usermod -a -G servarr tautulli
 usermod -a -G servarr wizarr
 
-
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies}
 mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr}-config
 mkdir -p scripts/{sonarr,radarr}-scripts/{custom-services,custom-cont-init}
 
 # Download arr-scripts
-wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -O scripts_init.bash -P scripts/sonarr/custom-cont-init
-wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash -O scripts_init.bash -P scripts/radarr/custom-cont-init
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -O /home/nathan/servarr/scripts/sonarr/custom-cont-init/scripts_init.bash
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash -O /home/nathan/servarr/scripts/radarr/custom-cont-init/scripts_init.bash
 
 # Set permissions
 chmod -R 775 /mnt/data
