@@ -115,6 +115,14 @@ resource "cloudflare_record" "wizarr_nathanjn_com" {
   proxied = true
 }
 
+resource "cloudflare_record" "maintainerr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "maintainerr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
 ###
 # Tunnel configuration 
 ###
@@ -175,6 +183,10 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     ingress_rule {
       hostname = "wizarr.nathanjn.com"
       service  = "http://wizarr:5690"
+    }
+    ingress_rule {
+      hostname = "maintainerr.nathanjn.com"
+      service  = "http://maintainerr:6246"
     }
     ingress_rule {
       service = "http_status:404"
@@ -390,6 +402,25 @@ resource "cloudflare_access_application" "wizarr_nathanjn_com" {
 
 resource "cloudflare_access_policy" "user_wizarr" {
   application_id = cloudflare_access_application.wizarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathanjamesnorris@gmail.com"]
+  }
+}
+
+
+resource "cloudflare_access_application" "maintainerr_nathanjn_com" {
+  zone_id          = data.cloudflare_zone.nathanjn_com.id
+  name             = "maintainerr.nathanjn.com"
+  domain           = "maintainerr.nathanjn.com"
+  session_duration = "2h"
+}
+
+resource "cloudflare_access_policy" "user_maintainerr" {
+  application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"
