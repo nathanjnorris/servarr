@@ -393,25 +393,6 @@ resource "cloudflare_access_policy" "user_tautulli" {
   }
 }
 
-resource "cloudflare_access_application" "wizarr_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "wizarr.nathanjn.com"
-  domain           = "wizarr.nathanjn.com"
-  session_duration = "2h"
-}
-
-resource "cloudflare_access_policy" "user_wizarr" {
-  application_id = cloudflare_access_application.wizarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "1"
-  decision       = "allow"
-  include {
-    email = ["nathanjamesnorris@gmail.com"]
-  }
-}
-
-
 resource "cloudflare_access_application" "maintainerr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "maintainerr.nathanjn.com"
