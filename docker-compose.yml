@@ -1,7 +1,7 @@
 version: "3.8"
 name: servarr
 services:
-  # User-facing apps
+  # User apps
   plex:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
@@ -44,6 +44,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
+      - /home/nathan/servarr/scripts/sonarr-scripts/custom-services:/custom-services.d
+      - /home/nathan/servarr/scripts/sonarr-scripts/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/sonarr-config:/config
       - /mnt/data:/data
     restart: unless-stopped
@@ -58,6 +60,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
+      - /home/nathan/servarr/scripts/radarr-scripts/custom-services:/custom-services.d
+      - /home/nathan/servarr/scripts/radarr-scripts/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/radarr-config:/config
       - /mnt/data:/data
     restart: unless-stopped
@@ -104,14 +108,17 @@ services:
       - /mnt/data/torrents:/data/torrents
     restart: unless-stopped
 
-  recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:latest
-    container_name: recyclarr
+  maintainerr:
+    image: ghcr.io/jorenn92/maintainerr:latest 
+    container_name: maintainerr
     user: 13008:13000
     volumes:
-      - /home/nathan/servarr/config/recyclarr-config:/config
+      - /home/nathan/servarr/config/maintainerr-config:/opt/data
     environment:
       - TZ=Canada/Pacific
+    ports:
+      - 6246:6246
+    restart: unless-stopped
 
   # User management
   tautulli:
@@ -139,7 +146,7 @@ services:
     ports:
       - 5690:5690
     restart: unless-stopped
-  
+
   # Networking
   cloudflared:
     image: cloudflare/cloudflared:latest
