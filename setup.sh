@@ -36,8 +36,8 @@ mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,mainta
 mkdir -p scripts/{sonarr,radarr}-scripts/{custom-services,custom-cont-init}
 
 # Download arr-scripts
-wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -P scripts/sonarr/custom-cont-init
-wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash -P scripts/radarr/custom-cont-init
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -O scripts_init.bash -P scripts/sonarr/custom-cont-init
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash -O scripts_init.bash -P scripts/radarr/custom-cont-init
 
 # Set permissions
 chmod -R 775 /mnt/data
@@ -51,5 +51,6 @@ chown -R radarr:servarr scripts/radarr-scripts
 chown -R bazarr:servarr config/bazarr-config
 chown -R prowlarr:servarr config/prowlarr-config
 chown -R qbittorrent:servarr config/qbittorrent-config
-chown -R tautulli:servarr config/tautulli-config
 chown -R maintainerr:servarr config/maintainerr-config
+chown -R tautulli:servarr config/tautulli-config
+chown -R wizarr:servarr config/wizarr-config
