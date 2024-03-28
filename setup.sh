@@ -2,45 +2,54 @@
 #
 
 # Make users and groups
-sudo useradd plex -u 13001
-sudo useradd overseerr -u 13002
-sudo useradd sonarr -u 13003
-sudo useradd radarr -u 13004
-sudo useradd bazarr -u 13005
-sudo useradd prowlarr -u 13006
-sudo useradd qbittorrent -u 13007
-sudo useradd recyclarr -u 13008
-sudo useradd tautulli -u 13009
-sudo useradd wizarr -u 13010
+useradd plex -u 13001
+useradd overseerr -u 13002
+useradd sonarr -u 13003
+useradd radarr -u 13004
+useradd bazarr -u 13005
+useradd prowlarr -u 13006
+useradd qbittorrent -u 13007
+useradd maintainerr -u 13008
+useradd tautulli -u 13009
+useradd wizarr -u 13010
 
 # Make group
-sudo groupadd servarr -g 13000
+groupadd servarr -g 13000
 
 # Add users to group
-sudo usermod -a -G servarr nathan
-sudo usermod -a -G servarr plex
-sudo usermod -a -G servarr overseerr
-sudo usermod -a -G servarr sonarr
-sudo usermod -a -G servarr radarr
-sudo usermod -a -G servarr bazarr
-sudo usermod -a -G servarr prowlarr
-sudo usermod -a -G servarr qbittorrent
-sudo usermod -a -G servarr recyclarr
-sudo usermod -a -G servarr tautulli
-sudo usermod -a -G servarr wizarr
+usermod -a -G servarr nathan
+usermod -a -G servarr plex
+usermod -a -G servarr overseerr
+usermod -a -G servarr sonarr
+usermod -a -G servarr radarr
+usermod -a -G servarr bazarr
+usermod -a -G servarr prowlarr
+usermod -a -G servarr qbittorrent
+usermod -a -G servarr maintainerr
+usermod -a -G servarr tautulli
+usermod -a -G servarr wizarr
+
 
 # Make directories
-sudo mkdir -p /mnt/data/{torrents,media}/{tv,movies}
-sudo mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,recyclarr,tautulli,wizarr}-config
+mkdir -p /mnt/data/{torrents,media}/{tv,movies}
+mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr}-config
+mkdir -p scripts/{sonarr,radarr}-scripts/{custom-services,custom-cont-init}
+
+# Download arr-scripts
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -P scripts/sonarr/custom-cont-init
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash -P scripts/radarr/custom-cont-init
 
 # Set permissions
-sudo chmod -R 775 /mnt/data
-sudo chown -R nathan:servarr /mnt/data
-sudo chown -R plex:servarr config/plex-config
-sudo chown -R overseerr:servarr config/overseerr-config
-sudo chown -R sonarr:servarr config/sonarr-config
-sudo chown -R radarr:servarr config/radarr-config
-sudo chown -R bazarr:servarr config/bazarr-config
-sudo chown -R prowlarr:servarr config/prowlarr-config
-sudo chown -R qbittorrent:servarr config/qbittorrent-config
-sudo chown -R recyclarr:servarr config/recyclarr-config
+chmod -R 775 /mnt/data
+chown -R nathan:servarr /mnt/data
+chown -R plex:servarr config/plex-config
+chown -R overseerr:servarr config/overseerr-config
+chown -R sonarr:servarr config/sonarr-config
+chown -R sonarr:servarr scripts/sonarr-scripts
+chown -R radarr:servarr config/radarr-config
+chown -R radarr:servarr scripts/radarr-scripts
+chown -R bazarr:servarr config/bazarr-config
+chown -R prowlarr:servarr config/prowlarr-config
+chown -R qbittorrent:servarr config/qbittorrent-config
+chown -R tautulli:servarr config/tautulli-config
+chown -R maintainerr:servarr config/maintainerr-config
