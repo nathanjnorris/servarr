@@ -32,7 +32,7 @@ usermod -a -G servarr wizarr
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies}
 mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr}-config
-mkdir -p scripts/{sonarr,radarr}-scripts/{custom-services,custom-cont-init}
+mkdir -p scripts/{sonarr,radarr}/{custom-services,custom-cont-init}
 
 # Download arr-scripts
 wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -O /home/nathan/servarr/scripts/sonarr/custom-cont-init/scripts_init.bash
@@ -44,9 +44,9 @@ chown -R nathan:servarr /mnt/data
 chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
-chown -R sonarr:servarr scripts/sonarr-scripts
+chown -R sonarr:servarr scripts/sonarr
 chown -R radarr:servarr config/radarr-config
-chown -R radarr:servarr scripts/radarr-scripts
+chown -R radarr:servarr scripts/radarr
 chown -R bazarr:servarr config/bazarr-config
 chown -R prowlarr:servarr config/prowlarr-config
 chown -R qbittorrent:servarr config/qbittorrent-config
