@@ -476,19 +476,19 @@ resource "cloudflare_access_policy" "user_maintainerr" {
 # R2 (S3-compatible storage)
 ###
 
-# resource "cloudflare_r2_bucket" "bucket-servarr" {
-#   account_id = var.account_id
-#   name       = "servarr"
-#   location   = "WNAM"
-# }
+resource "cloudflare_r2_bucket" "bucket-servarr" {
+  account_id = var.account_id
+  name       = "servarr"
+  location   = "WNAM"
+}
 
-# module "r2-api-token" {
-#   source  = "Cyb3r-Jak3/r2-api-token/cloudflare"
-#   version = "3.0.1"
+module "r2-api-token" {
+  source  = "Cyb3r-Jak3/r2-api-token/cloudflare"
+  version = "3.0.1"
 
-#   account_id   = var.account_id
-#   token_name   = "servarr-r2-api-token"
-#   buckets      = [cloudflare_r2_bucket.bucket-servarr.name]
-#   bucket_read  = true
-#   bucket_write = true
-# }
+  account_id   = var.account_id
+  token_name   = "servarr-r2-api-token"
+  buckets      = [cloudflare_r2_bucket.bucket-servarr.name]
+  bucket_read  = true
+  bucket_write = true
+}
