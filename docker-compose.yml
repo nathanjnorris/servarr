@@ -201,9 +201,9 @@ services:
       - TZ=Canada/Pacific
     ports:
       - 8191:8191 # flaresolverr
-      - 8989:8989 # sonarr
+      # - 8989:8989 # sonarr
       - 8988:8989 # 4ksonarr
-      - 7878:7878 # radarr
+      # - 7878:7878 # radarr
       - 7877:7878 # 4kradarr
       - 6767:6767 # bazarr
       - 9696:9696 # prowlarr
