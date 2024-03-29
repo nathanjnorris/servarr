@@ -44,27 +44,23 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - /home/nathan/servarr/scripts/sonarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/sonarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/sonarr-config:/config
       - /mnt/data:/data
     restart: unless-stopped
 
-  4ksonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: 4ksonarr
-    network_mode: service:gluetun
-    environment:
-      - PUID=13003
-      - PGID=13000
-      - UMASK=002
-      - TZ=Canada/Pacific
-    volumes:
-      - /home/nathan/servarr/scripts/4ksonarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/4ksonarr/custom-cont-init:/custom-cont-init.d
-      - /home/nathan/servarr/config/4ksonarr-config:/config
-      - /mnt/data:/data
-    restart: unless-stopped
+  # 4ksonarr:
+  #   image: lscr.io/linuxserver/sonarr:latest
+  #   container_name: 4ksonarr
+  #   network_mode: service:gluetun
+  #   environment:
+  #     - PUID=13003
+  #     - PGID=13000
+  #     - UMASK=002
+  #     - TZ=Canada/Pacific
+  #   volumes:
+  #     - /home/nathan/servarr/config/4ksonarr-config:/config
+  #     - /mnt/data:/data
+  #   restart: unless-stopped
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -76,27 +72,23 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - /home/nathan/servarr/scripts/radarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/radarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/radarr-config:/config
       - /mnt/data:/data
     restart: unless-stopped
 
-  4kradarr:
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: 4kradarr
-    network_mode: service:gluetun
-    environment:
-      - PUID=13004
-      - PGID=13000
-      - UMASK=002
-      - TZ=Canada/Pacific
-    volumes:
-      - /home/nathan/servarr/scripts/4kradarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/4kradarr/custom-cont-init:/custom-cont-init.d
-      - /home/nathan/servarr/config/4kradarr-config:/config
-      - /mnt/data:/data
-    restart: unless-stopped
+  # 4kradarr:
+  #   image: lscr.io/linuxserver/radarr:latest
+  #   container_name: 4kradarr
+  #   network_mode: service:gluetun
+  #   environment:
+  #     - PUID=13004
+  #     - PGID=13000
+  #     - UMASK=002
+  #     - TZ=Canada/Pacific
+  #   volumes:
+  #     - /home/nathan/servarr/config/4kradarr-config:/config
+  #     - /mnt/data:/data
+  #   restart: unless-stopped
 
   bazarr: 
     image: lscr.io/linuxserver/bazarr:latest
@@ -177,6 +169,16 @@ services:
     ports:
       - 5690:5690
     restart: unless-stopped
+  
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:latest
+    container_name: recyclarr
+    user: 13001:13000
+    volumes:
+      - /home/nathan/servarr/config/recyclarr-config:/config
+    environment:
+      - TZ=Canada/Pacific
+      - RECYCLARR_CREATE_CONFIG=true
 
   # Networking
   cloudflared:
