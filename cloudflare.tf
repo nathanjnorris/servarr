@@ -67,7 +67,7 @@ resource "cloudflare_record" "sonarr_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "sonarr_nathanjn_com" {
+resource "cloudflare_record" "4ksonarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "4ksonarr"
   value   = cloudflare_tunnel.servarr_tunnel.cname
@@ -83,7 +83,7 @@ resource "cloudflare_record" "radarr_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "radarr_nathanjn_com" {
+resource "cloudflare_record" "4kradarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "4kradarr"
   value   = cloudflare_tunnel.servarr_tunnel.cname
@@ -186,7 +186,7 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     }
     ingress_rule {
       hostname = "4kradarr.nathanjn.com"
-      service  = "http://gluetun:7878"
+      service  = "http://gluetun:7877"
     }
     ingress_rule {
       hostname = "bazarr.nathanjn.com"
@@ -327,7 +327,7 @@ resource "cloudflare_access_policy" "user_sonarr" {
   }
 }
 
-resource "cloudflare_access_application" "4ksonarr_nathanjn_com" {
+resource "cloudflare_access_application" "sonarr4k_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "4ksonarr.nathanjn.com"
   domain           = "4ksonarr.nathanjn.com"
@@ -335,7 +335,7 @@ resource "cloudflare_access_application" "4ksonarr_nathanjn_com" {
 }
 
 resource "cloudflare_access_policy" "user_4ksonarr" {
-  application_id = cloudflare_access_application.4ksonarr_nathanjn_com.id
+  application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"
@@ -363,7 +363,7 @@ resource "cloudflare_access_policy" "user_radarr" {
   }
 }
 
-resource "cloudflare_access_application" "4kradarr_nathanjn_com" {
+resource "cloudflare_access_application" "radarr4k_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "4kradarr.nathanjn.com"
   domain           = "4kradarr.nathanjn.com"
@@ -371,7 +371,7 @@ resource "cloudflare_access_application" "4kradarr_nathanjn_com" {
 }
 
 resource "cloudflare_access_policy" "user_4kradarr" {
-  application_id = cloudflare_access_application.4kradarr_nathanjn_com.id
+  application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"
