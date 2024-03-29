@@ -173,7 +173,7 @@ services:
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr:latest
     container_name: recyclarr
-    user: 13001:13000
+    user: 13010:13000
     volumes:
       - /home/nathan/servarr/config/recyclarr-config:/config
     environment:

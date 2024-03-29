@@ -11,6 +11,7 @@ useradd prowlarr -u 13006
 useradd qbittorrent -u 13007
 useradd maintainerr -u 13008
 useradd tautulli -u 13009
+useradd recyclarr -u 13010
 
 # Make group
 groupadd servarr -g 13000
@@ -26,10 +27,11 @@ usermod -a -G servarr prowlarr
 usermod -a -G servarr qbittorrent
 usermod -a -G servarr maintainerr
 usermod -a -G servarr tautulli
+usermod -a -G servarr recyclarr
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
-mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr}-config
+mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr,recyclarr}-config
 # mkdir -p scripts/{sonarr,4ksonarr,radarr,4kradarr}/{custom-services,custom-cont-init}
 
 # # Download arr-scripts
@@ -56,3 +58,4 @@ chown -R prowlarr:servarr config/prowlarr-config
 chown -R qbittorrent:servarr config/qbittorrent-config
 chown -R maintainerr:servarr config/maintainerr-config
 chown -R tautulli:servarr config/tautulli-config
+chown -R recyclarr:servarr config/recyclarr-config
