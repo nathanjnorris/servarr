@@ -2,7 +2,7 @@ terraform {
   required_version = "~> 1.7.0"
 
   backend "remote" {
-    hostname  = "nathanjnorris-org"
+    hostname = "nathanjnorris-org"
     workspaces {
       name = "servarr"
     }
