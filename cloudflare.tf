@@ -172,21 +172,21 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
       hostname = "overseerr.nathanjn.com"
       service  = "http://overseerr:5055"
     }
-    # ingress_rule {
-    #   hostname = "sonarr.nathanjn.com"
-    #   service  = "http://gluetun:8989"
-    # }
     ingress_rule {
-      hostname = "4ksonarr.nathanjn.com"
+      hostname = "sonarr.nathanjn.com"
       service  = "http://gluetun:8989"
     }
-    # ingress_rule {
-    #   hostname = "radarr.nathanjn.com"
-    #   service  = "http://gluetun:7878"
-    # }
+    ingress_rule {
+      hostname = "4ksonarr.nathanjn.com"
+      service  = "http://gluetun:8988"
+    }
+    ingress_rule {
+      hostname = "radarr.nathanjn.com"
+      service  = "http://gluetun:7878"
+    }
     ingress_rule {
       hostname = "4kradarr.nathanjn.com"
-      service  = "http://gluetun:7878"
+      service  = "http://gluetun:7877"
     }
     ingress_rule {
       hostname = "bazarr.nathanjn.com"
