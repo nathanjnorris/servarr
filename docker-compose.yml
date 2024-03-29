@@ -34,21 +34,21 @@ services:
     restart: unless-stopped
 
   # Media management
-  sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
-    network_mode: service:gluetun
-    environment:
-      - PUID=13003
-      - PGID=13000
-      - UMASK=002
-      - TZ=Canada/Pacific
-    volumes:
-      - /home/nathan/servarr/scripts/sonarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/sonarr/custom-cont-init:/custom-cont-init.d
-      - /home/nathan/servarr/config/sonarr-config:/config
-      - /mnt/data:/data
-    restart: unless-stopped
+  # sonarr:
+  #   image: lscr.io/linuxserver/sonarr:latest
+  #   container_name: sonarr
+  #   network_mode: service:gluetun
+  #   environment:
+  #     - PUID=13003
+  #     - PGID=13000
+  #     - UMASK=002
+  #     - TZ=Canada/Pacific
+  #   volumes:
+  #     - /home/nathan/servarr/scripts/sonarr/custom-services:/custom-services.d
+  #     - /home/nathan/servarr/scripts/sonarr/custom-cont-init:/custom-cont-init.d
+  #     - /home/nathan/servarr/config/sonarr-config:/config
+  #     - /mnt/data:/data
+  #   restart: unless-stopped
 
   4ksonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -66,21 +66,21 @@ services:
       - /mnt/data:/data
     restart: unless-stopped
 
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
-    network_mode: service:gluetun
-    environment:
-      - PUID=13004
-      - PGID=13000
-      - UMASK=002
-      - TZ=Canada/Pacific
-    volumes:
-      - /home/nathan/servarr/scripts/radarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/radarr/custom-cont-init:/custom-cont-init.d
-      - /home/nathan/servarr/config/radarr-config:/config
-      - /mnt/data:/data
-    restart: unless-stopped
+  # radarr:
+  #   image: lscr.io/linuxserver/radarr:latest
+  #   container_name: radarr
+  #   network_mode: service:gluetun
+  #   environment:
+  #     - PUID=13004
+  #     - PGID=13000
+  #     - UMASK=002
+  #     - TZ=Canada/Pacific
+  #   volumes:
+  #     - /home/nathan/servarr/scripts/radarr/custom-services:/custom-services.d
+  #     - /home/nathan/servarr/scripts/radarr/custom-cont-init:/custom-cont-init.d
+  #     - /home/nathan/servarr/config/radarr-config:/config
+  #     - /mnt/data:/data
+  #   restart: unless-stopped
 
   4kradarr:
     image: lscr.io/linuxserver/radarr:latest
