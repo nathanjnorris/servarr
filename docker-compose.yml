@@ -1,7 +1,7 @@
 version: "3.8"
 name: servarr
 services:
-  # User apps
+  # User apps 
   plex:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
