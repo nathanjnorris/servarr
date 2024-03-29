@@ -30,11 +30,13 @@ usermod -a -G servarr tautulli
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
 mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr}-config
-mkdir -p scripts/{sonarr,radarr}/{custom-services,custom-cont-init}
+mkdir -p scripts/{sonarr,4ksonarr,radarr,4kradarr}/{custom-services,custom-cont-init}
 
 # Download arr-scripts
 wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -O /home/nathan/servarr/scripts/sonarr/custom-cont-init/scripts_init.bash
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -O /home/nathan/servarr/scripts/4ksonarr/custom-cont-init/scripts_init.bash
 wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash -O /home/nathan/servarr/scripts/radarr/custom-cont-init/scripts_init.bash
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash -O /home/nathan/servarr/scripts/4kradarr/custom-cont-init/scripts_init.bash
 
 # Set permissions
 chmod -R 775 /mnt/data
@@ -44,9 +46,11 @@ chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
 chown -R sonarr:servarr config/4ksonarr-config
 chown -R sonarr:servarr scripts/sonarr
+chown -R sonarr:servarr scripts/4ksonarr
 chown -R radarr:servarr config/radarr-config
 chown -R radarr:servarr config/4kradarr-config
 chown -R radarr:servarr scripts/radarr
+chown -R radarr:servarr scripts/4kradarr
 chown -R bazarr:servarr config/bazarr-config
 chown -R prowlarr:servarr config/prowlarr-config
 chown -R qbittorrent:servarr config/qbittorrent-config
