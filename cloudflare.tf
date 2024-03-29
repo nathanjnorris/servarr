@@ -67,7 +67,7 @@ resource "cloudflare_record" "sonarr_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "4ksonarr_nathanjn_com" {
+resource "cloudflare_record" "sonarr4k_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "4ksonarr"
   value   = cloudflare_tunnel.servarr_tunnel.cname
@@ -83,7 +83,7 @@ resource "cloudflare_record" "radarr_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "4kradarr_nathanjn_com" {
+resource "cloudflare_record" "radarr4k_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "4kradarr"
   value   = cloudflare_tunnel.servarr_tunnel.cname
@@ -334,7 +334,7 @@ resource "cloudflare_access_application" "sonarr4k_nathanjn_com" {
   session_duration = "2h"
 }
 
-resource "cloudflare_access_policy" "user_4ksonarr" {
+resource "cloudflare_access_policy" "user_sonarr4k" {
   application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
@@ -370,7 +370,7 @@ resource "cloudflare_access_application" "radarr4k_nathanjn_com" {
   session_duration = "2h"
 }
 
-resource "cloudflare_access_policy" "user_4kradarr" {
+resource "cloudflare_access_policy" "user_radarr4k" {
   application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
