@@ -67,9 +67,25 @@ resource "cloudflare_record" "sonarr_nathanjn_com" {
   proxied = true
 }
 
+resource "cloudflare_record" "sonarr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "4ksonarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
 resource "cloudflare_record" "radarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "radarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "radarr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "4kradarr"
   value   = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
@@ -161,7 +177,15 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
       service  = "http://gluetun:8989"
     }
     ingress_rule {
+      hostname = "4ksonarr.nathanjn.com"
+      service  = "http://gluetun:8988"
+    }
+    ingress_rule {
       hostname = "radarr.nathanjn.com"
+      service  = "http://gluetun:7878"
+    }
+    ingress_rule {
+      hostname = "4kradarr.nathanjn.com"
       service  = "http://gluetun:7878"
     }
     ingress_rule {
@@ -303,6 +327,24 @@ resource "cloudflare_access_policy" "user_sonarr" {
   }
 }
 
+resource "cloudflare_access_application" "4ksonarr_nathanjn_com" {
+  zone_id          = data.cloudflare_zone.nathanjn_com.id
+  name             = "4ksonarr.nathanjn.com"
+  domain           = "4ksonarr.nathanjn.com"
+  session_duration = "2h"
+}
+
+resource "cloudflare_access_policy" "user_4ksonarr" {
+  application_id = cloudflare_access_application.4ksonarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathanjamesnorris@gmail.com"]
+  }
+}
+
 resource "cloudflare_access_application" "radarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "radarr.nathanjn.com"
@@ -312,6 +354,24 @@ resource "cloudflare_access_application" "radarr_nathanjn_com" {
 
 resource "cloudflare_access_policy" "user_radarr" {
   application_id = cloudflare_access_application.radarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathanjamesnorris@gmail.com"]
+  }
+}
+
+resource "cloudflare_access_application" "4kradarr_nathanjn_com" {
+  zone_id          = data.cloudflare_zone.nathanjn_com.id
+  name             = "4kradarr.nathanjn.com"
+  domain           = "4kradarr.nathanjn.com"
+  session_duration = "2h"
+}
+
+resource "cloudflare_access_policy" "user_4kradarr" {
+  application_id = cloudflare_access_application.4kradarr_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"
@@ -416,19 +476,19 @@ resource "cloudflare_access_policy" "user_maintainerr" {
 # R2 (S3-compatible storage)
 ###
 
-resource "cloudflare_r2_bucket" "bucket-servarr" {
-  account_id = var.account_id
-  name       = "servarr"
-  location   = "WNAM"
-}
+# resource "cloudflare_r2_bucket" "bucket-servarr" {
+#   account_id = var.account_id
+#   name       = "servarr"
+#   location   = "WNAM"
+# }
 
-module "r2-api-token" {
-  source  = "Cyb3r-Jak3/r2-api-token/cloudflare"
-  version = "3.0.1"
+# module "r2-api-token" {
+#   source  = "Cyb3r-Jak3/r2-api-token/cloudflare"
+#   version = "3.0.1"
 
-  account_id   = var.account_id
-  token_name   = "servarr-r2-api-token"
-  buckets      = [cloudflare_r2_bucket.bucket-servarr.name]
-  bucket_read  = true
-  bucket_write = true
-}
+#   account_id   = var.account_id
+#   token_name   = "servarr-r2-api-token"
+#   buckets      = [cloudflare_r2_bucket.bucket-servarr.name]
+#   bucket_read  = true
+#   bucket_write = true
+# }

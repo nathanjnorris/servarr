@@ -50,6 +50,22 @@ services:
       - /mnt/data:/data
     restart: unless-stopped
 
+  4ksonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: 4ksonarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=13003
+      - PGID=13000
+      - UMASK=002
+      - TZ=Canada/Pacific
+    volumes:
+      - /home/nathan/servarr/scripts/sonarr/custom-services:/custom-services.d
+      - /home/nathan/servarr/scripts/sonarr/custom-cont-init:/custom-cont-init.d
+      - /home/nathan/servarr/config/4ksonarr-config:/config
+      - /mnt/data:/data
+    restart: unless-stopped
+
   radarr:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
@@ -63,6 +79,22 @@ services:
       - /home/nathan/servarr/scripts/radarr/custom-services:/custom-services.d
       - /home/nathan/servarr/scripts/radarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/radarr-config:/config
+      - /mnt/data:/data
+    restart: unless-stopped
+
+  4kradarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=13004
+      - PGID=13000
+      - UMASK=002
+      - TZ=Canada/Pacific
+    volumes:
+      - /home/nathan/servarr/scripts/radarr/custom-services:/custom-services.d
+      - /home/nathan/servarr/scripts/radarr/custom-cont-init:/custom-cont-init.d
+      - /home/nathan/servarr/config/4kradarr-config:/config
       - /mnt/data:/data
     restart: unless-stopped
 
@@ -170,7 +202,9 @@ services:
     ports:
       - 8191:8191 # flaresolverr
       - 8989:8989 # sonarr
+      - 8988:8989 # 4ksonarr
       - 7878:7878 # radarr
+      - 7877:7878 # 4kradarr
       - 6767:6767 # bazarr
       - 9696:9696 # prowlarr
       - 8080:8080 # qbittorrent

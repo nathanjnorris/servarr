@@ -28,8 +28,8 @@ usermod -a -G servarr maintainerr
 usermod -a -G servarr tautulli
 
 # Make directories
-mkdir -p /mnt/data/{torrents,media}/{tv,movies}
-mkdir -p config/{plex,overseerr,sonarr,radarr,bazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr}-config
+mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
+mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr}-config
 mkdir -p scripts/{sonarr,radarr}/{custom-services,custom-cont-init}
 
 # Download arr-scripts
@@ -42,8 +42,10 @@ chown -R nathan:servarr /mnt/data
 chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
+chown -R sonarr:servarr config/4ksonarr-config
 chown -R sonarr:servarr scripts/sonarr
 chown -R radarr:servarr config/radarr-config
+chown -R radarr:servarr config/4kradarr-config
 chown -R radarr:servarr scripts/radarr
 chown -R bazarr:servarr config/bazarr-config
 chown -R prowlarr:servarr config/prowlarr-config
