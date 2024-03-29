@@ -1,9 +1,8 @@
 terraform {
   required_version = "~> 1.7.0"
 
-  cloud {
-    organization = "nathanjnorris-org"
-
+  backend "remote" {
+    hostname = "nathanjnorris-org"
     workspaces {
       name = "servarr"
     }

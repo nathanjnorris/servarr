@@ -67,9 +67,25 @@ resource "cloudflare_record" "sonarr_nathanjn_com" {
   proxied = true
 }
 
+resource "cloudflare_record" "sonarr4k_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "4ksonarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
 resource "cloudflare_record" "radarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "radarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "radarr4k_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "4kradarr"
   value   = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
@@ -161,8 +177,16 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
       service  = "http://gluetun:8989"
     }
     ingress_rule {
+      hostname = "4ksonarr.nathanjn.com"
+      service  = "http://gluetun:8988"
+    }
+    ingress_rule {
       hostname = "radarr.nathanjn.com"
       service  = "http://gluetun:7878"
+    }
+    ingress_rule {
+      hostname = "4kradarr.nathanjn.com"
+      service  = "http://gluetun:7877"
     }
     ingress_rule {
       hostname = "bazarr.nathanjn.com"
@@ -303,6 +327,24 @@ resource "cloudflare_access_policy" "user_sonarr" {
   }
 }
 
+resource "cloudflare_access_application" "sonarr4k_nathanjn_com" {
+  zone_id          = data.cloudflare_zone.nathanjn_com.id
+  name             = "4ksonarr.nathanjn.com"
+  domain           = "4ksonarr.nathanjn.com"
+  session_duration = "2h"
+}
+
+resource "cloudflare_access_policy" "user_sonarr4k" {
+  application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathanjamesnorris@gmail.com"]
+  }
+}
+
 resource "cloudflare_access_application" "radarr_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
   name             = "radarr.nathanjn.com"
@@ -312,6 +354,24 @@ resource "cloudflare_access_application" "radarr_nathanjn_com" {
 
 resource "cloudflare_access_policy" "user_radarr" {
   application_id = cloudflare_access_application.radarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathanjamesnorris@gmail.com"]
+  }
+}
+
+resource "cloudflare_access_application" "radarr4k_nathanjn_com" {
+  zone_id          = data.cloudflare_zone.nathanjn_com.id
+  name             = "4kradarr.nathanjn.com"
+  domain           = "4kradarr.nathanjn.com"
+  session_duration = "2h"
+}
+
+resource "cloudflare_access_policy" "user_radarr4k" {
+  application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"
