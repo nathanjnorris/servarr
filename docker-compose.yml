@@ -11,7 +11,7 @@ services:
       - PGID=13000
       - UMASK=002
       - TZ=Canada/Pacific
-      - VERSION=docker
+      - VERSION=latest
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/data/media
