@@ -6,12 +6,13 @@ services:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
     environment:
-      - device=/dev/dri:/dev/dri
       - PUID=13001
       - PGID=13000
       - UMASK=002
       - TZ=Canada/Pacific
       - VERSION=latest
+    devices:
+      - dev/dri:/dev/dri
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/data/media
