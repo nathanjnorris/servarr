@@ -18,7 +18,7 @@ services:
       - /mnt/data/media:/data/media
     ports:
       - 32400:32400
-    restart: unless-stopped
+    restart: always
   
   overseerr:
     image: lscr.io/linuxserver/overseerr:latest
@@ -32,7 +32,7 @@ services:
       - /home/nathan/servarr/config/overseerr-config:/config
     ports:
       - 5055:5055
-    restart: unless-stopped
+    restart: always
 
   # Media management
   sonarr:
@@ -47,7 +47,7 @@ services:
     volumes:
       - /home/nathan/servarr/config/sonarr-config:/config
       - /mnt/data:/data
-    restart: unless-stopped
+    restart: always
 
   4ksonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -61,7 +61,7 @@ services:
     volumes:
       - /home/nathan/servarr/config/4ksonarr-config:/config
       - /mnt/data:/data
-    restart: unless-stopped
+    restart: always
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -75,7 +75,7 @@ services:
     volumes:
       - /home/nathan/servarr/config/radarr-config:/config
       - /mnt/data:/data
-    restart: unless-stopped
+    restart: always
 
   4kradarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -89,7 +89,7 @@ services:
     volumes:
       - /home/nathan/servarr/config/4kradarr-config:/config
       - /mnt/data:/data
-    restart: unless-stopped
+    restart: always
 
   bazarr: 
     image: lscr.io/linuxserver/bazarr:latest
@@ -103,7 +103,7 @@ services:
     volumes:
       - /home/nathan/servarr/config/bazarr-config:/config
       - /mnt/data/media:/data/media
-    restart: unless-stopped
+    restart: always
   
   4kbazarr: 
     image: lscr.io/linuxserver/bazarr:latest
@@ -117,7 +117,7 @@ services:
     volumes:
       - /home/nathan/servarr/config/4kbazarr-config:/config
       - /mnt/data/media:/data/media
-    restart: unless-stopped
+    restart: always
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
@@ -130,7 +130,7 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/prowlarr-config:/config
-    restart: unless-stopped
+    restart: always
 
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent:latest
@@ -145,7 +145,7 @@ services:
     volumes:
       - /home/nathan/servarr/config/qbittorrent-config:/config
       - /mnt/data/torrents:/data/torrents
-    restart: unless-stopped
+    restart: always
 
   maintainerr:
     image: ghcr.io/jorenn92/maintainerr:latest 
@@ -157,7 +157,7 @@ services:
       - TZ=Canada/Pacific
     ports:
       - 6246:6246
-    restart: unless-stopped
+    restart: always
 
   # User management
   tautulli:
@@ -174,7 +174,7 @@ services:
       - /home/nathan/servarr/config/tautulli-config:/config
     ports:
       - 8181:8181
-    restart: unless-stopped
+    restart: always
 
   wizarr:
     image: ghcr.io/wizarrrr/wizarr:latest
@@ -183,7 +183,7 @@ services:
       - /home/nathan/servarr/config/wizarr-config:/data/database
     ports:
       - 5690:5690
-    restart: unless-stopped
+    restart: always
   
   recyclarr:
     image: ghcr.io/recyclarr/recyclarr:latest
@@ -193,6 +193,7 @@ services:
       - /home/nathan/servarr/config/recyclarr-config:/config
     environment:
       - TZ=Canada/Pacific
+    restart: always
 
   # Networking
   cloudflared:
@@ -201,7 +202,7 @@ services:
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
-    restart: unless-stopped
+    restart: always
 
   gluetun:
     image: qmcgaw/gluetun:latest
@@ -227,7 +228,7 @@ services:
       - 8080:8080 # qbittorrent
       - 6881:6881 # qbittorrent
       - 6881:6881/udp # qbittorrent
-    restart: unless-stopped
+    restart: always
 
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
@@ -235,7 +236,7 @@ services:
     network_mode: service:gluetun
     environment:
       - TZ=Canada/Pacific
-    restart: unless-stopped
+    restart: always
 
   # Container updates
   watchtower:
@@ -245,4 +246,4 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
     command: --cleanup true --remove-volumes true --schedule "30 9 * * *" --rolling-restart true
-    restart: unless-stopped
+    restart: always
