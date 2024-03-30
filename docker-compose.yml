@@ -34,23 +34,9 @@ services:
     restart: unless-stopped
 
   # Media management
-  sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
-    network_mode: service:gluetun
-    environment:
-      - PUID=13003
-      - PGID=13000
-      - UMASK=002
-      - TZ=Canada/Pacific
-    volumes:
-      - /home/nathan/servarr/config/sonarr-config:/config
-      - /mnt/data:/data
-    restart: unless-stopped
-
-  # 4ksonarr:
+  # sonarr:
   #   image: lscr.io/linuxserver/sonarr:latest
-  #   container_name: 4ksonarr
+  #   container_name: sonarr
   #   network_mode: service:gluetun
   #   environment:
   #     - PUID=13003
@@ -58,27 +44,27 @@ services:
   #     - UMASK=002
   #     - TZ=Canada/Pacific
   #   volumes:
-  #     - /home/nathan/servarr/config/4ksonarr-config:/config
+  #     - /home/nathan/servarr/config/sonarr-config:/config
   #     - /mnt/data:/data
   #   restart: unless-stopped
 
-  radarr:
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr
+  4ksonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: 4ksonarr
     network_mode: service:gluetun
     environment:
-      - PUID=13004
+      - PUID=13003
       - PGID=13000
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - /home/nathan/servarr/config/radarr-config:/config
+      - /home/nathan/servarr/config/4ksonarr-config:/config
       - /mnt/data:/data
     restart: unless-stopped
 
-  # 4kradarr:
+  # radarr:
   #   image: lscr.io/linuxserver/radarr:latest
-  #   container_name: 4kradarr
+  #   container_name: radarr
   #   network_mode: service:gluetun
   #   environment:
   #     - PUID=13004
@@ -86,9 +72,23 @@ services:
   #     - UMASK=002
   #     - TZ=Canada/Pacific
   #   volumes:
-  #     - /home/nathan/servarr/config/4kradarr-config:/config
+  #     - /home/nathan/servarr/config/radarr-config:/config
   #     - /mnt/data:/data
   #   restart: unless-stopped
+
+  4kradarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: 4kradarr
+    network_mode: service:gluetun
+    environment:
+      - PUID=13004
+      - PGID=13000
+      - UMASK=002
+      - TZ=Canada/Pacific
+    volumes:
+      - /home/nathan/servarr/config/4kradarr-config:/config
+      - /mnt/data:/data
+    restart: unless-stopped
 
   bazarr: 
     image: lscr.io/linuxserver/bazarr:latest
@@ -178,7 +178,6 @@ services:
       - /home/nathan/servarr/config/recyclarr-config:/config
     environment:
       - TZ=Canada/Pacific
-      - RECYCLARR_CREATE_CONFIG=true
 
   # Networking
   cloudflared:
