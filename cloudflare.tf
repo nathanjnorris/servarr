@@ -99,7 +99,7 @@ resource "cloudflare_record" "bazarr_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "bazarr_nathanjn_com" {
+resource "cloudflare_record" "bazarr4k_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "4kbazarr"
   value   = cloudflare_tunnel.servarr_tunnel.cname
