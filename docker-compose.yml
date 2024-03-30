@@ -90,9 +90,23 @@ services:
       - /mnt/data:/data
     restart: unless-stopped
 
-  bazarr: 
+  # bazarr: 
+  #   image: lscr.io/linuxserver/bazarr:latest
+  #   container_name: bazarr
+  #   network_mode: service:gluetun
+  #   environment:
+  #     - PUID=13005
+  #     - PGID=13000
+  #     - UMASK=002
+  #     - TZ=Canada/Pacific
+  #   volumes:
+  #     - /home/nathan/servarr/config/bazarr-config:/config
+  #     - /mnt/data/media:/data/media
+  #   restart: unless-stopped
+  
+  4kbazarr: 
     image: lscr.io/linuxserver/bazarr:latest
-    container_name: bazarr
+    container_name: 4kbazarr
     network_mode: service:gluetun
     environment:
       - PUID=13005
@@ -100,7 +114,7 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - /home/nathan/servarr/config/bazarr-config:/config
+      - /home/nathan/servarr/config/4kbazarr-config:/config
       - /mnt/data/media:/data/media
     restart: unless-stopped
 
