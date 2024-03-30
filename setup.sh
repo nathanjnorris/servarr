@@ -31,7 +31,7 @@ usermod -a -G servarr recyclarr
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
-mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr,recyclarr}-config
+mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,tautulli,wizarr,recyclarr}-config
 # mkdir -p scripts/{sonarr,4ksonarr,radarr,4kradarr}/{custom-services,custom-cont-init}
 
 # Set permissions
@@ -44,6 +44,7 @@ chown -R sonarr:servarr config/4ksonarr-config
 chown -R radarr:servarr config/radarr-config
 chown -R radarr:servarr config/4kradarr-config
 chown -R bazarr:servarr config/bazarr-config
+chown -R bazarr:servarr config/4kbazarr-config
 chown -R prowlarr:servarr config/prowlarr-config
 chown -R qbittorrent:servarr config/qbittorrent-config
 chown -R maintainerr:servarr config/maintainerr-config
