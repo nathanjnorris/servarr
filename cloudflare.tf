@@ -99,6 +99,14 @@ resource "cloudflare_record" "bazarr_nathanjn_com" {
   proxied = true
 }
 
+resource "cloudflare_record" "bazarr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "4kbazarr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
 resource "cloudflare_record" "prowlarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "prowlarr"
@@ -191,6 +199,10 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     ingress_rule {
       hostname = "bazarr.nathanjn.com"
       service  = "http://gluetun:6767"
+    }
+    ingress_rule {
+      hostname = "4kbazarr.nathanjn.com"
+      service  = "http://gluetun:6766"
     }
     ingress_rule {
       hostname = "prowlarr.nathanjn.com"
@@ -390,6 +402,24 @@ resource "cloudflare_access_application" "bazarr_nathanjn_com" {
 
 resource "cloudflare_access_policy" "user_bazarr" {
   application_id = cloudflare_access_application.bazarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathanjamesnorris@gmail.com"]
+  }
+}
+
+resource "cloudflare_access_application" "bazarr4k_nathanjn_com" {
+  zone_id          = data.cloudflare_zone.nathanjn_com.id
+  name             = "4kbazarr.nathanjn.com"
+  domain           = "4kbazarr.nathanjn.com"
+  session_duration = "2h"
+}
+
+resource "cloudflare_access_policy" "user_bazarr4k" {
+  application_id = cloudflare_access_application.bazarr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"
