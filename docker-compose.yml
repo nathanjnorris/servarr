@@ -12,7 +12,7 @@ services:
       - TZ=Canada/Pacific
       - VERSION=latest
     devices:
-      - dev/dri:/dev/dri
+      - /dev/dri:/dev/dri
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/data/media
