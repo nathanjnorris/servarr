@@ -224,6 +224,7 @@ services:
       - WIREGUARD_PRESHARED_KEY=${GLUETUN_PRESHARED_KEY}
       - WIREGUARD_ADDRESSES=10.155.80.253/32
       - SERVER_CITIES=Vancouver
+      - FIREWALL_VPN_INPUT_PORTS=24242
       - TZ=Canada/Pacific
     ports:
       - 8191:8191 # flaresolverr
@@ -235,8 +236,8 @@ services:
       - 6766:6766 # 4kbazarr
       - 9696:9696 # prowlarr
       - 8080:8080 # qbittorrent
-      - 6881:6881 # qbittorrent
-      - 6881:6881/udp # qbittorrent
+      - 24242:24242 # qbittorrent
+      - 24242:24242/udp # qbittorrent
     restart: always
 
   flaresolverr:
