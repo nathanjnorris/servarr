@@ -215,6 +215,8 @@ services:
   gluetun:
     image: qmcgaw/gluetun:latest
     container_name: gluetun
+    volumes:
+      - /home/nathan/servarr/config/gluetun-config:/gluetun
     cap_add:
       - NET_ADMIN
     environment:
