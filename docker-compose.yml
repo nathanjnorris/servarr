@@ -145,21 +145,9 @@ services:
       - /mnt/data/torrents:/data/torrents
     restart: always
 
-  maintainerr:
-    image: ghcr.io/jorenn92/maintainerr:latest 
-    container_name: maintainerr
-    user: 13008:13000
-    volumes:
-      - /home/nathan/servarr/config/maintainerr-config:/opt/data
-    environment:
-      - TZ=Canada/Pacific
-    ports:
-      - 6246:6246
-    restart: always
-
-  # 4kmaintainerr:
+  # maintainerr:
   #   image: ghcr.io/jorenn92/maintainerr:latest 
-  #   container_name: 4kmaintainerr
+  #   container_name: maintainerr
   #   user: 13008:13000
   #   volumes:
   #     - /home/nathan/servarr/config/maintainerr-config:/opt/data
@@ -168,6 +156,18 @@ services:
   #   ports:
   #     - 6246:6246
   #   restart: always
+
+  4kmaintainerr:
+    image: ghcr.io/jorenn92/maintainerr:latest 
+    container_name: 4kmaintainerr
+    user: 13008:13000
+    volumes:
+      - /home/nathan/servarr/config/maintainerr-config:/opt/data
+    environment:
+      - TZ=Canada/Pacific
+    ports:
+      - 6246:6246
+    restart: always
 
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
@@ -194,15 +194,15 @@ services:
       - 5690:5690
     restart: always
   
-  recyclarr:
-    image: ghcr.io/recyclarr/recyclarr:latest
-    container_name: recyclarr
-    user: 13010:13000
-    volumes:
-      - /home/nathan/servarr/config/recyclarr-config:/config
-    environment:
-      - TZ=Canada/Pacific
-    restart: always
+  # recyclarr:
+  #   image: ghcr.io/recyclarr/recyclarr:latest
+  #   container_name: recyclarr
+  #   user: 13010:13000
+  #   volumes:
+  #     - /home/nathan/servarr/config/recyclarr-config:/config
+  #   environment:
+  #     - TZ=Canada/Pacific
+  #   restart: always
 
   cloudflared:
     image: cloudflare/cloudflared:latest
