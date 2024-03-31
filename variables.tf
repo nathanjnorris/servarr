@@ -47,6 +47,18 @@ variable "mullvad_private_key" {
   sensitive   = true
 }
 
+variable "gluetun_private_key" {
+  type        = string
+  description = "The private key used for gluetun VPN provider"
+  sensitive   = true
+}
+
+variable "gluetun_preshared_key" {
+  type        = string
+  description = "The preshared key used for gluetun VPN provider"
+  sensitive   = true
+}
+
 variable "sudo_password" {
   type        = string
   description = "The password of the permitted user, to execute a command as the superuser"

@@ -58,6 +58,19 @@ resource "github_actions_secret" "sudo_password" {
   plaintext_value = var.sudo_password
 }
 
+resource "github_actions_secret" "gluetun_private_key" {
+  repository      = "servarr"
+  secret_name     = "gluetun_private_key"
+  plaintext_value = var.gluetun_private_key
+}
+
+resource "github_actions_secret" "gluetun_preshared_key" {
+  repository      = "servarr"
+  secret_name     = "gluetun_preshared_key"
+  plaintext_value = var.gluetun_preshared_key
+}
+
+
 resource "github_actions_variable" "r2_access_key_id" {
   repository    = "servarr"
   variable_name = "r2_access_key_id"
