@@ -246,3 +246,28 @@ services:
       - /etc/localtime:/etc/localtime:ro
     command: --cleanup true --remove-volumes true --schedule "30 9 * * *" --rolling-restart true
     restart: always
+
+  kopia:
+      image: kopia/kopia:latest
+      container_name: kopia
+      # ports:
+      #       - 51515:51515
+      command:
+        - server
+        - start
+        - --disable-csrf-token-checks
+        - --insecure
+        - --address=0.0.0.0:51515
+        - --server-username=nathan
+        - --server-password=${KOPIA_PASSWORD}
+      volumes:
+        - /mnt/kopia:/tmp:shared
+        - /home/nathan/kopia/config:/app/config
+        - /home/nathan/kopia/cache:/app/cache
+        - /home/nathan/kopia/logs:/app/logs
+        - /home/nathan/servarr/config:/data:ro
+      environment:
+        KOPIA_PASSWORD: ${KOPIA_PASSWORD}
+        TZ: Canada/Pacific
+        USER: "nathan"
+      restart: "always"
