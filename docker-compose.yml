@@ -166,7 +166,7 @@ services:
     environment:
       - TZ=Canada/Pacific
     ports:
-      - 6246:6246
+      - 6245:6246
     restart: always
 
   tautulli:
