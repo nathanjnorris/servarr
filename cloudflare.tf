@@ -147,6 +147,14 @@ resource "cloudflare_record" "maintainerr_nathanjn_com" {
   proxied = true
 }
 
+resource "cloudflare_record" "maintainerr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "4kmaintainerr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
 ###
 # Tunnel configuration 
 ###
@@ -225,6 +233,10 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
       service  = "http://maintainerr:6246"
     }
     ingress_rule {
+      hostname = "4kmaintainerr.nathanjn.com"
+      service  = "http://maintainerr:6245"
+    }
+    ingress_rule {
       service = "http_status:404"
     }
   }
@@ -261,20 +273,20 @@ resource "cloudflare_ruleset" "cache_nathanjn_com" {
 ###
 
 # Challenge bots
-resource "cloudflare_ruleset" "bots_nathanjn_com" {
-  zone_id     = data.cloudflare_zone.nathanjn_com.id
-  name        = "Challenge bots"
-  description = "Ruleset to present bots a managed challenge"
-  kind        = "zone"
-  phase       = "http_request_firewall_custom"
+# resource "cloudflare_ruleset" "bots_nathanjn_com" {
+#   zone_id     = data.cloudflare_zone.nathanjn_com.id
+#   name        = "Challenge bots"
+#   description = "Ruleset to present bots a managed challenge"
+#   kind        = "zone"
+#   phase       = "http_request_firewall_custom"
 
-  rules {
-    action      = "managed_challenge"
-    expression  = "(not cf.client.bot and not http.user_agent contains \"cloudflared\")"
-    description = "Present bots a managed challenge (except cloudflared user agent)"
-    enabled     = true
-  }
-}
+#   rules {
+#     action      = "managed_challenge"
+#     expression  = "(not cf.client.bot and not http.user_agent contains \"cloudflared\")"
+#     description = "Present bots a managed challenge (except cloudflared user agent)"
+#     enabled     = true
+#   }
+# }
 
 ###
 # Zero Trust 
@@ -492,6 +504,24 @@ resource "cloudflare_access_application" "maintainerr_nathanjn_com" {
 
 resource "cloudflare_access_policy" "user_maintainerr" {
   application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathanjamesnorris@gmail.com"]
+  }
+}
+
+resource "cloudflare_access_application" "maintainerr4k_nathanjn_com" {
+  zone_id          = data.cloudflare_zone.nathanjn_com.id
+  name             = "4kmaintainerr.nathanjn.com"
+  domain           = "4kmaintainerr.nathanjn.com"
+  session_duration = "2h"
+}
+
+resource "cloudflare_access_policy" "user_maintainerr4k" {
+  application_id = cloudflare_access_application.maintainerr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"

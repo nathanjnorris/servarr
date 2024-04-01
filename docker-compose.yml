@@ -14,7 +14,7 @@ services:
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/data/media
-      - /tmp/ramdisk:/transcode
+      - /dev/shm:/transcode
     ports:
       - 32400:32400
     restart: always
@@ -145,21 +145,9 @@ services:
       - /mnt/data/torrents:/data/torrents
     restart: always
 
-  # maintainerr:
-  #   image: ghcr.io/jorenn92/maintainerr:latest 
-  #   container_name: maintainerr
-  #   user: 13008:13000
-  #   volumes:
-  #     - /home/nathan/servarr/config/maintainerr-config:/opt/data
-  #   environment:
-  #     - TZ=Canada/Pacific
-  #   ports:
-  #     - 6246:6246
-  #   restart: always
-
-  4kmaintainerr:
+  maintainerr:
     image: ghcr.io/jorenn92/maintainerr:latest 
-    container_name: 4kmaintainerr
+    container_name: maintainerr
     user: 13008:13000
     volumes:
       - /home/nathan/servarr/config/maintainerr-config:/opt/data
@@ -167,6 +155,18 @@ services:
       - TZ=Canada/Pacific
     ports:
       - 6246:6246
+    restart: always
+
+  4kmaintainerr:
+    image: ghcr.io/jorenn92/maintainerr:latest 
+    container_name: 4kmaintainerr
+    user: 13008:13000
+    volumes:
+      - /home/nathan/servarr/config/4kmaintainerr-config:/opt/data
+    environment:
+      - TZ=Canada/Pacific
+    ports:
+      - 6245:6246
     restart: always
 
   tautulli:
