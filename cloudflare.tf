@@ -234,7 +234,7 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     }
     ingress_rule {
       hostname = "4kmaintainerr.nathanjn.com"
-      service  = "http://4kmaintainerr:6245"
+      service  = "http://4kmaintainerr:6246"
     }
     ingress_rule {
       service = "http_status:404"
