@@ -78,6 +78,7 @@
 | [cloudflare_zone_settings_override.nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/zone_settings_override) | resource |
 | [github_actions_secret.gluetun_preshared_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.gluetun_private_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
+| [github_actions_secret.kopia_password](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.r2_secret_access_token](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.servar_tunnel_token](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.service_token_secret](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
@@ -101,6 +102,7 @@
 | <a name="input_github_access_token"></a> [github\_access\_token](#input\_github\_access\_token) | Personal access token for Terraform provider to act on user behalf | `string` | n/a | yes |
 | <a name="input_gluetun_preshared_key"></a> [gluetun\_preshared\_key](#input\_gluetun\_preshared\_key) | The preshared key used for gluetun VPN provider | `string` | n/a | yes |
 | <a name="input_gluetun_private_key"></a> [gluetun\_private\_key](#input\_gluetun\_private\_key) | The private key used for gluetun VPN provider | `string` | n/a | yes |
+| <a name="input_kopia_password"></a> [kopia\_password](#input\_kopia\_password) | The password used for Kopia | `string` | n/a | yes |
 | <a name="input_ssh_host"></a> [ssh\_host](#input\_ssh\_host) | The hostname of the server | `string` | n/a | yes |
 | <a name="input_ssh_port"></a> [ssh\_port](#input\_ssh\_port) | The SSH port of the server | `number` | n/a | yes |
 | <a name="input_ssh_private_key_filename"></a> [ssh\_private\_key\_filename](#input\_ssh\_private\_key\_filename) | The filename of the private key used for authentication | `string` | n/a | yes |
