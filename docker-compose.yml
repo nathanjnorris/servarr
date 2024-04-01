@@ -165,8 +165,6 @@ services:
       - /home/nathan/servarr/config/4kmaintainerr-config:/opt/data
     environment:
       - TZ=Canada/Pacific
-    ports:
-      - 6245:6246
     restart: always
 
   tautulli:
