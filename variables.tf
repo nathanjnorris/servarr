@@ -41,12 +41,6 @@ variable "ssh_private_key_value" {
   sensitive   = true
 }
 
-variable "mullvad_private_key" {
-  type        = string
-  description = "The base64 encoded value of the private key used for the Mullvad VPN"
-  sensitive   = true
-}
-
 variable "gluetun_private_key" {
   type        = string
   description = "The private key used for gluetun VPN provider"
