@@ -166,7 +166,7 @@ services:
     environment:
       - TZ=Canada/Pacific
     ports:
-      - 6245:6246
+      - 6246:6246
     restart: always
 
   tautulli:
@@ -193,16 +193,6 @@ services:
     ports:
       - 5690:5690
     restart: always
-  
-  # recyclarr:
-  #   image: ghcr.io/recyclarr/recyclarr:latest
-  #   container_name: recyclarr
-  #   user: 13010:13000
-  #   volumes:
-  #     - /home/nathan/servarr/config/recyclarr-config:/config
-  #   environment:
-  #     - TZ=Canada/Pacific
-  #   restart: always
 
   cloudflared:
     image: cloudflare/cloudflared:latest

@@ -234,7 +234,7 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     }
     ingress_rule {
       hostname = "4kmaintainerr.nathanjn.com"
-      service  = "http://maintainerr:6245"
+      service  = "http://4kmaintainerr:6246"
     }
     ingress_rule {
       service = "http_status:404"
@@ -269,24 +269,13 @@ resource "cloudflare_ruleset" "cache_nathanjn_com" {
 }
 
 ###
-# WAF rules
+# Bot management
 ###
 
-# Challenge bots
-# resource "cloudflare_ruleset" "bots_nathanjn_com" {
-#   zone_id     = data.cloudflare_zone.nathanjn_com.id
-#   name        = "Challenge bots"
-#   description = "Ruleset to present bots a managed challenge"
-#   kind        = "zone"
-#   phase       = "http_request_firewall_custom"
-
-#   rules {
-#     action      = "managed_challenge"
-#     expression  = "(not cf.client.bot and not http.user_agent contains \"cloudflared\")"
-#     description = "Present bots a managed challenge (except cloudflared user agent)"
-#     enabled     = true
-#   }
-# }
+resource "cloudflare_bot_management" "example" {
+  zone_id    = data.cloudflare_zone.nathanjn_com.id
+  fight_mode = true
+}
 
 ###
 # Zero Trust 
