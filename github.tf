@@ -52,6 +52,12 @@ resource "github_actions_secret" "sudo_password" {
   plaintext_value = var.sudo_password
 }
 
+resource "github_actions_secret" "kopia_password" {
+  repository      = "servarr"
+  secret_name     = "kopia_password"
+  plaintext_value = var.kopia_password
+}
+
 resource "github_actions_secret" "gluetun_private_key" {
   repository      = "servarr"
   secret_name     = "gluetun_private_key"

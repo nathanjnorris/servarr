@@ -58,3 +58,9 @@ variable "sudo_password" {
   description = "The password of the permitted user, to execute a command as the superuser"
   sensitive   = true
 }
+
+variable "kopia_password" {
+  type        = string
+  description = "The password used for Kopia"
+  sensitive   = true
+}
