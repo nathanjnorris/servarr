@@ -15,8 +15,8 @@ services:
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/data/media
       - /dev/shm:/transcode
-    ports:
-      - 32400:32400
+    # ports:
+    #   - 32400:32400
     restart: always
   
   overseerr:
@@ -29,8 +29,8 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/overseerr-config:/config
-    ports:
-      - 5055:5055
+    # ports:
+    #   - 5055:5055
     restart: always
 
   sonarr:
@@ -153,8 +153,8 @@ services:
       - /home/nathan/servarr/config/maintainerr-config:/opt/data
     environment:
       - TZ=Canada/Pacific
-    ports:
-      - 6246:6246
+    # ports:
+    #   - 6246:6246
     restart: always
 
   4kmaintainerr:
@@ -179,8 +179,8 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/tautulli-config:/config
-    ports:
-      - 8181:8181
+    # ports:
+    #   - 8181:8181
     restart: always
 
   wizarr:
@@ -188,8 +188,8 @@ services:
     container_name: wizarr
     volumes:
       - /home/nathan/servarr/config/wizarr-config:/data/database
-    ports:
-      - 5690:5690
+    # ports:
+    #   - 5690:5690
     restart: always
 
   cloudflared:
