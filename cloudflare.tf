@@ -27,6 +27,8 @@ resource "cloudflare_zone_settings_override" "nathanjn_com" {
     opportunistic_encryption = "on"
     tls_1_3                  = "on"
     automatic_https_rewrites = "on"
+    security_level           = "high"
+    challenge_ttl            = 7200
   }
 }
 
