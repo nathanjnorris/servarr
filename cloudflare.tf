@@ -157,6 +157,14 @@ resource "cloudflare_record" "maintainerr4k_nathanjn_com" {
   proxied = true
 }
 
+resource "cloudflare_record" "kopia_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "kopia"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
 ###
 # Tunnel configuration 
 ###
@@ -237,6 +245,10 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     ingress_rule {
       hostname = "4kmaintainerr.nathanjn.com"
       service  = "http://4kmaintainerr:6246"
+    }
+    ingress_rule {
+      hostname = "kopia.nathanjn.com"
+      service  = "http://kopia:51515"
     }
     ingress_rule {
       service = "http_status:404"
@@ -523,6 +535,23 @@ resource "cloudflare_access_policy" "user_maintainerr4k" {
   }
 }
 
+resource "cloudflare_access_application" "kopia_nathanjn_com" {
+  zone_id          = data.cloudflare_zone.nathanjn_com.id
+  name             = "kopia.nathanjn.com"
+  domain           = "kopia.nathanjn.com"
+  session_duration = "2h"
+}
+
+resource "cloudflare_access_policy" "user_kopia" {
+  application_id = cloudflare_access_application.kopia_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathanjamesnorris@gmail.com"]
+  }
+}
 
 ###
 # R2 (S3-compatible storage)
