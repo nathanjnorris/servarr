@@ -69,16 +69,3 @@ resource "github_actions_secret" "gluetun_preshared_key" {
   secret_name     = "gluetun_preshared_key"
   plaintext_value = var.gluetun_preshared_key
 }
-
-
-resource "github_actions_variable" "r2_access_key_id" {
-  repository    = "servarr"
-  variable_name = "r2_access_key_id"
-  value         = module.r2-api-token.id
-}
-
-resource "github_actions_secret" "r2_secret_access_token" {
-  repository      = "servarr"
-  secret_name     = "r2_secret_access_token"
-  plaintext_value = module.r2-api-token.secret
-}
