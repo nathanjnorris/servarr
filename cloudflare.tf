@@ -272,7 +272,7 @@ resource "cloudflare_ruleset" "cache_nathanjn_com" {
 
 ###
 # Bot management
-###
+### 
 
 resource "cloudflare_bot_management" "bots_nathanjn_com" {
   zone_id    = data.cloudflare_zone.nathanjn_com.id
