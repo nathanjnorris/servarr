@@ -15,8 +15,8 @@ services:
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/data/media
       - /dev/shm:/transcode
-    # ports:
-    #   - 32400:32400
+    ports:
+      - 32400:32400 # enable local access
     restart: always
   
   overseerr:
@@ -165,6 +165,8 @@ services:
       - /home/nathan/servarr/config/4kmaintainerr-config:/opt/data
     environment:
       - TZ=Canada/Pacific
+    # ports:
+    #   - 6246:6246
     restart: always
 
   tautulli:
@@ -194,10 +196,15 @@ services:
 
   cloudflared:
     image: cloudflare/cloudflared:latest
-    container_name: cloudflared
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    deploy:
+      mode: replicated
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 15s
     restart: always
 
   gluetun:
@@ -216,18 +223,18 @@ services:
       - SERVER_CITIES=Vancouver
       - FIREWALL_VPN_INPUT_PORTS=24242
       - TZ=Canada/Pacific
-    ports:
-      - 8191:8191 # flaresolverr
-      - 8989:8989 # sonarr
-      - 8988:8988 # 4ksonarr
-      - 7878:7878 # radarr
-      - 7877:7877 # 4kradarr
-      - 6767:6767 # bazarr
-      - 6766:6766 # 4kbazarr
-      - 9696:9696 # prowlarr
-      - 8080:8080 # qbittorrent
-      - 24242:24242 # qbittorrent
-      - 24242:24242/udp # qbittorrent
+    # ports:
+    #   - 8191:8191 # flaresolverr
+    #   - 8989:8989 # sonarr
+    #   - 8988:8988 # 4ksonarr
+    #   - 7878:7878 # radarr
+    #   - 7877:7877 # 4kradarr
+    #   - 6767:6767 # bazarr
+    #   - 6766:6766 # 4kbazarr
+    #   - 9696:9696 # prowlarr
+    #   - 8080:8080 # qbittorrent
+    #   - 24242:24242 # qbittorrent
+    #   - 24242:24242/udp # qbittorrent
     restart: always
 
   flaresolverr:
@@ -244,7 +251,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
-    command: --cleanup true --remove-volumes true --schedule "30 9 * * *" --rolling-restart true
+    environment: 
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_REMOVE_VOLUMES=true
+      - WATCHTOWER_SCHEDULE="30 9 * * *" 
+      - WATCHTOWER_ROLLING_RESTART=true
     restart: always
 
   kopia:
