@@ -196,6 +196,7 @@ services:
 
   cloudflared:
     image: cloudflare/cloudflared:latest
+    labels: ["com.centurylinklabs.watchtower.scope=cloudflared"]
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
@@ -245,6 +246,20 @@ services:
       - TZ=Canada/Pacific
     restart: always
 
+  scoped-watchtower:
+    image: containrrr/watchtower:latest
+    labels: ["com.centurylinklabs.watchtower.scope=cloudflared"]
+    container_name: scoped-watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    environment: 
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_REMOVE_VOLUMES=true
+      - WATCHTOWER_SCHEDULE="30 9 * * *" 
+      - WATCHTOWER_ROLLING_RESTART=true
+    restart: always
+
   watchtower:
     image: containrrr/watchtower:latest
     container_name: watchtower
@@ -255,7 +270,6 @@ services:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_REMOVE_VOLUMES=true
       - WATCHTOWER_SCHEDULE="30 9 * * *" 
-      - WATCHTOWER_ROLLING_RESTART=true
     restart: always
 
   kopia:
