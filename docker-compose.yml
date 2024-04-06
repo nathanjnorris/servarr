@@ -246,10 +246,10 @@ services:
       - TZ=Canada/Pacific
     restart: always
 
-  watchtower-scoped:
+  watchtower-cloudflared:
     image: containrrr/watchtower:latest
     labels: ["com.centurylinklabs.watchtower.scope=cloudflared"]
-    container_name: watchtower-scoped
+    container_name: watchtower-cloudflared
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/localtime:/etc/localtime:ro
@@ -257,7 +257,7 @@ services:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_REMOVE_VOLUMES=true
       - WATCHTOWER_SCOPE=cloudflared
-      - WATCHTOWER_SCHEDULE=30 9 * * * * 
+      - WATCHTOWER_SCHEDULE=0 30 9 * * * 
       - WATCHTOWER_ROLLING_RESTART=true
     restart: always
 
@@ -271,7 +271,7 @@ services:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_REMOVE_VOLUMES=true
       - WATCHTOWER_SCOPE=none
-      - WATCHTOWER_SCHEDULE=30 9 * * * *
+      - WATCHTOWER_SCHEDULE=0 30 9 * * *
     restart: always
 
   kopia:
