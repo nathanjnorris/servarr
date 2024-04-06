@@ -20,9 +20,7 @@
 
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_r2-api-token"></a> [r2-api-token](#module\_r2-api-token) | Cyb3r-Jak3/r2-api-token/cloudflare | 3.0.1 |
+No modules.
 
 ## Resources
 
@@ -82,12 +80,10 @@
 | [github_actions_secret.gluetun_preshared_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.gluetun_private_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.kopia_password](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
-| [github_actions_secret.r2_secret_access_token](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.servar_tunnel_token](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.service_token_secret](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.ssh_private_key_value](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.sudo_password](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
-| [github_actions_variable.r2_access_key_id](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.service_token_id](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.ssh_host](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.ssh_port](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
