@@ -140,6 +140,7 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
       - WEBUI_PORT=8080
+      - TORRENTING_PORT=24242
     volumes:
       - /home/nathan/servarr/config/qbittorrent-config:/config
       - /mnt/data/torrents:/data/torrents
