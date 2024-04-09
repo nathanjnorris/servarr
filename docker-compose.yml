@@ -37,6 +37,8 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     network_mode: service:gluetun
+    depends_on:
+      - gluetun
     environment:
       - PUID=13003
       - PGID=13000
@@ -53,6 +55,8 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: 4ksonarr
     network_mode: service:gluetun
+    depends_on:
+      - gluetun
     environment:
       - PUID=13003
       - PGID=13000
@@ -69,6 +73,8 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     network_mode: service:gluetun
+    depends_on:
+      - gluetun
     environment:
       - PUID=13004
       - PGID=13000
@@ -85,6 +91,8 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: 4kradarr
     network_mode: service:gluetun
+    depends_on:
+      - gluetun
     environment:
       - PUID=13004
       - PGID=13000
@@ -101,6 +109,8 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
     network_mode: service:gluetun
+    depends_on:
+      - gluetun
     environment:
       - PUID=13005
       - PGID=13000
@@ -115,6 +125,8 @@ services:
     image: lscr.io/linuxserver/bazarr:latest
     container_name: 4kbazarr
     network_mode: service:gluetun
+    depends_on:
+      - gluetun
     environment:
       - PUID=13005
       - PGID=13000
@@ -129,6 +141,8 @@ services:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     network_mode: service:gluetun
+    depends_on:
+      - gluetun
     environment:
       - PUID=13006
       - PGID=13000
@@ -142,6 +156,8 @@ services:
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     network_mode: service:gluetun
+    depends_on:
+      - gluetun
     environment:
       - PUID=13007
       - PGID=13000
