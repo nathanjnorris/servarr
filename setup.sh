@@ -11,7 +11,6 @@ useradd prowlarr -u 13006
 useradd qbittorrent -u 13007
 useradd maintainerr -u 13008
 useradd tautulli -u 13009
-useradd recyclarr -u 13010
 
 # Make group
 groupadd servarr -g 13000
@@ -27,13 +26,19 @@ usermod -a -G servarr prowlarr
 usermod -a -G servarr qbittorrent
 usermod -a -G servarr maintainerr
 usermod -a -G servarr tautulli
-usermod -a -G servarr recyclarr
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
+mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun}-config
+mkdir -p scripts/{sonarr,4ksonarr,radarr,4kradarr}/{custom-services,custom-cont-init}
 mkdir -p /mnt/kopia
-mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,recyclarr,gluetun}-config
 mkdir -p /home/nathan/kopia/{config,cache,logs}
+
+# Download arr-scripts
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -O /home/nathan/servarr/scripts/sonarr/custom-cont-init/scripts_init.bash
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/sonarr/scripts_init.bash -O /home/nathan/servarr/scripts/4ksonarr/custom-cont-init/scripts_init.bash
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash -O /home/nathan/servarr/scripts/radarr/custom-cont-init/scripts_init.bash
+wget https://raw.githubusercontent.com/RandomNinjaAtk/arr-scripts/main/radarr/scripts_init.bash -O /home/nathan/servarr/scripts/4kradarr/custom-cont-init/scripts_init.bash
 
 # Set permissions
 chmod -R 775 /mnt/data
@@ -44,8 +49,12 @@ chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
 chown -R sonarr:servarr config/4ksonarr-config
+chown -R sonarr:servarr scripts/sonarr
+chown -R sonarr:servarr scripts/4ksonarr
 chown -R radarr:servarr config/radarr-config
 chown -R radarr:servarr config/4kradarr-config
+chown -R radarr:servarr scripts/radarr
+chown -R radarr:servarr scripts/4kradarr
 chown -R bazarr:servarr config/bazarr-config
 chown -R bazarr:servarr config/4kbazarr-config
 chown -R prowlarr:servarr config/prowlarr-config
@@ -53,4 +62,3 @@ chown -R qbittorrent:servarr config/qbittorrent-config
 chown -R maintainerr:servarr config/maintainerr-config
 chown -R maintainerr:servarr config/4kmaintainerr-config
 chown -R tautulli:servarr config/tautulli-config
-chown -R recyclarr:servarr config/recyclarr-config
