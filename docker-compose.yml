@@ -43,6 +43,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
+      - /home/nathan/servarr/scripts/sonarr/custom-services:/custom-services.d
+      - /home/nathan/servarr/scripts/sonarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/sonarr-config:/config
       - /mnt/data:/data
     restart: always
@@ -57,6 +59,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
+      - /home/nathan/servarr/scripts/4ksonarr/custom-services:/custom-services.d
+      - /home/nathan/servarr/scripts/4ksonarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/4ksonarr-config:/config
       - /mnt/data:/data
     restart: always
@@ -71,6 +75,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
+      - /home/nathan/servarr/scripts/radarr/custom-services:/custom-services.d
+      - /home/nathan/servarr/scripts/radarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/radarr-config:/config
       - /mnt/data:/data
     restart: always
@@ -85,6 +91,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
+      - /home/nathan/servarr/scripts/4kradarr/custom-services:/custom-services.d
+      - /home/nathan/servarr/scripts/4kradarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/4kradarr-config:/config
       - /mnt/data:/data
     restart: always
@@ -226,6 +234,7 @@ services:
       - WIREGUARD_ADDRESSES=10.155.80.253/32
       - SERVER_CITIES=Vancouver
       - FIREWALL_VPN_INPUT_PORTS=24242
+      - HEALTH_VPN_DURATION_INITIAL=60s
       - TZ=Canada/Pacific
     # ports:
     #   - 8191:8191 # flaresolverr
