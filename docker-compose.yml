@@ -45,8 +45,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - /home/nathan/servarr/scripts/sonarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/sonarr/custom-cont-init:/custom-cont-init.d
+      # - /home/nathan/servarr/scripts/sonarr/custom-services:/custom-services.d
+      # - /home/nathan/servarr/scripts/sonarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/sonarr-config:/config
       - /mnt/data:/data
     restart: always
@@ -63,8 +63,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - /home/nathan/servarr/scripts/4ksonarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/4ksonarr/custom-cont-init:/custom-cont-init.d
+      # - /home/nathan/servarr/scripts/4ksonarr/custom-services:/custom-services.d
+      # - /home/nathan/servarr/scripts/4ksonarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/4ksonarr-config:/config
       - /mnt/data:/data
     restart: always
@@ -81,8 +81,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - /home/nathan/servarr/scripts/radarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/radarr/custom-cont-init:/custom-cont-init.d
+      # - /home/nathan/servarr/scripts/radarr/custom-services:/custom-services.d
+      # - /home/nathan/servarr/scripts/radarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/radarr-config:/config
       - /mnt/data:/data
     restart: always
@@ -99,8 +99,8 @@ services:
       - UMASK=002
       - TZ=Canada/Pacific
     volumes:
-      - /home/nathan/servarr/scripts/4kradarr/custom-services:/custom-services.d
-      - /home/nathan/servarr/scripts/4kradarr/custom-cont-init:/custom-cont-init.d
+      # - /home/nathan/servarr/scripts/4kradarr/custom-services:/custom-services.d
+      # - /home/nathan/servarr/scripts/4kradarr/custom-cont-init:/custom-cont-init.d
       - /home/nathan/servarr/config/4kradarr-config:/config
       - /mnt/data:/data
     restart: always
@@ -227,10 +227,9 @@ services:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 3
       update_config:
         parallelism: 1
-        delay: 15s
     restart: always
 
   gluetun:
