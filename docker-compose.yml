@@ -1,5 +1,6 @@
 name: servarr
 services:
+# Media server  
   plex:
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
@@ -18,7 +19,7 @@ services:
     ports:
       - 32400:32400 # enable local access
     restart: always
-  
+# Media requests  
   overseerr:
     image: lscr.io/linuxserver/overseerr:latest
     container_name: overseerr
@@ -32,7 +33,7 @@ services:
     # ports:
     #   - 5055:5055
     restart: always
-
+# Media monitoring
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
@@ -96,7 +97,7 @@ services:
       - /home/nathan/servarr/config/4kradarr-config:/config
       - /mnt/data:/data
     restart: always
-
+# Subtitles
   bazarr: 
     image: lscr.io/linuxserver/bazarr:latest
     container_name: bazarr
@@ -112,7 +113,7 @@ services:
       - /home/nathan/servarr/config/bazarr-config:/config
       - /mnt/data/media:/data/media
     restart: always
-  
+
   4kbazarr: 
     image: lscr.io/linuxserver/bazarr:latest
     container_name: 4kbazarr
@@ -128,7 +129,7 @@ services:
       - /home/nathan/servarr/config/4kbazarr-config:/config
       - /mnt/data/media:/data/media
     restart: always
-
+# Media download
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
@@ -142,6 +143,14 @@ services:
       - TZ=Canada/Pacific
     volumes:
       - /home/nathan/servarr/config/prowlarr-config:/config
+    restart: always
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    network_mode: service:gluetun
+    environment:
+      - TZ=Canada/Pacific
     restart: always
 
   qbittorrent:
@@ -161,7 +170,7 @@ services:
       - /home/nathan/servarr/config/qbittorrent-config:/config
       - /mnt/data/torrents:/data/torrents
     restart: always
-
+# Media management
   maintainerr:
     image: ghcr.io/jorenn92/maintainerr:latest 
     container_name: maintainerr
@@ -185,7 +194,7 @@ services:
     # ports:
     #   - 6246:6246
     restart: always
-
+# User management
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
@@ -210,7 +219,7 @@ services:
     # ports:
     #   - 5690:5690
     restart: always
-
+# Networking
   cloudflared:
     image: cloudflare/cloudflared:latest
     labels: ["com.centurylinklabs.watchtower.scope=cloudflared"]
@@ -256,15 +265,7 @@ services:
     #   - 24242:24242 # qbittorrent
     #   - 24242:24242/udp # qbittorrent
     restart: always
-
-  flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: flaresolverr
-    network_mode: service:gluetun
-    environment:
-      - TZ=Canada/Pacific
-    restart: always
-
+# Container updates
   watchtower-cloudflared:
     image: containrrr/watchtower:latest
     labels: ["com.centurylinklabs.watchtower.scope=cloudflared"]
@@ -292,7 +293,7 @@ services:
       - WATCHTOWER_SCOPE=none
       - WATCHTOWER_SCHEDULE=0 30 9 * * *
     restart: always
-
+# Backups
   kopia:
       image: kopia/kopia:latest
       container_name: kopia
@@ -317,7 +318,7 @@ services:
         TZ: Canada/Pacific
         USER: "nathan"
       restart: "always"
-
+# Web monitoring
   uptime-kuma:
     image: louislam/uptime-kuma:latest
     container_name: uptime-kuma
@@ -327,29 +328,3 @@ services:
     # ports:
     #   - 3001:3001
     restart: always
-
-  netdata:
-    image: netdata/netdata:latest
-    container_name: netdata
-    pid: host
-    cap_add:
-      - SYS_PTRACE
-      - SYS_ADMIN
-    security_opt:
-      - apparmor:unconfined
-    volumes:
-      - /home/nathan/netdata/config:/etc/netdata
-      - /home/nathan/netdata/lib:/var/lib/netdata
-      - /home/nathan/netdata/cache:/var/cache/netdata
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /etc/localtime:/etc/localtime:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /etc/os-release:/host/etc/os-release:ro
-      - /var/log:/host/var/log:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /run/dbus:/run/dbus:ro
-    # ports:
-    #   - 19999:19999
-    restart: unless-stopped
