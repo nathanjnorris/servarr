@@ -165,7 +165,7 @@ resource "cloudflare_record" "kopia_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "kopia_nathanjn_com" {
+resource "cloudflare_record" "monitor_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "monitor"
   value   = cloudflare_tunnel.servarr_tunnel.cname
