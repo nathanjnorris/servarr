@@ -317,3 +317,13 @@ services:
         TZ: Canada/Pacific
         USER: "nathan"
       restart: "always"
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    volumes:
+      - /home/nathan/uptime-kuma/data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    # ports:
+    #   - 3001:3001
+    restart: always
