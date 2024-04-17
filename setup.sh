@@ -32,12 +32,14 @@ mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
 mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun}-config
 mkdir -p /mnt/kopia
 mkdir -p /home/nathan/kopia/{config,cache,logs}
+mkdir -p /home/nathan/uptime-kuma/data
 
 # Set permissions
 chmod -R 775 /mnt/data
 chown -R nathan:servarr /mnt/data
 chown -R nathan:servarr /mnt/kopia
 chown -R nathan:servarr /home/nathan/kopia
+chown -R nathan:servarr /home/nathan/uptime-kuma
 chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
