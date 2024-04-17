@@ -272,7 +272,7 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     }
     ingress_rule {
       hostname = "netdata.nathanjn.com"
-      service  = "http://uptime-kuma:3001"
+      service  = "http://netdata:19999"
     }
     ingress_rule {
       service = "http_status:404"
