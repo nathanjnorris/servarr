@@ -518,7 +518,7 @@ resource "cloudflare_access_application" "tautulli_nathanjn_com" {
   session_duration = "2h"
 }
 
-resource "cloudflare_access_policy" "service_servarr" {
+resource "cloudflare_access_policy" "service_tautulli" {
   application_id = cloudflare_access_application.tautulli_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "Service auth"
@@ -619,7 +619,7 @@ resource "cloudflare_access_application" "netdata_nathanjn_com" {
   session_duration = "2h"
 }
 
-resource "cloudflare_access_policy" "user_monitor" {
+resource "cloudflare_access_policy" "user_netdata" {
   application_id = cloudflare_access_application.netdata_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
