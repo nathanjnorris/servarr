@@ -165,9 +165,17 @@ resource "cloudflare_record" "kopia_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "monitor_nathanjn_com" {
+resource "cloudflare_record" "uptimekuma_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
-  name    = "monitor"
+  name    = "uptimekuma"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "netdata_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "netdata"
   value   = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
@@ -259,7 +267,11 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
       service  = "http://kopia:51515"
     }
     ingress_rule {
-      hostname = "monitor.nathanjn.com"
+      hostname = "uptimekuma.nathanjn.com"
+      service  = "http://uptime-kuma:3001"
+    }
+    ingress_rule {
+      hostname = "netdata.nathanjn.com"
       service  = "http://uptime-kuma:3001"
     }
     ingress_rule {
@@ -315,6 +327,12 @@ resource "cloudflare_access_service_token" "github_actions" {
   duration   = "forever"
 }
 
+# Create an service token for Uptime Kuma to authenticate
+resource "cloudflare_access_service_token" "uptime_kuma" {
+  account_id = var.account_id
+  name       = "Uptime Kuma"
+  duration   = "forever"
+}
 
 # Create an Access application to control who can connect to SSH.
 resource "cloudflare_access_application" "servarr_nathanjn_com" {
@@ -500,11 +518,22 @@ resource "cloudflare_access_application" "tautulli_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_tautulli" {
+  application_id = cloudflare_access_application.tautulli_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_tautulli" {
   application_id = cloudflare_access_application.tautulli_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -565,15 +594,33 @@ resource "cloudflare_access_policy" "user_kopia" {
   }
 }
 
-resource "cloudflare_access_application" "monitor_nathanjn_com" {
+resource "cloudflare_access_application" "uptimekuma_nathanjn_com" {
   zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "monitor.nathanjn.com"
-  domain           = "monitor.nathanjn.com"
+  name             = "uptimekuma.nathanjn.com"
+  domain           = "uptimekuma.nathanjn.com"
   session_duration = "2h"
 }
 
-resource "cloudflare_access_policy" "user_monitor" {
-  application_id = cloudflare_access_application.monitor_nathanjn_com.id
+resource "cloudflare_access_policy" "user_uptimekuma" {
+  application_id = cloudflare_access_application.uptimekuma_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathanjamesnorris@gmail.com"]
+  }
+}
+
+resource "cloudflare_access_application" "netdata_nathanjn_com" {
+  zone_id          = data.cloudflare_zone.nathanjn_com.id
+  name             = "netdata.nathanjn.com"
+  domain           = "netdata.nathanjn.com"
+  session_duration = "2h"
+}
+
+resource "cloudflare_access_policy" "user_netdata" {
+  application_id = cloudflare_access_application.netdata_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"
