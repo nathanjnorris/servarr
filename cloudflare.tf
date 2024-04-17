@@ -362,11 +362,22 @@ resource "cloudflare_access_application" "sonarr_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_sonarr" {
+  application_id = cloudflare_access_application.sonarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_sonarr" {
   application_id = cloudflare_access_application.sonarr_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -380,11 +391,22 @@ resource "cloudflare_access_application" "sonarr4k_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_sonarr4k" {
+  application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_sonarr4k" {
   application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -398,11 +420,22 @@ resource "cloudflare_access_application" "radarr_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_radarr" {
+  application_id = cloudflare_access_application.radarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_radarr" {
   application_id = cloudflare_access_application.radarr_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -416,11 +449,22 @@ resource "cloudflare_access_application" "radarr4k_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_radarr4k" {
+  application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_radarr4k" {
   application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -434,11 +478,22 @@ resource "cloudflare_access_application" "bazarr_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_bazarr" {
+  application_id = cloudflare_access_application.bazarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_bazarr" {
   application_id = cloudflare_access_application.bazarr_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -452,11 +507,23 @@ resource "cloudflare_access_application" "bazarr4k_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_bazarr4k" {
+  application_id = cloudflare_access_application.bazarr4k_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
+
 resource "cloudflare_access_policy" "user_bazarr4k" {
   application_id = cloudflare_access_application.bazarr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -470,11 +537,22 @@ resource "cloudflare_access_application" "prowlarr_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_prowlarr" {
+  application_id = cloudflare_access_application.prowlarr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_prowlarr" {
   application_id = cloudflare_access_application.prowlarr_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -488,11 +566,22 @@ resource "cloudflare_access_application" "qbittorrent_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_qbittorrent" {
+  application_id = cloudflare_access_application.qbittorrent_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_qbittorrent" {
   application_id = cloudflare_access_application.qbittorrent_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -535,11 +624,22 @@ resource "cloudflare_access_application" "maintainerr_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_maintainerr" {
+  application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_maintainerr" {
   application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
@@ -553,11 +653,22 @@ resource "cloudflare_access_application" "maintainerr4k_nathanjn_com" {
   session_duration = "2h"
 }
 
+resource "cloudflare_access_policy" "service_maintainerr4k" {
+  application_id = cloudflare_access_application.maintainerr4k_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_maintainerr4k" {
   application_id = cloudflare_access_application.maintainerr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "1"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathanjamesnorris@gmail.com"]
