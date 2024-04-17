@@ -219,7 +219,7 @@ services:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     deploy:
       mode: replicated
-      replicas: 3
+      replicas: 2
       update_config:
         parallelism: 1
     restart: always
