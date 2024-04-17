@@ -173,14 +173,6 @@ resource "cloudflare_record" "uptimekuma_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "netdata_nathanjn_com" {
-  zone_id = data.cloudflare_zone.nathanjn_com.id
-  name    = "netdata"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
-  type    = "CNAME"
-  proxied = true
-}
-
 ###
 # Tunnel configuration 
 ###
@@ -269,10 +261,6 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     ingress_rule {
       hostname = "uptimekuma.nathanjn.com"
       service  = "http://uptime-kuma:3001"
-    }
-    ingress_rule {
-      hostname = "netdata.nathanjn.com"
-      service  = "http://netdata:19999"
     }
     ingress_rule {
       service = "http_status:404"
@@ -603,24 +591,6 @@ resource "cloudflare_access_application" "uptimekuma_nathanjn_com" {
 
 resource "cloudflare_access_policy" "user_uptimekuma" {
   application_id = cloudflare_access_application.uptimekuma_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "1"
-  decision       = "allow"
-  include {
-    email = ["nathanjamesnorris@gmail.com"]
-  }
-}
-
-resource "cloudflare_access_application" "netdata_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "netdata.nathanjn.com"
-  domain           = "netdata.nathanjn.com"
-  session_duration = "2h"
-}
-
-resource "cloudflare_access_policy" "user_netdata" {
-  application_id = cloudflare_access_application.netdata_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"

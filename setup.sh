@@ -33,7 +33,6 @@ mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,
 mkdir -p /mnt/kopia
 mkdir -p /home/nathan/kopia/{config,cache,logs}
 mkdir -p /home/nathan/uptime-kuma/data
-mkdir -p /home/nathan/netdata/{config,lib,cache}
 
 # Set permissions
 chmod -R 775 /mnt/data
@@ -41,7 +40,6 @@ chown -R nathan:servarr /mnt/data
 chown -R nathan:servarr /mnt/kopia
 chown -R nathan:servarr /home/nathan/kopia
 chown -R nathan:servarr /home/nathan/uptime-kuma
-chown -R nathan:servarr /home/nathan/netdata
 chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
