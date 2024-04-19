@@ -324,11 +324,11 @@ resource "cloudflare_access_service_token" "uptime_kuma" {
 
 # Create an Access application to control who can connect to SSH.
 resource "cloudflare_access_application" "servarr_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "servarr.nathanjn.com"
-  domain           = "servarr.nathanjn.com"
-  session_duration = "2h"
-  type             = "ssh"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "servarr.nathanjn.com"
+  domain                    = "servarr.nathanjn.com"
+  session_duration          = "2h"
+  type                      = "ssh"
   auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
@@ -358,10 +358,10 @@ resource "cloudflare_access_policy" "user_servarr" {
 }
 
 resource "cloudflare_access_application" "sonarr_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "sonarr.nathanjn.com"
-  domain           = "sonarr.nathanjn.com"
-  session_duration = "2h"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "sonarr.nathanjn.com"
+  domain                    = "sonarr.nathanjn.com"
+  session_duration          = "2h"
   auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
@@ -389,10 +389,10 @@ resource "cloudflare_access_policy" "user_sonarr" {
 }
 
 resource "cloudflare_access_application" "sonarr4k_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "4ksonarr.nathanjn.com"
-  domain           = "4ksonarr.nathanjn.com"
-  session_duration = "2h"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "4ksonarr.nathanjn.com"
+  domain                    = "4ksonarr.nathanjn.com"
+  session_duration          = "2h"
   auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
@@ -420,10 +420,10 @@ resource "cloudflare_access_policy" "user_sonarr4k" {
 }
 
 resource "cloudflare_access_application" "radarr_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "radarr.nathanjn.com"
-  domain           = "radarr.nathanjn.com"
-  session_duration = "2h"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "radarr.nathanjn.com"
+  domain                    = "radarr.nathanjn.com"
+  session_duration          = "2h"
   auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
@@ -451,11 +451,11 @@ resource "cloudflare_access_policy" "user_radarr" {
 }
 
 resource "cloudflare_access_application" "radarr4k_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "4kradarr.nathanjn.com"
-  domain           = "4kradarr.nathanjn.com"
-  session_duration = "2h"
-    auto_redirect_to_identity = true
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "4kradarr.nathanjn.com"
+  domain                    = "4kradarr.nathanjn.com"
+  session_duration          = "2h"
+  auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
@@ -482,11 +482,11 @@ resource "cloudflare_access_policy" "user_radarr4k" {
 }
 
 resource "cloudflare_access_application" "bazarr_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "bazarr.nathanjn.com"
-  domain           = "bazarr.nathanjn.com"
-  session_duration = "2h"
-    auto_redirect_to_identity = true
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "bazarr.nathanjn.com"
+  domain                    = "bazarr.nathanjn.com"
+  session_duration          = "2h"
+  auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
@@ -513,11 +513,11 @@ resource "cloudflare_access_policy" "user_bazarr" {
 }
 
 resource "cloudflare_access_application" "bazarr4k_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "4kbazarr.nathanjn.com"
-  domain           = "4kbazarr.nathanjn.com"
-  session_duration = "2h"
-    auto_redirect_to_identity = true
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "4kbazarr.nathanjn.com"
+  domain                    = "4kbazarr.nathanjn.com"
+  session_duration          = "2h"
+  auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
@@ -545,10 +545,10 @@ resource "cloudflare_access_policy" "user_bazarr4k" {
 }
 
 resource "cloudflare_access_application" "prowlarr_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "prowlarr.nathanjn.com"
-  domain           = "prowlarr.nathanjn.com"
-  session_duration = "2h"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "prowlarr.nathanjn.com"
+  domain                    = "prowlarr.nathanjn.com"
+  session_duration          = "2h"
   auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
@@ -576,10 +576,10 @@ resource "cloudflare_access_policy" "user_prowlarr" {
 }
 
 resource "cloudflare_access_application" "qbittorrent_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "qbittorrent.nathanjn.com"
-  domain           = "qbittorrent.nathanjn.com"
-  session_duration = "2h"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "qbittorrent.nathanjn.com"
+  domain                    = "qbittorrent.nathanjn.com"
+  session_duration          = "2h"
   auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
@@ -607,10 +607,10 @@ resource "cloudflare_access_policy" "user_qbittorrent" {
 }
 
 resource "cloudflare_access_application" "tautulli_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "tautulli.nathanjn.com"
-  domain           = "tautulli.nathanjn.com"
-  session_duration = "2h"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "tautulli.nathanjn.com"
+  domain                    = "tautulli.nathanjn.com"
+  session_duration          = "2h"
   auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
@@ -669,10 +669,10 @@ resource "cloudflare_access_policy" "user_maintainerr" {
 }
 
 resource "cloudflare_access_application" "maintainerr4k_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "4kmaintainerr.nathanjn.com"
-  domain           = "4kmaintainerr.nathanjn.com"
-  session_duration = "2h"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "4kmaintainerr.nathanjn.com"
+  domain                    = "4kmaintainerr.nathanjn.com"
+  session_duration          = "2h"
   auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
@@ -700,10 +700,10 @@ resource "cloudflare_access_policy" "user_maintainerr4k" {
 }
 
 resource "cloudflare_access_application" "kopia_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "kopia.nathanjn.com"
-  domain           = "kopia.nathanjn.com"
-  session_duration = "2h"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "kopia.nathanjn.com"
+  domain                    = "kopia.nathanjn.com"
+  session_duration          = "2h"
   auto_redirect_to_identity = true
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
