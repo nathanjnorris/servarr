@@ -329,6 +329,8 @@ resource "cloudflare_access_application" "servarr_nathanjn_com" {
   domain           = "servarr.nathanjn.com"
   session_duration = "2h"
   type             = "ssh"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 # Creates an Access policy for SSH.
@@ -351,7 +353,7 @@ resource "cloudflare_access_policy" "user_servarr" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -360,6 +362,8 @@ resource "cloudflare_access_application" "sonarr_nathanjn_com" {
   name             = "sonarr.nathanjn.com"
   domain           = "sonarr.nathanjn.com"
   session_duration = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_sonarr" {
@@ -380,7 +384,7 @@ resource "cloudflare_access_policy" "user_sonarr" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -389,6 +393,8 @@ resource "cloudflare_access_application" "sonarr4k_nathanjn_com" {
   name             = "4ksonarr.nathanjn.com"
   domain           = "4ksonarr.nathanjn.com"
   session_duration = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_sonarr4k" {
@@ -409,7 +415,7 @@ resource "cloudflare_access_policy" "user_sonarr4k" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -418,6 +424,8 @@ resource "cloudflare_access_application" "radarr_nathanjn_com" {
   name             = "radarr.nathanjn.com"
   domain           = "radarr.nathanjn.com"
   session_duration = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_radarr" {
@@ -438,7 +446,7 @@ resource "cloudflare_access_policy" "user_radarr" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -447,6 +455,8 @@ resource "cloudflare_access_application" "radarr4k_nathanjn_com" {
   name             = "4kradarr.nathanjn.com"
   domain           = "4kradarr.nathanjn.com"
   session_duration = "2h"
+    auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_radarr4k" {
@@ -467,7 +477,7 @@ resource "cloudflare_access_policy" "user_radarr4k" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -476,6 +486,8 @@ resource "cloudflare_access_application" "bazarr_nathanjn_com" {
   name             = "bazarr.nathanjn.com"
   domain           = "bazarr.nathanjn.com"
   session_duration = "2h"
+    auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_bazarr" {
@@ -496,7 +508,7 @@ resource "cloudflare_access_policy" "user_bazarr" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -505,6 +517,8 @@ resource "cloudflare_access_application" "bazarr4k_nathanjn_com" {
   name             = "4kbazarr.nathanjn.com"
   domain           = "4kbazarr.nathanjn.com"
   session_duration = "2h"
+    auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_bazarr4k" {
@@ -526,7 +540,7 @@ resource "cloudflare_access_policy" "user_bazarr4k" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -535,6 +549,8 @@ resource "cloudflare_access_application" "prowlarr_nathanjn_com" {
   name             = "prowlarr.nathanjn.com"
   domain           = "prowlarr.nathanjn.com"
   session_duration = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_prowlarr" {
@@ -555,7 +571,7 @@ resource "cloudflare_access_policy" "user_prowlarr" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -564,6 +580,8 @@ resource "cloudflare_access_application" "qbittorrent_nathanjn_com" {
   name             = "qbittorrent.nathanjn.com"
   domain           = "qbittorrent.nathanjn.com"
   session_duration = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_qbittorrent" {
@@ -584,7 +602,7 @@ resource "cloudflare_access_policy" "user_qbittorrent" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -593,6 +611,8 @@ resource "cloudflare_access_application" "tautulli_nathanjn_com" {
   name             = "tautulli.nathanjn.com"
   domain           = "tautulli.nathanjn.com"
   session_duration = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_tautulli" {
@@ -613,15 +633,17 @@ resource "cloudflare_access_policy" "user_tautulli" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
 resource "cloudflare_access_application" "maintainerr_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "maintainerr.nathanjn.com"
-  domain           = "maintainerr.nathanjn.com"
-  session_duration = "2h"
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "maintainerr.nathanjn.com"
+  domain                    = "maintainerr.nathanjn.com"
+  session_duration          = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_maintainerr" {
@@ -642,7 +664,7 @@ resource "cloudflare_access_policy" "user_maintainerr" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -651,6 +673,8 @@ resource "cloudflare_access_application" "maintainerr4k_nathanjn_com" {
   name             = "4kmaintainerr.nathanjn.com"
   domain           = "4kmaintainerr.nathanjn.com"
   session_duration = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "service_maintainerr4k" {
@@ -671,7 +695,7 @@ resource "cloudflare_access_policy" "user_maintainerr4k" {
   precedence     = "2"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
@@ -680,6 +704,8 @@ resource "cloudflare_access_application" "kopia_nathanjn_com" {
   name             = "kopia.nathanjn.com"
   domain           = "kopia.nathanjn.com"
   session_duration = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
 resource "cloudflare_access_policy" "user_kopia" {
@@ -689,7 +715,7 @@ resource "cloudflare_access_policy" "user_kopia" {
   precedence     = "1"
   decision       = "allow"
   include {
-    email = ["nathanjamesnorris@gmail.com"]
+    email = ["nathan.james.norris@gmail.com"]
   }
 }
 
