@@ -165,9 +165,9 @@ resource "cloudflare_record" "kopia_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "uptimekuma_nathanjn_com" {
+resource "cloudflare_record" "status_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
-  name    = "uptimekuma"
+  name    = "status"
   value   = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
@@ -259,7 +259,7 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
       service  = "http://kopia:51515"
     }
     ingress_rule {
-      hostname = "uptimekuma.nathanjn.com"
+      hostname = "status.nathanjn.com"
       service  = "http://uptime-kuma:3001"
     }
     ingress_rule {
@@ -684,24 +684,6 @@ resource "cloudflare_access_application" "kopia_nathanjn_com" {
 
 resource "cloudflare_access_policy" "user_kopia" {
   application_id = cloudflare_access_application.kopia_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "1"
-  decision       = "allow"
-  include {
-    email = ["nathanjamesnorris@gmail.com"]
-  }
-}
-
-resource "cloudflare_access_application" "uptimekuma_nathanjn_com" {
-  zone_id          = data.cloudflare_zone.nathanjn_com.id
-  name             = "uptimekuma.nathanjn.com"
-  domain           = "uptimekuma.nathanjn.com"
-  session_duration = "2h"
-}
-
-resource "cloudflare_access_policy" "user_uptimekuma" {
-  application_id = cloudflare_access_application.uptimekuma_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"
