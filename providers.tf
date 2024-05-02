@@ -21,10 +21,10 @@ terraform {
       version = "~> 6.2.1"
     }
     google = {
-      source = "hashicorp/google"
+      source  = "hashicorp/google"
       version = "~> 5.27.0"
     }
-    
+
   }
 }
 
