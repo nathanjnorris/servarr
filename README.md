@@ -6,7 +6,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.8.2 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.7.0 |
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 4.30.0 |
 | <a name="requirement_github"></a> [github](#requirement\_github) | ~> 6.2.1 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | ~> 5.27.0 |
