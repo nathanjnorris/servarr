@@ -11,15 +11,20 @@ terraform {
   required_providers {
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = ">= 4.9.0"
+      version = "~> 4.30.0"
     }
     random = {
       source = "hashicorp/random"
     }
     github = {
       source  = "integrations/github"
-      version = "~> 6.0"
+      version = "~> 6.2.1"
     }
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.27.0"
+    }
+
   }
 }
 
@@ -32,4 +37,8 @@ provider "github" {
 }
 
 provider "random" {
+}
+
+provider "google" {
+  project = var.gcp_project_id
 }
