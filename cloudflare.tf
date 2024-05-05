@@ -333,11 +333,11 @@ resource "cloudflare_access_application" "servarr_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-# # account level
-# resource "cloudflare_access_ca_certificate" "servarr" {
-#   account_id     = var.account_id
-#   application_id = cloudflare_access_application.servarr_nathanjn_com.id
-# }
+# account level
+resource "cloudflare_access_ca_certificate" "servarr" {
+  account_id     = var.account_id
+  application_id = cloudflare_access_application.servarr_nathanjn_com.id
+}
 
 
 # Creates an Access policy for SSH.
