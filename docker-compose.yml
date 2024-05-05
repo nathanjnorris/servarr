@@ -212,7 +212,7 @@ services:
     restart: always
 
   wizarr:
-    image: ghcr.io/wizarrrr/wizarr:3.5.1
+    image: ghcr.io/wizarrrr/wizarr:latest
     container_name: wizarr
     volumes:
       - /home/nathan/servarr/config/wizarr-config:/data/database
