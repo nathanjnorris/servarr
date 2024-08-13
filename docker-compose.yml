@@ -9,7 +9,7 @@ services:
       - PGID=13000
       - UMASK=002
       - TZ=America/Vancouver
-      - VERSION=latest
+      - VERSION=public
     devices:
       - /dev/dri:/dev/dri
     volumes: 
