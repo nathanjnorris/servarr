@@ -8,8 +8,8 @@ services:
       - PUID=13001
       - PGID=13000
       - UMASK=002
-      - TZ=Canada/Pacific
-      - VERSION=latest
+      - TZ=America/Vancouver
+      - VERSION=public
     devices:
       - /dev/dri:/dev/dri
     volumes: 
