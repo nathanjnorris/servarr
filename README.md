@@ -7,7 +7,7 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.7.0 |
-| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 4.30.0 |
+| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 4.31.0 |
 | <a name="requirement_github"></a> [github](#requirement\_github) | ~> 6.2.1 |
 | <a name="requirement_google"></a> [google](#requirement\_google) | ~> 5.28.0 |
 
@@ -15,7 +15,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_cloudflare"></a> [cloudflare](#provider\_cloudflare) | ~> 4.30.0 |
+| <a name="provider_cloudflare"></a> [cloudflare](#provider\_cloudflare) | ~> 4.31.0 |
 | <a name="provider_github"></a> [github](#provider\_github) | ~> 6.2.1 |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
