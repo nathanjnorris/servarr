@@ -149,14 +149,6 @@ resource "cloudflare_record" "maintainerr_nathanjn_com" {
   proxied = true
 }
 
-resource "cloudflare_record" "maintainerr4k_nathanjn_com" {
-  zone_id = data.cloudflare_zone.nathanjn_com.id
-  name    = "4kmaintainerr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
-  type    = "CNAME"
-  proxied = true
-}
-
 resource "cloudflare_record" "kopia_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "kopia"
@@ -249,10 +241,6 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     ingress_rule {
       hostname = "maintainerr.nathanjn.com"
       service  = "http://maintainerr:6246"
-    }
-    ingress_rule {
-      hostname = "4kmaintainerr.nathanjn.com"
-      service  = "http://4kmaintainerr:6246"
     }
     ingress_rule {
       hostname = "kopia.nathanjn.com"
@@ -666,37 +654,6 @@ resource "cloudflare_access_policy" "service_maintainerr" {
 
 resource "cloudflare_access_policy" "user_maintainerr" {
   application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
-  }
-}
-
-resource "cloudflare_access_application" "maintainerr4k_nathanjn_com" {
-  zone_id                   = data.cloudflare_zone.nathanjn_com.id
-  name                      = "4kmaintainerr.nathanjn.com"
-  domain                    = "4kmaintainerr.nathanjn.com"
-  session_duration          = "2h"
-  auto_redirect_to_identity = true
-  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
-}
-
-resource "cloudflare_access_policy" "service_maintainerr4k" {
-  application_id = cloudflare_access_application.maintainerr4k_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  }
-}
-
-resource "cloudflare_access_policy" "user_maintainerr4k" {
-  application_id = cloudflare_access_application.maintainerr4k_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "2"
