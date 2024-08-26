@@ -183,17 +183,17 @@ services:
     #   - 6246:6246
     restart: always
 
-  4kmaintainerr:
-    image: ghcr.io/jorenn92/maintainerr:latest 
-    container_name: 4kmaintainerr
-    user: 13008:13000
-    volumes:
-      - /home/nathan/servarr/config/4kmaintainerr-config:/opt/data
-    environment:
-      - TZ=America/Vancouver
-    # ports:
-    #   - 6246:6246
-    restart: always
+  # 4kmaintainerr:
+  #   image: ghcr.io/jorenn92/maintainerr:latest 
+  #   container_name: 4kmaintainerr
+  #   user: 13008:13000
+  #   volumes:
+  #     - /home/nathan/servarr/config/4kmaintainerr-config:/opt/data
+  #   environment:
+  #     - TZ=America/Vancouver
+  #   # ports:
+  #   #   - 6246:6246
+  #   restart: always
 # User management
   tautulli:
     image: lscr.io/linuxserver/tautulli:latest
