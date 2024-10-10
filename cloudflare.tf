@@ -340,17 +340,17 @@ resource "cloudflare_access_policy" "service_servarr" {
   }
 }
 
-# Creates an Access policy for SSH.
-resource "cloudflare_access_policy" "user_servarr" {
-  application_id = cloudflare_access_application.servarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
-  }
-}
+# # Creates an Access policy for SSH.
+# resource "cloudflare_access_policy" "user_servarr" {
+#   application_id = cloudflare_access_application.servarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
 
 resource "cloudflare_access_application" "sonarr_nathanjn_com" {
   zone_id                   = data.cloudflare_zone.nathanjn_com.id
