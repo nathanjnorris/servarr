@@ -346,11 +346,11 @@ resource "cloudflare_access_policy" "user_servarr" {
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "2"
-  decision       = "allow"
+  decision       = "allow" 
   include {
     email = ["nathan.james.norris@gmail.com"]
   }
-} 
+}
 
 resource "cloudflare_access_application" "sonarr_nathanjn_com" {
   zone_id                   = data.cloudflare_zone.nathanjn_com.id

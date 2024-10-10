@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Connect and run command on remote server
-      uses: nathanjnorris/cloudflared-ssh-action@latest
+      uses: and-fm/cloudflared-ssh-action@v3
       with:
         host: ${{ vars.SSH_HOST }}
         username: ${{ vars.SSH_USERNAME }}

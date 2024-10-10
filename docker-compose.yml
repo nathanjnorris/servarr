@@ -223,7 +223,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     labels: ["com.centurylinklabs.watchtower.scope=cloudflared"]
-    command: tunnel run --protocol auto
+    command: tunnel run --protocol http2
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     deploy:
