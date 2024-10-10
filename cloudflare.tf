@@ -350,7 +350,7 @@ resource "cloudflare_access_policy" "user_servarr" {
   include {
     email = ["nathan.james.norris@gmail.com"]
   }
-} 
+}
 
 resource "cloudflare_access_application" "sonarr_nathanjn_com" {
   zone_id                   = data.cloudflare_zone.nathanjn_com.id
