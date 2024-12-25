@@ -8,7 +8,7 @@ services:
       - PUID=13001
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
       - VERSION=public
     devices:
       - /dev/dri:/dev/dri
@@ -27,7 +27,7 @@ services:
       - PUID=13002
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/overseerr-config:/config
     # ports:
@@ -44,7 +44,7 @@ services:
       - PUID=13003
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/sonarr-config:/config
       - /mnt/data:/data
@@ -60,7 +60,7 @@ services:
       - PUID=13003
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/4ksonarr-config:/config
       - /mnt/data:/data
@@ -76,7 +76,7 @@ services:
       - PUID=13004
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/radarr-config:/config
       - /mnt/data:/data
@@ -92,7 +92,7 @@ services:
       - PUID=13004
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/4kradarr-config:/config
       - /mnt/data:/data
@@ -108,7 +108,7 @@ services:
       - PUID=13005
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/bazarr-config:/config
       - /mnt/data/media:/data/media
@@ -124,7 +124,7 @@ services:
       - PUID=13005
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/4kbazarr-config:/config
       - /mnt/data/media:/data/media
@@ -140,7 +140,7 @@ services:
       - PUID=13006
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/prowlarr-config:/config
     restart: always
@@ -150,7 +150,7 @@ services:
     container_name: flaresolverr
     network_mode: service:gluetun
     environment:
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     restart: always
 
   qbittorrent:
@@ -163,7 +163,7 @@ services:
       - PUID=13007
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
       - WEBUI_PORT=8080
       - TORRENTING_PORT=24242
     volumes:
@@ -178,7 +178,7 @@ services:
     volumes:
       - /home/nathan/servarr/config/maintainerr-config:/opt/data
     environment:
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     # ports:
     #   - 6246:6246
     restart: always
@@ -190,7 +190,7 @@ services:
   #   volumes:
   #     - /home/nathan/servarr/config/4kmaintainerr-config:/opt/data
   #   environment:
-  #     - TZ=America/Vancouver
+  #     - TZ=Australia/Brisbane
   #   # ports:
   #   #   - 6246:6246
   #   restart: always
@@ -204,7 +204,7 @@ services:
       - PUID=13009
       - PGID=13000
       - UMASK=002
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/tautulli-config:/config
     # ports:
@@ -251,7 +251,7 @@ services:
       - SERVER_CITIES=Vancouver
       - FIREWALL_VPN_INPUT_PORTS=24242
       - HEALTH_VPN_DURATION_INITIAL=60s
-      - TZ=America/Vancouver
+      - TZ=Australia/Brisbane
     # ports:
     #   - 8191:8191 # flaresolverr
     #   - 8989:8989 # sonarr
@@ -315,7 +315,7 @@ services:
         - /home/nathan/servarr/config:/data:ro
       environment:
         KOPIA_PASSWORD: ${KOPIA_PASSWORD}
-        TZ: America/Vancouver
+        TZ: Australia/Brisbane
         USER: "nathan"
       restart: "always"
 # Web monitoring
