@@ -41,6 +41,6 @@ provider "random" {
 
 provider "google" {
   project = var.gcp_project_id
-  region = "australia-southeast1"
-  zone = "australia-southeast1-a"
+  region  = "australia-southeast1"
+  zone    = "australia-southeast1-a"
 }
