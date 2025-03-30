@@ -222,15 +222,9 @@ services:
 # Networking
   cloudflared:
     image: cloudflare/cloudflared:latest
-    labels: ["com.centurylinklabs.watchtower.scope=cloudflared"]
     command: tunnel run --protocol http2
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
-    deploy:
-      mode: replicated
-      replicas: 2
-      update_config:
-        parallelism: 1
     restart: always
 
   gluetun:
@@ -248,7 +242,7 @@ services:
       - WIREGUARD_PRIVATE_KEY=${GLUETUN_PRIVATE_KEY}
       - WIREGUARD_PRESHARED_KEY=${GLUETUN_PRESHARED_KEY}
       - WIREGUARD_ADDRESSES=10.155.80.253/32
-      - SERVER_CITIES=Vancouver
+      - SERVER_REGIONS=Oceania
       - FIREWALL_VPN_INPUT_PORTS=24242
       - HEALTH_VPN_DURATION_INITIAL=60s
       - TZ=Australia/Brisbane
@@ -266,21 +260,6 @@ services:
     #   - 24242:24242/udp # qbittorrent
     restart: always
 # Container updates
-  watchtower-cloudflared:
-    image: containrrr/watchtower:latest
-    labels: ["com.centurylinklabs.watchtower.scope=cloudflared"]
-    container_name: watchtower-cloudflared
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime:ro
-    environment: 
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_REMOVE_VOLUMES=true
-      - WATCHTOWER_SCOPE=cloudflared
-      - WATCHTOWER_SCHEDULE=0 30 9 * * * 
-      - WATCHTOWER_ROLLING_RESTART=true
-    restart: always
-
   watchtower:
     image: containrrr/watchtower:latest
     container_name: watchtower

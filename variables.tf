@@ -10,11 +10,6 @@ variable "github_access_token" {
   sensitive   = true
 }
 
-variable "gcp_project_id" {
-  type        = string
-  description = "Project ID in Google Cloud"
-}
-
 variable "account_id" {
   type        = string
   description = "The account identifier, the basic resource for working with Cloudflare zones, teams and users"
