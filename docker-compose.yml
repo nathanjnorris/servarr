@@ -222,6 +222,7 @@ services:
 # Networking
   cloudflared:
     image: cloudflare/cloudflared:latest
+    container_name: cloudflared
     command: tunnel run --protocol http2
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
