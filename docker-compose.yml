@@ -214,6 +214,10 @@ services:
   wizarr:
     image: ghcr.io/wizarrrr/wizarr:latest
     container_name: wizarr
+    environment:
+      - APP_URL=https://wizarr.nathanjn.com 
+      - DISABLE_BUILTIN_AUTH=false 
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/wizarr-config:/data/database
     # ports:
