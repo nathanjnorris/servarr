@@ -12,6 +12,7 @@ services:
       - VERSION=public
     devices:
       - /dev/dri:/dev/dri
+      - /dev/dvb:/dev/dvb
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/data/media
