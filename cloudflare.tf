@@ -264,7 +264,7 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
 resource "cloudflare_ruleset" "cache_nathanjn_com" {
   zone_id     = data.cloudflare_zone.nathanjn_com.id
   name        = "Cache bypass"
-  description = "Ruleset for cache configuration (bypass required for Plex)"
+  description = "Ruleset to bypass cache"
   kind        = "zone"
   phase       = "http_request_cache_settings"
 
@@ -276,7 +276,7 @@ resource "cloudflare_ruleset" "cache_nathanjn_com" {
         mode = "bypass"
       }
     }
-    expression  = "(http.host eq \"plex.nathanjn.com\")"
+    expression  = "(http.host contains \"plex.nathanjn.com\")"
     description = "Bypass cache for plex.nathanjn.com"
     enabled     = true
   }
