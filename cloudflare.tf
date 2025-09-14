@@ -25,7 +25,7 @@ resource "cloudflare_zone_settings_override" "nathanjn_com" {
     always_use_https         = "on"
     min_tls_version          = "1.2"
     opportunistic_encryption = "on"
-    tls_1_3                  = "on"
+    tls_1_3                  = "zrt"
     automatic_https_rewrites = "on"
     security_level           = "high"
     challenge_ttl            = 7200
@@ -260,11 +260,11 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
 # Cache configuration 
 ###
 
-# Bypass the cache
+# Cache configuration
 resource "cloudflare_ruleset" "cache_nathanjn_com" {
   zone_id     = data.cloudflare_zone.nathanjn_com.id
-  name        = "Cache bypass"
-  description = "Ruleset to bypass cache"
+  name        = "Cache settings"
+  description = "Ruleset for cache configuration"
   kind        = "zone"
   phase       = "http_request_cache_settings"
 
@@ -278,6 +278,42 @@ resource "cloudflare_ruleset" "cache_nathanjn_com" {
     }
     expression  = "(http.host eq \"plex.nathanjn.com\")"
     description = "Bypass cache for plex.nathanjn.com"
+    enabled     = true
+  }
+
+  rules {
+    action = "set_cache_settings"
+    action_parameters {
+      cache = true
+      cache_key {
+        cache_by_device_type       = true
+        cache_deception_armor      = true
+        ignore_query_strings_order = true
+      }
+      edge_ttl {
+        default = 31536000
+        mode    = "override_origin"
+      }
+    }
+    expression  = "(http.request.full_uri wildcard r\"https://nathanjn.com/assets/*\") or (http.request.full_uri wildcard r\"https://consent.nathanjn.com/assets/*\")"
+    description = "Cache static assets for nathanjn.com"
+    enabled     = true
+  }
+
+  rules {
+    action = "set_cache_settings"
+    action_parameters {
+      cache = true
+      cache_key {
+        cache_deception_armor      = true
+        ignore_query_strings_order = true
+      }
+      edge_ttl {
+        mode = "respect_origin"
+      }
+    }
+    expression  = "true"
+    description = "Cache everything"
     enabled     = true
   }
 }
