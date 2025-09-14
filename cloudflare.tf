@@ -263,8 +263,8 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
 # Cache configuration
 resource "cloudflare_ruleset" "cache_nathanjn_com" {
   zone_id     = data.cloudflare_zone.nathanjn_com.id
-  name        = "Cache settings"
-  description = "Ruleset for cache configuration"
+  name        = "Cache bypass"
+  description = "Ruleset for cache configuration (bypass required for Plex)"
   kind        = "zone"
   phase       = "http_request_cache_settings"
 
