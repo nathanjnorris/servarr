@@ -29,6 +29,7 @@ usermod -a -G servarr tautulli
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
+mkdir -p /mnt/data/recordings/{tv,movies}
 mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun}-config
 mkdir -p /mnt/kopia
 mkdir -p /home/nathan/kopia/{config,cache,logs}

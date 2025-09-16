@@ -16,6 +16,7 @@ services:
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/data/media
+      - /mnt/data/recordings:/data/recordings
       - /dev/shm:/transcode
     ports:
       - 32400:32400 # enable local access
