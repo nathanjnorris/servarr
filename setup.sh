@@ -41,6 +41,7 @@ chown -R nathan:servarr /mnt/data
 chown -R nathan:servarr /mnt/kopia
 chown -R nathan:servarr /home/nathan/kopia
 chown -R nathan:servarr /home/nathan/uptime-kuma
+chown -R plex:servarr /mnt/data/recordings
 chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
