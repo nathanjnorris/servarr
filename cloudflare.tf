@@ -299,23 +299,6 @@ resource "cloudflare_ruleset" "cache_nathanjn_com" {
     description = "Cache static assets for nathanjn.com"
     enabled     = true
   }
-
-  rules {
-    action = "set_cache_settings"
-    action_parameters {
-      cache = true
-      cache_key {
-        cache_deception_armor      = true
-        ignore_query_strings_order = true
-      }
-      edge_ttl {
-        mode = "respect_origin"
-      }
-    }
-    expression  = "true"
-    description = "Cache everything"
-    enabled     = true
-  }
 }
 
 ###
