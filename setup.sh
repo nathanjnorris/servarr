@@ -29,7 +29,7 @@ usermod -a -G servarr tautulli
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
-mkdir -p /mnt/data/recordings/{tv,movies}
+mkdir -p /mnt/data/{recordings,optimised}/{tv,movies}
 mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun}-config
 mkdir -p /mnt/kopia
 mkdir -p /home/nathan/kopia/{config,cache,logs}
@@ -41,6 +41,8 @@ chown -R nathan:servarr /mnt/data
 chown -R nathan:servarr /mnt/kopia
 chown -R nathan:servarr /home/nathan/kopia
 chown -R nathan:servarr /home/nathan/uptime-kuma
+chown -R plex:servarr /mnt/data/recordings
+chown -R plex:servarr /mnt/data/optimised
 chown -R plex:servarr config/plex-config
 chown -R overseerr:servarr config/overseerr-config
 chown -R sonarr:servarr config/sonarr-config
