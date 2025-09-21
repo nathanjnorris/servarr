@@ -19,6 +19,7 @@ services:
       - /mnt/data/recordings:/data/recordings
       - /mnt/data/optimised:/data/optimised
       - /dev/shm:/transcode
+      - /var/tmp/plex:/downloads
     ports:
       - 32400:32400 # enable local access
     restart: always
