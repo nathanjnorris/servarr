@@ -65,9 +65,13 @@ jobs:
   #       commands: cd servarr; git reset --hard HEAD; git pull; echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash setup.sh; echo "TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}" > .env; echo "GLUETUN_PRIVATE_KEY=${{ secrets.GLUETUN_PRIVATE_KEY }}" >> .env; echo "GLUETUN_PRESHARED_KEY=${{ secrets.GLUETUN_PRESHARED_KEY }}" >> .env; echo "KOPIA_PASSWORD=${{ secrets.KOPIA_PASSWORD }}" >> .env; docker compose pull; docker compose up --build --remove-orphans -d; docker system prune -f
   
   tailscale-ssh:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     name: SSH and run commands
-    if: github.event.pull_request.merged == true
+    env:
+      MACHINE: servarr
+      SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
+      USER: ${{ vars.SSH_USERNAME }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -80,8 +84,6 @@ jobs:
         tags: tag:gha
 
     - name: Add SSH key
-      env:
-        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
       run: |
         mkdir -p ~/.ssh
         MACHINE_IP="$(tailscale ip -6 $MACHINE)"
@@ -90,7 +92,5 @@ jobs:
         chmod 600 ~/.ssh/key                              
 
     - name: Pull default branch and run Docker commands
-      env:
-          USER: ${{ vars.SSH_USERNAME }}
       run: |
-        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr; git reset --hard HEAD; git pull; docker compose pull; docker compose up --build --remove-orphans -d; docker system prune -f"   
+        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr; git reset --hard HEAD; git pull; docker compose pull; docker compose up --build --remove-orphans -d; docker system prune -f"
