@@ -43,7 +43,8 @@ services:
     container_name: sonarr
     network_mode: service:gluetun
     depends_on:
-      - gluetun
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=13003
       - PGID=13000
@@ -59,7 +60,8 @@ services:
     container_name: 4ksonarr
     network_mode: service:gluetun
     depends_on:
-      - gluetun
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=13003
       - PGID=13000
@@ -75,7 +77,8 @@ services:
     container_name: radarr
     network_mode: service:gluetun
     depends_on:
-      - gluetun
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=13004
       - PGID=13000
@@ -91,7 +94,8 @@ services:
     container_name: 4kradarr
     network_mode: service:gluetun
     depends_on:
-      - gluetun
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=13004
       - PGID=13000
@@ -107,7 +111,8 @@ services:
     container_name: bazarr
     network_mode: service:gluetun
     depends_on:
-      - gluetun
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=13005
       - PGID=13000
@@ -123,7 +128,8 @@ services:
     container_name: 4kbazarr
     network_mode: service:gluetun
     depends_on:
-      - gluetun
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=13005
       - PGID=13000
@@ -139,7 +145,8 @@ services:
     container_name: prowlarr
     network_mode: service:gluetun
     depends_on:
-      - gluetun
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=13006
       - PGID=13000
@@ -152,7 +159,9 @@ services:
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
-    network_mode: service:gluetun
+    depends_on:
+      gluetun:
+        condition: service_healthy
     environment:
       - TZ=Australia/Brisbane
     restart: always
@@ -162,7 +171,8 @@ services:
     container_name: qbittorrent
     network_mode: service:gluetun
     depends_on:
-      - gluetun
+      gluetun:
+        condition: service_healthy
     environment:
       - PUID=13007
       - PGID=13000
@@ -268,6 +278,26 @@ services:
     #   - 8080:8080 # qbittorrent
     #   - 24242:24242 # qbittorrent
     #   - 24242:24242/udp # qbittorrent
+    restart: always
+  # Tailscale exit node via gluetun
+  tailscale-gluetun-exit-node:
+    image: tailscale/tailscale:latest
+    container_name: tailscale-gluetun-exit-node
+    network_mode: service:gluetun
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    devices:
+    - /dev/net/tun:/dev/net/tun
+    cap_add:
+    - NET_ADMIN 
+    environment:
+      - TS_AUTHKEY=${TS_CLIENT_SECRET_GLUETUN}
+      - TS_EXTRA_ARGS=--advertise-tags=tag:gluetun --advertise-exit-node
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_HOSTNAME=gluetun
+    volumes:
+      - /home/nathan/servarr/config/tailscale-config:/var/lib/tailscale
     restart: always
 # Container updates
   watchtower:
