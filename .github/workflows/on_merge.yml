@@ -73,6 +73,8 @@ jobs:
       MACHINE: servarr
       SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
       USER: ${{ vars.SSH_USERNAME }}
+    permissions:
+      contents: read
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -99,12 +101,12 @@ jobs:
 
     - name: Setup users, folders, and permissions
       run: |
-        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash setup.sh"
+        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash setup.sh"
 
     - name: Add secrets to .env file
       run: |
-        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "echo "TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}" > .env && echo "GLUETUN_PRIVATE_KEY=${{ secrets.GLUETUN_PRIVATE_KEY }}" >> .env && echo "GLUETUN_PRESHARED_KEY=${{ secrets.GLUETUN_PRESHARED_KEY }}" >> .env && echo "TS_CLIENT_SECRET_GLUETUN=${{ secrets.TS_CLIENT_SECRET_GLUETUN }}" >> .env && echo "KOPIA_PASSWORD=${{ secrets.KOPIA_PASSWORD }}" >> .env"
+        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && echo "TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}" > .env && echo "GLUETUN_PRIVATE_KEY=${{ secrets.GLUETUN_PRIVATE_KEY }}" >> .env && echo "GLUETUN_PRESHARED_KEY=${{ secrets.GLUETUN_PRESHARED_KEY }}" >> .env && echo "TS_CLIENT_SECRET_GLUETUN=${{ secrets.TS_CLIENT_SECRET_GLUETUN }}" >> .env && echo "KOPIA_PASSWORD=${{ secrets.KOPIA_PASSWORD }}" >> .env"
     
     - name: Deploy with Docker Compose
       run: |
-        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "bash deploy.sh"
+        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && bash deploy.sh"
