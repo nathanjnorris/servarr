@@ -33,7 +33,7 @@ usermod -a -G servarr wizarr
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
 mkdir -p /mnt/data/{recordings,optimised}/{tv,movies}
 mkdir -p /var/tmp/plex
-mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun}-config
+mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun,tailscale}-config
 mkdir -p /mnt/kopia
 mkdir -p /home/nathan/kopia/{config,cache,logs}
 mkdir -p /home/nathan/uptime-kuma/data

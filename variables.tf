@@ -67,12 +67,18 @@ variable "kopia_password" {
 
 variable "tailscale_client_id" {
   type        = string
-  description = "The client ID for Tailscale OAuth"
+  description = "The GitHub Actions client ID for Tailscale OAuth"
   sensitive   = true
 }
 
 variable "tailscale_client_secret" {
   type        = string
-  description = "The client secret for Tailscale OAuth"
+  description = "The GitHub Actions client secret for Tailscale OAuth"
+  sensitive   = true
+}
+
+variable "tailscale_client_secret_gluetun" {
+  type        = string
+  description = "The gluetun client secret for Tailscale OAuth"
   sensitive   = true
 }

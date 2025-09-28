@@ -81,3 +81,9 @@ resource "github_actions_secret" "tailscale_client_secret" {
   secret_name     = "ts_oauth_secret"
   plaintext_value = var.tailscale_client_secret
 }
+
+resource "github_actions_secret" "tailscale_client_secret_gluetun" {
+  repository      = "servarr"
+  secret_name     = "ts_client_secret_gluetun"
+  plaintext_value = var.tailscale_client_secret_gluetun
+}
