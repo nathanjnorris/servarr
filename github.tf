@@ -72,12 +72,12 @@ resource "github_actions_secret" "gluetun_preshared_key" {
 
 resource "github_actions_secret" "tailscale_client_id" {
   repository      = "servarr"
-  secret_name     = "tailscale_client_id"
+  secret_name     = "ts_oauth_client_id"
   plaintext_value = var.tailscale_client_id
 }
 
 resource "github_actions_secret" "tailscale_client_secret" {
   repository      = "servarr"
-  secret_name     = "tailscale_client_secret"
+  secret_name     = "ts_oauth_secret"
   plaintext_value = var.tailscale_client_secret
 }
