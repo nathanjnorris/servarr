@@ -87,6 +87,7 @@ jobs:
       run: |
         mkdir -p ~/.ssh
         MACHINE_IP="$(tailscale ip -6 $MACHINE)"
+        echo "MACHINE_IP=$MACHINE_IP" >> $GITHUB_ENV
         ssh-keyscan $MACHINE_IP >> ~/.ssh/known_hosts
         printf "%s" "$SSH_KEY" > ~/.ssh/key
         chmod 600 ~/.ssh/key                              
