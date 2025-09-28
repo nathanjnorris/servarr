@@ -66,6 +66,7 @@ jobs:
   
   tailscale-ssh:
     if: github.event.pull_request.merged == true
+    needs: terraform_apply
     runs-on: ubuntu-latest
     name: SSH and run commands
     env:
