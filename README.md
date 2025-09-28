@@ -91,6 +91,7 @@ No modules.
 | [github_actions_secret.sudo_password](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.tailscale_client_id](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.tailscale_client_secret](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
+| [github_actions_secret.tailscale_client_secret_gluetun](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_variable.ssh_private_key_filename](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.ssh_username](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [random_password.servarr_tunnel_secret](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
@@ -110,8 +111,9 @@ No modules.
 | <a name="input_ssh_private_key_value"></a> [ssh\_private\_key\_value](#input\_ssh\_private\_key\_value) | The value of the private key used for authentication | `string` | n/a | yes |
 | <a name="input_ssh_username"></a> [ssh\_username](#input\_ssh\_username) | The username used for authentication | `string` | n/a | yes |
 | <a name="input_sudo_password"></a> [sudo\_password](#input\_sudo\_password) | The password of the permitted user, to execute a command as the superuser | `string` | n/a | yes |
-| <a name="input_tailscale_client_id"></a> [tailscale\_client\_id](#input\_tailscale\_client\_id) | The client ID for Tailscale OAuth | `string` | n/a | yes |
-| <a name="input_tailscale_client_secret"></a> [tailscale\_client\_secret](#input\_tailscale\_client\_secret) | The client secret for Tailscale OAuth | `string` | n/a | yes |
+| <a name="input_tailscale_client_id"></a> [tailscale\_client\_id](#input\_tailscale\_client\_id) | The GitHub Actions client ID for Tailscale OAuth | `string` | n/a | yes |
+| <a name="input_tailscale_client_secret"></a> [tailscale\_client\_secret](#input\_tailscale\_client\_secret) | The GitHub Actions client secret for Tailscale OAuth | `string` | n/a | yes |
+| <a name="input_tailscale_client_secret_gluetun"></a> [tailscale\_client\_secret\_gluetun](#input\_tailscale\_client\_secret\_gluetun) | The gluetun client secret for Tailscale OAuth | `string` | n/a | yes |
 
 ## Outputs
 
