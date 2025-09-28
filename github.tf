@@ -79,5 +79,5 @@ resource "github_actions_secret" "tailscale_client_id" {
 resource "github_actions_secret" "tailscale_client_secret" {
   repository      = "servarr"
   secret_name     = "tailscale_client_secret"
-  plaintext_value = var.tailscale_client_secret 
+  plaintext_value = var.tailscale_client_secret
 }
