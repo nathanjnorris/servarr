@@ -159,6 +159,7 @@ services:
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     container_name: flaresolverr
+    network_mode: service:gluetun
     depends_on:
       gluetun:
         condition: service_healthy
@@ -290,7 +291,7 @@ services:
     devices:
     - /dev/net/tun:/dev/net/tun
     cap_add:
-    - NET_ADMIN 
+    - NET_ADMIN
     environment:
       - TS_AUTHKEY=${TS_CLIENT_SECRET_GLUETUN}
       - TS_EXTRA_ARGS=--advertise-tags=tag:gluetun --advertise-exit-node
