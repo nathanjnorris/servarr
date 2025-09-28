@@ -95,4 +95,4 @@ jobs:
 
     - name: Pull default branch and run Docker commands
       run: |
-        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr; git reset --hard HEAD; git pull; docker compose pull; docker compose up --build --remove-orphans -d; docker system prune -f"
+        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && git reset --hard HEAD && git pull && docker compose pull && docker compose up --build --remove-orphans -d && docker system prune -f"
