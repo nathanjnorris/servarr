@@ -263,6 +263,7 @@ services:
       - WIREGUARD_PRIVATE_KEY=${GLUETUN_PRIVATE_KEY}
       - WIREGUARD_PRESHARED_KEY=${GLUETUN_PRESHARED_KEY}
       - WIREGUARD_ADDRESSES=10.155.80.253/32
+      - WIREGUARD_MTU=1280 # Tailscale compatibility
       - SERVER_REGIONS=Oceania
       - FIREWALL_VPN_INPUT_PORTS=24242
       - HEALTH_VPN_DURATION_INITIAL=60s
@@ -292,6 +293,7 @@ services:
     - /dev/net/tun:/dev/net/tun
     cap_add:
     - NET_ADMIN
+    - SYS_MODULE
     environment:
       - TS_AUTHKEY=${TS_CLIENT_SECRET_GLUETUN}
       - TS_EXTRA_ARGS=--advertise-tags=tag:gluetun --advertise-exit-node
