@@ -73,6 +73,8 @@ jobs:
       MACHINE: servarr
       SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
       USER: ${{ vars.SSH_USERNAME }}
+    permissions:
+      contents: read
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
