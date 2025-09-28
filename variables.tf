@@ -15,15 +15,15 @@ variable "account_id" {
   description = "The account identifier, the basic resource for working with Cloudflare zones, teams and users"
 }
 
-variable "ssh_host" {
-  type        = string
-  description = "The hostname of the server"
-}
+# variable "ssh_host" {
+#   type        = string
+#   description = "The hostname of the server"
+# }
 
-variable "ssh_port" {
-  type        = number
-  description = "The SSH port of the server"
-}
+# variable "ssh_port" {
+#   type        = number
+#   description = "The SSH port of the server"
+# }
 
 variable "ssh_username" {
   type        = string
@@ -62,5 +62,17 @@ variable "sudo_password" {
 variable "kopia_password" {
   type        = string
   description = "The password used for Kopia"
+  sensitive   = true
+}
+
+variable "tailscale_client_id" {
+  type        = string
+  description = "The client ID for Tailscale OAuth"
+  sensitive   = true
+}
+
+variable "tailscale_client_secret" {
+  type        = string
+  description = "The client secret for Tailscale OAuth"
   sensitive   = true
 }

@@ -4,29 +4,29 @@ resource "github_actions_secret" "servar_tunnel_token" {
   plaintext_value = cloudflare_tunnel.servarr_tunnel.tunnel_token
 }
 
-resource "github_actions_variable" "service_token_id" {
-  repository    = "servarr"
-  variable_name = "service_token_id"
-  value         = cloudflare_access_service_token.github_actions.client_id
-}
+# resource "github_actions_variable" "service_token_id" {
+#   repository    = "servarr"
+#   variable_name = "service_token_id"
+#   value         = cloudflare_access_service_token.github_actions.client_id
+# }
 
-resource "github_actions_secret" "service_token_secret" {
-  repository      = "servarr"
-  secret_name     = "service_token_secret"
-  plaintext_value = cloudflare_access_service_token.github_actions.client_secret
-}
+# resource "github_actions_secret" "service_token_secret" {
+#   repository      = "servarr"
+#   secret_name     = "service_token_secret"
+#   plaintext_value = cloudflare_access_service_token.github_actions.client_secret
+# }
 
-resource "github_actions_variable" "ssh_host" {
-  repository    = "servarr"
-  variable_name = "ssh_host"
-  value         = var.ssh_host
-}
+# resource "github_actions_variable" "ssh_host" {
+#   repository    = "servarr"
+#   variable_name = "ssh_host"
+#   value         = var.ssh_host
+# }
 
-resource "github_actions_variable" "ssh_port" {
-  repository    = "servarr"
-  variable_name = "ssh_port"
-  value         = var.ssh_port
-}
+# resource "github_actions_variable" "ssh_port" {
+#   repository    = "servarr"
+#   variable_name = "ssh_port"
+#   value         = var.ssh_port
+# }
 
 resource "github_actions_variable" "ssh_username" {
   repository    = "servarr"
@@ -68,4 +68,16 @@ resource "github_actions_secret" "gluetun_preshared_key" {
   repository      = "servarr"
   secret_name     = "gluetun_preshared_key"
   plaintext_value = var.gluetun_preshared_key
+}
+
+resource "github_actions_secret" "tailscale_client_id" {
+  repository      = "servarr"
+  secret_name     = "ts_oauth_client_id"
+  plaintext_value = var.tailscale_client_id
+}
+
+resource "github_actions_secret" "tailscale_client_secret" {
+  repository      = "servarr"
+  secret_name     = "ts_oauth_secret"
+  plaintext_value = var.tailscale_client_secret
 }
