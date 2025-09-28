@@ -36,14 +36,14 @@ resource "cloudflare_zone_settings_override" "nathanjn_com" {
 # DNS records
 ###
 
-# Create a CNAME record that routes servarr.nathanjn.com to the tunnel.
-resource "cloudflare_record" "servarr_nathanjn_com" {
-  zone_id = data.cloudflare_zone.nathanjn_com.id
-  name    = "servarr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
-  type    = "CNAME"
-  proxied = true
-}
+# # Create a CNAME record that routes servarr.nathanjn.com to the tunnel.
+# resource "cloudflare_record" "servarr_nathanjn_com" {
+#   zone_id = data.cloudflare_zone.nathanjn_com.id
+#   name    = "servarr"
+#   value   = cloudflare_tunnel.servarr_tunnel.cname
+#   type    = "CNAME"
+#   proxied = true
+# }
 
 resource "cloudflare_record" "plex_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
@@ -186,10 +186,10 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
   tunnel_id  = cloudflare_tunnel.servarr_tunnel.id
   account_id = var.account_id
   config {
-    ingress_rule {
-      hostname = "servarr.nathanjn.com"
-      service  = "ssh://172.17.0.1"
-    }
+    # ingress_rule {
+    #   hostname = "servarr.nathanjn.com"
+    #   service  = "ssh://172.17.0.1"
+    # }
     ingress_rule {
       hostname = "plex.nathanjn.com"
       service  = "http://plex:32400"
@@ -329,16 +329,16 @@ resource "cloudflare_access_service_token" "uptime_kuma" {
   duration   = "forever"
 }
 
-# Create an Access application to control who can connect to SSH.
-resource "cloudflare_access_application" "servarr_nathanjn_com" {
-  zone_id                   = data.cloudflare_zone.nathanjn_com.id
-  name                      = "servarr.nathanjn.com"
-  domain                    = "servarr.nathanjn.com"
-  session_duration          = "2h"
-  type                      = "ssh"
-  auto_redirect_to_identity = true
-  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
-}
+# # Create an Access application to control who can connect to SSH.
+# resource "cloudflare_access_application" "servarr_nathanjn_com" {
+#   zone_id                   = data.cloudflare_zone.nathanjn_com.id
+#   name                      = "servarr.nathanjn.com"
+#   domain                    = "servarr.nathanjn.com"
+#   session_duration          = "2h"
+#   type                      = "ssh"
+#   auto_redirect_to_identity = true
+#   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
+# }
 
 # # account level
 # resource "cloudflare_access_ca_certificate" "servarr" {
