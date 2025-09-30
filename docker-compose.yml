@@ -267,15 +267,15 @@ services:
       - WIREGUARD_PRESHARED_KEY=${GLUETUN_PRESHARED_KEY}
       - WIREGUARD_ADDRESSES=10.155.80.253/32
       - SERVER_REGIONS=Oceania
-      # - FIREWALL_OUTBOUND_SUBNETS=100.64.0.0/10
+      - FIREWALL_OUTBOUND_SUBNETS=100.64.0.0/10
       - FIREWALL_VPN_INPUT_PORTS=24242
-      - FIREWALL_INPUT_PORTS=41641
+      - FIREWALL_INPUT_PORTS=41641,3478
       - HEALTH_VPN_DURATION_INITIAL=60s
       - TZ=Australia/Brisbane
       - UPDATER_PERIOD=24h
     #ports:
-    #  - 41641:41641 # tailscale port
-    #  - 3478:3478 # stun port
+    #   - 41641:41641 # tailscale port
+    #   - 3478:3478 # stun port
     #   - 8191:8191 # flaresolverr
     #   - 8989:8989 # sonarr
     #   - 8988:8988 # 4ksonarr
