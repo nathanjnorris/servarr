@@ -266,7 +266,7 @@ services:
       - SERVER_REGIONS=Oceania
       - FIREWALL_OUTBOUND_SUBNETS=100.64.0.0/10
       - FIREWALL_VPN_INPUT_PORTS=24242
-      - FIREWALL_INPUT_PORTS=41641
+      - FIREWALL_INPUT_PORTS=41641,3478
       - HEALTH_VPN_DURATION_INITIAL=60s
       - TZ=Australia/Brisbane
       - UPDATER_PERIOD=24h
@@ -294,7 +294,7 @@ services:
       gluetun:
         condition: service_healthy
     devices:
-    - /dev/net/tun:/dev/net/tun
+    - /dev/net/tun:/dev/net/tun2
     cap_add:
     - NET_ADMIN
     environment:
@@ -304,6 +304,7 @@ services:
       - TS_HOSTNAME=gluetun
       - TS_NO_LOGS_NO_SUPPORT=true
       - TS_USERSPACE=false
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/tailscale-config:/var/lib/tailscale
     restart: always
