@@ -264,10 +264,15 @@ services:
       - WIREGUARD_PRESHARED_KEY=${GLUETUN_PRESHARED_KEY}
       - WIREGUARD_ADDRESSES=10.155.80.253/32
       - SERVER_REGIONS=Oceania
+      - FIREWALL_OUTBOUND_SUBNETS=100.64.0.0/10
       - FIREWALL_VPN_INPUT_PORTS=24242
+      - FIREWALL_INPUT_PORTS=41641,3478
       - HEALTH_VPN_DURATION_INITIAL=60s
       - TZ=Australia/Brisbane
-    # ports:
+      - UPDATER_PERIOD=24h
+    #ports:
+    #  - 41641:41641 # tailscale port
+    #  - 3478:3478 # stun port
     #   - 8191:8191 # flaresolverr
     #   - 8989:8989 # sonarr
     #   - 8988:8988 # 4ksonarr
@@ -291,12 +296,18 @@ services:
     devices:
     - /dev/net/tun:/dev/net/tun
     cap_add:
-    - NET_ADMIN
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.forwarding=1
     environment:
       - TS_AUTHKEY=${TS_CLIENT_SECRET_GLUETUN}
       - TS_EXTRA_ARGS=--advertise-tags=tag:gluetun --advertise-exit-node
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_HOSTNAME=gluetun
+      - TS_NO_LOGS_NO_SUPPORT=true
+      # - TS_USERSPACE=false
+      - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/tailscale-config:/var/lib/tailscale
     restart: always
