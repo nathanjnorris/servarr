@@ -270,9 +270,9 @@ services:
       - HEALTH_VPN_DURATION_INITIAL=60s
       - TZ=Australia/Brisbane
       - UPDATER_PERIOD=24h
-    ports:
-      - 41641:41641 # tailscale port
-      - 3478:3478 # stun port
+    #ports:
+    #  - 41641:41641 # tailscale port
+    #  - 3478:3478 # stun port
     #   - 8191:8191 # flaresolverr
     #   - 8989:8989 # sonarr
     #   - 8988:8988 # 4ksonarr
