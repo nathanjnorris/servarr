@@ -61,3 +61,8 @@ chown -R maintainerr:servarr config/maintainerr-config
 chown -R maintainerr:servarr config/4kmaintainerr-config
 chown -R tautulli:servarr config/tautulli-config
 chown -R wizarr:servarr config/wizarr-config
+
+# Tailscale exit node
+grep -q '^net.ipv4.ip_forward = 1$' /etc/sysctl.d/99-tailscale.conf || echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+grep -q '^net.ipv6.conf.all.forwarding = 1$' /etc/sysctl.d/99-tailscale.conf || echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+sysctl -p /etc/sysctl.d/99-tailscale.conf
