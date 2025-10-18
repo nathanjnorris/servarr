@@ -351,6 +351,5 @@ networks:
       config:
         - subnet: 192.168.8.0/24
           # The ip_range 192.168.8.4/30 provides only 2 usable IP addresses (192.168.8.5 for the container, 192.168.8.6 for the host).
-          # This tight allocation is intentional to restrict the macvlan network to a single container and the host, minimizing IP usage and avoiding conflicts.
           ip_range: 192.168.8.4/30
           gateway: 192.168.8.1
