@@ -104,7 +104,7 @@ COMMIT\
 fi
 
 # Restart UFW to apply all changes
-ufw disable && ufw enable
+ufw --force disable && ufw --force enable
 
 # Install macvlan setup service (only if not already installed)
 if [ ! -f /etc/systemd/system/macvlan.service ]; then
