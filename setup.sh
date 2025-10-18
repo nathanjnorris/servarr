@@ -66,13 +66,15 @@ chown -R wizarr:servarr config/wizarr-config
 # Enable IP forwarding
 echo 'net.ipv4.ip_forward = 1' | tee -a /etc/sysctl.d/99-tailscale.conf
 echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.d/99-tailscale.conf
-# Create the macvlan device
-echo 'ip link add macvlan0 link enp1s0 type macvlan mode bridge' | tee -a /etc/sysctl.d/99-tailscale.conf
-# Give the host an IP address on the macvlan network
-echo 'ip addr add 192.168.8.6/32 dev macvlan0' | tee -a /etc/sysctl.d/99-tailscale.conf
-# Bring the interface up
-echo 'ip link set macvlan0 up' | tee -a /etc/sysctl.d/99-tailscale.conf
-# Add a route
-echo 'ip route add 192.168.8.4/30 dev macvlan0' | tee -a /etc/sysctl.d/99-tailscale.conf
 # Persist the changes
 sysctl -p /etc/sysctl.d/99-tailscale.conf
+
+# Install macvlan setup service
+cp macvlan.sh /etc/macvlan.sh
+chmod +x /etc/macvlan.sh
+cp macvlan.service /etc/systemd/system/macvlan.service
+systemctl daemon-reload
+systemctl enable macvlan.service
+
+# Run it now for immediate setup
+systemctl start macvlan.service
