@@ -62,7 +62,19 @@ chown -R maintainerr:servarr config/4kmaintainerr-config
 chown -R tautulli:servarr config/tautulli-config
 chown -R wizarr:servarr config/wizarr-config
 
-# Tailscale exit node
+## Tailscale exit node
+# Enable IP forwarding
 echo 'net.ipv4.ip_forward = 1' | tee -a /etc/sysctl.d/99-tailscale.conf
 echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.d/99-tailscale.conf
+# Persist the changes
 sysctl -p /etc/sysctl.d/99-tailscale.conf
+
+# Install macvlan setup service
+cp macvlan.sh /etc/macvlan.sh
+chmod +x /etc/macvlan.sh
+cp macvlan.service /etc/systemd/system/macvlan.service
+systemctl daemon-reload
+systemctl enable macvlan.service
+
+# Run it now for immediate setup
+systemctl start macvlan.service
