@@ -84,7 +84,7 @@ variable "gluetun_wireguard_address" {
 }
 
 variable "gluetun_port" {
-  type        = string
+  type        = number
   description = "The port used for torrenting"
   sensitive   = true
 }
