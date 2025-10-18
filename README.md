@@ -83,15 +83,17 @@ No modules.
 | [cloudflare_tunnel_config.servarr_tunnel](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/tunnel_config) | resource |
 | [cloudflare_zone_dnssec.example](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/zone_dnssec) | resource |
 | [cloudflare_zone_settings_override.nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/zone_settings_override) | resource |
+| [github_actions_secret.gluetun_port](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.gluetun_preshared_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.gluetun_private_key](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
+| [github_actions_secret.gluetun_wireguard_address](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.kopia_password](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.servar_tunnel_token](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.ssh_private_key_value](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.sudo_password](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.tailscale_client_id](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_secret.tailscale_client_secret](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
-| [github_actions_secret.tailscale_client_secret_gluetun](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
+| [github_actions_secret.tailscale_client_secret_exit_node](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_secret) | resource |
 | [github_actions_variable.ssh_private_key_filename](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [github_actions_variable.ssh_username](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/actions_variable) | resource |
 | [random_password.servarr_tunnel_secret](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
@@ -104,8 +106,10 @@ No modules.
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | The account identifier, the basic resource for working with Cloudflare zones, teams and users | `string` | n/a | yes |
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | Token for Terraform provider to work with the Cloudflare API | `string` | n/a | yes |
 | <a name="input_github_access_token"></a> [github\_access\_token](#input\_github\_access\_token) | Personal access token for Terraform provider to act on user behalf | `string` | n/a | yes |
+| <a name="input_gluetun_port"></a> [gluetun\_port](#input\_gluetun\_port) | The port used for torrenting | `string` | n/a | yes |
 | <a name="input_gluetun_preshared_key"></a> [gluetun\_preshared\_key](#input\_gluetun\_preshared\_key) | The preshared key used for gluetun VPN provider | `string` | n/a | yes |
 | <a name="input_gluetun_private_key"></a> [gluetun\_private\_key](#input\_gluetun\_private\_key) | The private key used for gluetun VPN provider | `string` | n/a | yes |
+| <a name="input_gluetun_wireguard_address"></a> [gluetun\_wireguard\_address](#input\_gluetun\_wireguard\_address) | The WireGuard address for gluetun VPN | `string` | n/a | yes |
 | <a name="input_kopia_password"></a> [kopia\_password](#input\_kopia\_password) | The password used for Kopia | `string` | n/a | yes |
 | <a name="input_ssh_private_key_filename"></a> [ssh\_private\_key\_filename](#input\_ssh\_private\_key\_filename) | The filename of the private key used for authentication | `string` | n/a | yes |
 | <a name="input_ssh_private_key_value"></a> [ssh\_private\_key\_value](#input\_ssh\_private\_key\_value) | The value of the private key used for authentication | `string` | n/a | yes |
@@ -113,7 +117,7 @@ No modules.
 | <a name="input_sudo_password"></a> [sudo\_password](#input\_sudo\_password) | The password of the permitted user, to execute a command as the superuser | `string` | n/a | yes |
 | <a name="input_tailscale_client_id"></a> [tailscale\_client\_id](#input\_tailscale\_client\_id) | The GitHub Actions client ID for Tailscale OAuth | `string` | n/a | yes |
 | <a name="input_tailscale_client_secret"></a> [tailscale\_client\_secret](#input\_tailscale\_client\_secret) | The GitHub Actions client secret for Tailscale OAuth | `string` | n/a | yes |
-| <a name="input_tailscale_client_secret_gluetun"></a> [tailscale\_client\_secret\_gluetun](#input\_tailscale\_client\_secret\_gluetun) | The gluetun client secret for Tailscale OAuth | `string` | n/a | yes |
+| <a name="input_tailscale_client_secret_exit_node"></a> [tailscale\_client\_secret\_exit\_node](#input\_tailscale\_client\_secret\_exit\_node) | The exit node client secret for Tailscale OAuth | `string` | n/a | yes |
 
 ## Outputs
 
