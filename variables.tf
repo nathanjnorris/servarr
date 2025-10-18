@@ -77,8 +77,20 @@ variable "tailscale_client_secret" {
   sensitive   = true
 }
 
-variable "tailscale_client_secret_gluetun" {
+variable "gluetun_wireguard_address" {
   type        = string
-  description = "The gluetun client secret for Tailscale OAuth"
+  description = "The WireGuard address for gluetun VPN"
+  sensitive   = true
+}
+
+variable "gluetun_port" {
+  type        = string
+  description = "The port used for torrenting"
+  sensitive   = true
+}
+
+variable "tailscale_client_secret_exit_node" {
+  type        = string
+  description = "The exit node client secret for Tailscale OAuth"
   sensitive   = true
 }

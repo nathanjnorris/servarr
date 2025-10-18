@@ -82,8 +82,20 @@ resource "github_actions_secret" "tailscale_client_secret" {
   plaintext_value = var.tailscale_client_secret
 }
 
-resource "github_actions_secret" "tailscale_client_secret_gluetun" {
+resource "github_actions_secret" "gluetun_wireguard_address" {
   repository      = "servarr"
-  secret_name     = "ts_client_secret_gluetun"
-  plaintext_value = var.tailscale_client_secret_gluetun
+  secret_name     = "gluetun_wireguard_address"
+  plaintext_value = var.gluetun_wireguard_address
+}
+
+resource "github_actions_secret" "gluetun_port" {
+  repository      = "servarr"
+  secret_name     = "gluetun_port"
+  plaintext_value = var.gluetun_port
+}
+
+resource "github_actions_secret" "tailscale_client_secret_exit_node" {
+  repository      = "servarr"
+  secret_name     = "ts_client_secret_exit_node"
+  plaintext_value = var.tailscale_client_secret_exit_node
 }

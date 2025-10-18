@@ -180,7 +180,7 @@ services:
       - UMASK=002
       - TZ=Australia/Brisbane
       - WEBUI_PORT=8080
-      - TORRENTING_PORT=24242
+      - TORRENTING_PORT=${GLUETUN_PORT}
     volumes:
       - /home/nathan/servarr/config/qbittorrent-config:/config
       - /mnt/data/torrents:/data/torrents
@@ -257,62 +257,38 @@ services:
       - /home/nathan/servarr/config/gluetun-config:/gluetun
     cap_add:
       - NET_ADMIN
-    # sysctls:
-    #   - net.ipv4.ip_forward=1
-    #   - net.ipv6.conf.all.forwarding=1
     environment:
       - VPN_SERVICE_PROVIDER=airvpn
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY=${GLUETUN_PRIVATE_KEY}
       - WIREGUARD_PRESHARED_KEY=${GLUETUN_PRESHARED_KEY}
-      - WIREGUARD_ADDRESSES=10.155.80.253/32
+      - WIREGUARD_ADDRESSES=${GLUETUN_WIREGUARD_ADDRESS}
       - SERVER_REGIONS=Oceania
-      - FIREWALL_OUTBOUND_SUBNETS=100.64.0.0/10
-      - FIREWALL_VPN_INPUT_PORTS=24242
-      - FIREWALL_INPUT_PORTS=41641,3478
+      - FIREWALL_VPN_INPUT_PORTS=${GLUETUN_PORT}
       - HEALTH_VPN_DURATION_INITIAL=60s
       - TZ=Australia/Brisbane
       - UPDATER_PERIOD=24h
-    #ports:
-    #   - 41641:41641 # tailscale port
-    #   - 3478:3478 # stun port
-    #   - 8191:8191 # flaresolverr
-    #   - 8989:8989 # sonarr
-    #   - 8988:8988 # 4ksonarr
-    #   - 7878:7878 # radarr
-    #   - 7877:7877 # 4kradarr
-    #   - 6767:6767 # bazarr
-    #   - 6766:6766 # 4kbazarr
-    #   - 9696:9696 # prowlarr
-    #   - 8080:8080 # qbittorrent
-    #   - 24242:24242 # qbittorrent
-    #   - 24242:24242/udp # qbittorrent
     restart: always
   # Tailscale exit node via gluetun
-  tailscale-gluetun-exit-node:
+  tailscale-exit-node:
     image: tailscale/tailscale:latest
-    container_name: tailscale-gluetun-exit-node
-    network_mode: service:gluetun
-    depends_on:
-      gluetun:
-        condition: service_healthy
+    container_name: tailscale-exit-node
+    networks:
+      macvlan0:
+        ipv4_address: 192.168.8.5
     devices:
-    - /dev/net/tun:/dev/net/tun
+      - /dev/net/tun:/dev/net/tun
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
-    # sysctls:
-    #   - net.ipv4.ip_forward=1
-    #   - net.ipv6.conf.all.forwarding=1
     environment:
-      - TS_AUTHKEY=${TS_CLIENT_SECRET_GLUETUN}
-      - TS_EXTRA_ARGS=--advertise-tags=tag:gluetun --advertise-exit-node
+      - TS_AUTHKEY=${TS_CLIENT_SECRET_EXIT_NODE}
+      - TS_EXTRA_ARGS=--advertise-tags=tag:exit --advertise-exit-node
       - TS_STATE_DIR=/var/lib/tailscale
-      - TS_HOSTNAME=gluetun
-      - TS_NO_LOGS_NO_SUPPORT=true
+      - TS_HOSTNAME=exit-node
       - TS_USERSPACE=false
+      - TS_NO_LOGS_NO_SUPPORT=true
       - TS_DEBUG_FIREWALL_MODE=nftables
-      # - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/tailscale-config:/var/lib/tailscale
     restart: always
@@ -364,3 +340,15 @@ services:
     # ports:
     #   - 3001:3001
     restart: always
+
+networks:
+  macvlan0:
+    driver: macvlan
+    driver_opts:
+      parent: enp1s0
+    ipam:
+      driver: default
+      config:
+       - subnet: 192.168.8.0/24
+         ip_range: 192.168.8.4/30
+         gateway: 192.168.8.1
