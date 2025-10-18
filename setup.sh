@@ -85,7 +85,7 @@ if grep -q 'DEFAULT_FORWARD_POLICY="DROP"' /etc/default/ufw; then
 fi
 
 # Update UFW before.rules to add NAT rules (only if not already present)
-if ! grep -q "Forward traffic from macvlan0@enp1s0 through enp1s0" /etc/ufw/before.rules; then
+if ! grep -q "Forward traffic through enp1s0" /etc/ufw/before.rules; then
     sed -i '/^# Rules that should be run before the ufw command line added rules\. Custom$/,/^#$/{
         /^#$/c\
 #\
@@ -94,8 +94,8 @@ if ! grep -q "Forward traffic from macvlan0@enp1s0 through enp1s0" /etc/ufw/befo
 *nat\
 :POSTROUTING ACCEPT [0:0]\
 \
-# Forward traffic from macvlan0@enp1s0 through enp1s0.\
--A POSTROUTING -i macvlan0@enp1s0 -o enp1s0 -j MASQUERADE\
+# Forward traffic through enp1s0.\
+-A POSTROUTING -o enp1s0 -j MASQUERADE\
 \
 # don'\''t delete the '\''COMMIT'\'' line or these nat table rules won'\''t be processed\
 COMMIT\
