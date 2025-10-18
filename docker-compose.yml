@@ -278,19 +278,17 @@ services:
         ipv4_address: 192.168.8.5
     devices:
       - /dev/net/tun:/dev/net/tun
+    volumes:
+      - /home/nathan/servarr/config/tailscale-config:/var/lib/tailscale
     cap_add:
       - NET_ADMIN
-      - SYS_MODULE
     environment:
       - TS_AUTHKEY=${TS_CLIENT_SECRET_EXIT_NODE}
       - TS_EXTRA_ARGS=--advertise-tags=tag:vpn-exit-node --advertise-exit-node
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_HOSTNAME=vpn-exit-node
       - TS_USERSPACE=false
-      - TS_NO_LOGS_NO_SUPPORT=true
-      - TS_DEBUG_FIREWALL_MODE=nftables
-    volumes:
-      - /home/nathan/servarr/config/tailscale-config:/var/lib/tailscale
+      - TS_ROUTES=172.18.0.0/16
     restart: always
 # Container updates
   watchtower:
