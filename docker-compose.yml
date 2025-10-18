@@ -276,6 +276,7 @@ services:
     networks:
       macvlan0:
         ipv4_address: 192.168.8.5
+        mac_address: 'ee:30:7f:4b:51:b6'
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
