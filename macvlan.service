@@ -1,3 +1,8 @@
+[Unit]
+Description=Setup macvlan network interface
+After=network.target
+Wants=network.target
+
 [Service] 
 Type=simple
 ExecStart=/bin/sh /etc/macvlan.sh 
