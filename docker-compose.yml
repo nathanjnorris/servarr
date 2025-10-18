@@ -349,6 +349,6 @@ networks:
     ipam:
       driver: default
       config:
-       - subnet: 192.168.8.0/24
-         ip_range: 192.168.8.4/30
-         gateway: 192.168.8.1
+        - subnet: 192.168.8.0/24
+          ip_range: 192.168.8.4/30
+          gateway: 192.168.8.1
