@@ -85,7 +85,7 @@ if grep -q 'DEFAULT_FORWARD_POLICY="DROP"' /etc/default/ufw; then
 fi
 
 # Update UFW before.rules to add NAT rules (only if not already present)
-if ! grep -q "Forward trafficthrough enp1s0" /etc/ufw/before.rules; then
+if ! grep -q "Forward traffic through enp1s0" /etc/ufw/before.rules; then
     sed -i '/^# Rules that should be run before the ufw command line added rules\. Custom$/,/^#$/{
         /^#$/c\
 #\
