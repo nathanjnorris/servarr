@@ -106,7 +106,7 @@ No modules.
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | The account identifier, the basic resource for working with Cloudflare zones, teams and users | `string` | n/a | yes |
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | Token for Terraform provider to work with the Cloudflare API | `string` | n/a | yes |
 | <a name="input_github_access_token"></a> [github\_access\_token](#input\_github\_access\_token) | Personal access token for Terraform provider to act on user behalf | `string` | n/a | yes |
-| <a name="input_gluetun_port"></a> [gluetun\_port](#input\_gluetun\_port) | The port used for torrenting | `string` | n/a | yes |
+| <a name="input_gluetun_port"></a> [gluetun\_port](#input\_gluetun\_port) | The port used for torrenting | `number` | n/a | yes |
 | <a name="input_gluetun_preshared_key"></a> [gluetun\_preshared\_key](#input\_gluetun\_preshared\_key) | The preshared key used for gluetun VPN provider | `string` | n/a | yes |
 | <a name="input_gluetun_private_key"></a> [gluetun\_private\_key](#input\_gluetun\_private\_key) | The private key used for gluetun VPN provider | `string` | n/a | yes |
 | <a name="input_gluetun_wireguard_address"></a> [gluetun\_wireguard\_address](#input\_gluetun\_wireguard\_address) | The WireGuard address for gluetun VPN | `string` | n/a | yes |
