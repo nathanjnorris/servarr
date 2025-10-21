@@ -12,7 +12,7 @@ services:
       - VERSION=public
     devices:
       - /dev/dri:/dev/dri
-      - /dev/dvb:/dev/dvb
+    #  - /dev/dvb:/dev/dvb
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
       - /mnt/data/media:/data/media
@@ -283,9 +283,9 @@ services:
       - net_admin
     environment:
       - TS_AUTHKEY=${TS_CLIENT_SECRET_EXIT_NODE}
-      - TS_EXTRA_ARGS=--advertise-tags=tag:vpn-exit-node --advertise-exit-node --reset
+      - TS_EXTRA_ARGS=--advertise-tags=tag:vpn --advertise-exit-node --reset
       - TS_STATE_DIR=/var/lib/tailscale
-      - TS_HOSTNAME=vpn-exit-node
+      - TS_HOSTNAME=vpn
     restart: always
 # Container updates
   watchtower:
