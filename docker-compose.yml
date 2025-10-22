@@ -287,6 +287,17 @@ services:
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_HOSTNAME=vpn
     restart: always
+  # Control D DNS
+  control-d-dns:
+    image: controldns/ctrld:latest
+    container_name: ctrld
+    ports:
+      - 53:53/udp
+    command:
+      - ctrld
+      - run
+      - --base64_config="W25ldHdvcmsuMF0KICAgIG5hbWUgPSAiQW55IE5ldHdvcmsiCiAgICBjaWRycyA9IFsiMC4wLjAuMC8wIl0KClt1cHN0cmVhbS4wXQogICAgbmFtZSA9ICJDb250cm9sIEQgRG9RIgogICAgYm9vdHN0cmFwX2lwID0gIjc2Ljc2LjIuMTEiCiAgICBlbmRwb2ludCA9ICJwMi5mcmVlZG5zLmNvbnRyb2xkLmNvbSIKICAgIHR5cGUgPSAiZG9xIgoKW3Vwc3RyZWFtLjFdCiAgICBuYW1lID0gIkNsb3VkZmxhcmUgRG9UIgogICAgZW5kcG9pbnQgPSAiMS4xLjEuMTo4NTMiCiAgICB0eXBlID0gImRvdCIKCQpbbGlzdGVuZXIuMF0KICAgIGlwID0gIjEyNy4wLjAuMSIKICAgIHBvcnQgPSA1MwoKICAgIFtsaXN0ZW5lci4wLnBvbGljeV0KICAgICAgICBydWxlcyA9IFsKICAgICAgICAgICAgeyIqLmRyb25nby1zbmFyZXMudHMubmV0IiA9IFsiMTAwLjEwMC4xMDAuMTAwOjUzIl19CiAgICAgICAgXQ=="
+    restart: always
 # Container updates
   watchtower:
     image: containrrr/watchtower:latest
