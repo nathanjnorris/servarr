@@ -17,17 +17,17 @@ id wizarr &>/dev/null || useradd wizarr -u 13010
 getent group servarr &>/dev/null || groupadd servarr -g 13000
 
 # Add users to group (only if not already in group)
-groups nathan | grep -q servarr || usermod -a -G servarr nathan &>/dev/null
-groups plex | grep -q servarr || usermod -a -G servarr plex &>/dev/null
-groups overseerr | grep -q servarr || usermod -a -G servarr overseerr &>/dev/null
-groups sonarr | grep -q servarr || usermod -a -G servarr sonarr &>/dev/null
-groups radarr | grep -q servarr || usermod -a -G servarr radarr &>/dev/null
-groups bazarr | grep -q servarr || usermod -a -G servarr bazarr &>/dev/null
-groups prowlarr | grep -q servarr || usermod -a -G servarr prowlarr &>/dev/null
-groups qbittorrent | grep -q servarr || usermod -a -G servarr qbittorrent &>/dev/null
-groups maintainerr | grep -q servarr || usermod -a -G servarr maintainerr &>/dev/null
-groups tautulli | grep -q servarr || usermod -a -G servarr tautulli &>/dev/null
-groups wizarr | grep -q servarr || usermod -a -G servarr wizarr &>/dev/null
+id -nG nathan 2>/dev/null | grep -qw servarr || usermod -a -G servarr nathan &>/dev/null
+id -nG plex 2>/dev/null | grep -qw servarr || usermod -a -G servarr plex &>/dev/null
+id -nG overseerr 2>/dev/null | grep -qw servarr || usermod -a -G servarr overseerr &>/dev/null
+id -nG sonarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr sonarr &>/dev/null
+id -nG radarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr radarr &>/dev/null
+id -nG bazarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr bazarr &>/dev/null
+id -nG prowlarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr prowlarr &>/dev/null
+id -nG qbittorrent 2>/dev/null | grep -qw servarr || usermod -a -G servarr qbittorrent &>/dev/null
+id -nG maintainerr 2>/dev/null | grep -qw servarr || usermod -a -G servarr maintainerr &>/dev/null
+id -nG tautulli 2>/dev/null | grep -qw servarr || usermod -a -G servarr tautulli &>/dev/null
+id -nG wizarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr wizarr &>/dev/null
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies} &>/dev/null
