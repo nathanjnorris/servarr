@@ -16,51 +16,51 @@ id wizarr &>/dev/null || useradd wizarr -u 13010
 # Make group (only if it doesn't exist)
 getent group servarr &>/dev/null || groupadd servarr -g 13000
 
-# Add users to group
-usermod -a -G servarr nathan
-usermod -a -G servarr plex
-usermod -a -G servarr overseerr
-usermod -a -G servarr sonarr
-usermod -a -G servarr radarr
-usermod -a -G servarr bazarr
-usermod -a -G servarr prowlarr
-usermod -a -G servarr qbittorrent
-usermod -a -G servarr maintainerr
-usermod -a -G servarr tautulli
-usermod -a -G servarr wizarr
+# Add users to group (only if not already in group)
+id -nG nathan 2>/dev/null | grep -qw servarr || usermod -a -G servarr nathan &>/dev/null
+id -nG plex 2>/dev/null | grep -qw servarr || usermod -a -G servarr plex &>/dev/null
+id -nG overseerr 2>/dev/null | grep -qw servarr || usermod -a -G servarr overseerr &>/dev/null
+id -nG sonarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr sonarr &>/dev/null
+id -nG radarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr radarr &>/dev/null
+id -nG bazarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr bazarr &>/dev/null
+id -nG prowlarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr prowlarr &>/dev/null
+id -nG qbittorrent 2>/dev/null | grep -qw servarr || usermod -a -G servarr qbittorrent &>/dev/null
+id -nG maintainerr 2>/dev/null | grep -qw servarr || usermod -a -G servarr maintainerr &>/dev/null
+id -nG tautulli 2>/dev/null | grep -qw servarr || usermod -a -G servarr tautulli &>/dev/null
+id -nG wizarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr wizarr &>/dev/null
 
 # Make directories
-mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies}
-mkdir -p /mnt/data/{recordings,optimised}/{tv,movies}
-mkdir -p /var/tmp/plex
-mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun,tailscale}-config
-mkdir -p /mnt/kopia
-mkdir -p /home/nathan/kopia/{config,cache,logs}
-mkdir -p /home/nathan/uptime-kuma/data
+mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies} &>/dev/null
+mkdir -p /mnt/data/{recordings,optimised}/{tv,movies} &>/dev/null
+mkdir -p /var/tmp/plex &>/dev/null
+mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun,tailscale}-config &>/dev/null
+mkdir -p /mnt/kopia &>/dev/null
+mkdir -p /home/nathan/kopia/{config,cache,logs} &>/dev/null
+mkdir -p /home/nathan/uptime-kuma/data &>/dev/null
 
 # Set permissions
-chmod -R 775 /mnt/data
-chown -R nathan:servarr /mnt/data
-chown -R nathan:servarr /mnt/kopia
-chown -R nathan:servarr /home/nathan/kopia
-chown -R nathan:servarr /home/nathan/uptime-kuma
-chown -R plex:servarr /mnt/data/recordings
-chown -R plex:servarr /mnt/data/optimised
-chown -R plex:servarr /var/tmp/plex
-chown -R plex:servarr config/plex-config
-chown -R overseerr:servarr config/overseerr-config
-chown -R sonarr:servarr config/sonarr-config
-chown -R sonarr:servarr config/4ksonarr-config
-chown -R radarr:servarr config/radarr-config
-chown -R radarr:servarr config/4kradarr-config
-chown -R bazarr:servarr config/bazarr-config
-chown -R bazarr:servarr config/4kbazarr-config
-chown -R prowlarr:servarr config/prowlarr-config
-chown -R qbittorrent:servarr config/qbittorrent-config
-chown -R maintainerr:servarr config/maintainerr-config
-chown -R maintainerr:servarr config/4kmaintainerr-config
-chown -R tautulli:servarr config/tautulli-config
-chown -R wizarr:servarr config/wizarr-config
+chmod -R 775 /mnt/data &>/dev/null
+chown -R nathan:servarr /mnt/data &>/dev/null
+chown -R nathan:servarr /mnt/kopia &>/dev/null
+chown -R nathan:servarr /home/nathan/kopia &>/dev/null
+chown -R nathan:servarr /home/nathan/uptime-kuma &>/dev/null
+chown -R plex:servarr /mnt/data/recordings &>/dev/null
+chown -R plex:servarr /mnt/data/optimised &>/dev/null
+chown -R plex:servarr /var/tmp/plex &>/dev/null
+chown -R plex:servarr config/plex-config &>/dev/null
+chown -R overseerr:servarr config/overseerr-config &>/dev/null
+chown -R sonarr:servarr config/sonarr-config &>/dev/null
+chown -R sonarr:servarr config/4ksonarr-config &>/dev/null
+chown -R radarr:servarr config/radarr-config &>/dev/null
+chown -R radarr:servarr config/4kradarr-config &>/dev/null
+chown -R bazarr:servarr config/bazarr-config &>/dev/null
+chown -R bazarr:servarr config/4kbazarr-config &>/dev/null
+chown -R prowlarr:servarr config/prowlarr-config &>/dev/null
+chown -R qbittorrent:servarr config/qbittorrent-config &>/dev/null
+chown -R maintainerr:servarr config/maintainerr-config &>/dev/null
+chown -R maintainerr:servarr config/4kmaintainerr-config &>/dev/null
+chown -R tautulli:servarr config/tautulli-config &>/dev/null
+chown -R wizarr:servarr config/wizarr-config &>/dev/null
 
 ## Tailscale exit node
 # Enable IP forwarding in tailscale sysctl.d (only if not already configured)
