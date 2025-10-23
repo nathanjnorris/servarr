@@ -33,10 +33,13 @@ id -nG wizarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr wizarr &>/
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies} &>/dev/null
 mkdir -p /mnt/data/{recordings,optimised}/{tv,movies} &>/dev/null
 mkdir -p /var/tmp/plex &>/dev/null
-mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun,tailscale}-config &>/dev/null
+mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun,tailscale,ctrld}-config &>/dev/null
 mkdir -p /mnt/kopia &>/dev/null
 mkdir -p /home/nathan/kopia/{config,cache,logs} &>/dev/null
 mkdir -p /home/nathan/uptime-kuma/data &>/dev/null
+
+# Copy ctrld configuration file
+cp ctrld.toml config/ctrld-config/ctrld.toml &>/dev/null
 
 # Set permissions
 chmod -R 775 /mnt/data &>/dev/null
@@ -61,6 +64,7 @@ chown -R maintainerr:servarr config/maintainerr-config &>/dev/null
 chown -R maintainerr:servarr config/4kmaintainerr-config &>/dev/null
 chown -R tautulli:servarr config/tautulli-config &>/dev/null
 chown -R wizarr:servarr config/wizarr-config &>/dev/null
+chown -R nathan:servarr config/ctrld-config &>/dev/null
 
 ## Tailscale exit node
 # Enable IP forwarding in tailscale sysctl.d (only if not already configured)
