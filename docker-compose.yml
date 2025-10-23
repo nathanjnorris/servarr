@@ -255,7 +255,6 @@ services:
       - /home/nathan/servarr/config/ctrld-config:/etc/controld
     ports:
       - 53:53/udp
-      - 53:53/tcp
     restart: always
 
   gluetun:
