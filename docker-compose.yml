@@ -248,6 +248,16 @@ services:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     restart: always
 
+  ctrld:
+    image: controldns/ctrld:latest
+    container_name: ctrld
+    volumes:
+      - /home/nathan/servarr/config/ctrld-config:/etc/controld
+    ports:
+      - 53:53/udp
+      - 53:53/tcp
+    restart: always
+
   gluetun:
     image: qmcgaw/gluetun:v3
     container_name: gluetun
@@ -269,6 +279,7 @@ services:
       - TZ=Australia/Brisbane
       - UPDATER_PERIOD=24h
     restart: always
+
   # Tailscale exit node via VPN on router
   tailscale-exit-node:
     image: tailscale/tailscale:latest
@@ -287,15 +298,7 @@ services:
       - TS_STATE_DIR=/var/lib/tailscale
       - TS_HOSTNAME=vpn
     restart: always
-  # Control D DNS
-  control-d-dns:
-    image: controldns/ctrld:latest
-    container_name: ctrld
-    ports:
-      - 53:53/udp
-    command:
-      - --base64_config="W2xpc3RlbmVyXQogIFtsaXN0ZW5lci4wXQogICAgaXAgPSAiMTI3LjAuMC4xIgogICAgcG9ydCA9IDUzCgpbbmV0d29ya10KICBbbmV0d29yay4wXQogICAgY2lkcnMgPSBbIjAuMC4wLjAvMCJdCiAgICBuYW1lID0gIkFueSBuZXR3b3JrIgoKW3Vwc3RyZWFtXQogIFt1cHN0cmVhbS4wXQogICAgbmFtZSA9ICJDb250cm9sIEQgRG9RIgogICAgYm9vdHN0cmFwX2lwID0gIjc2Ljc2LjIuMTEiCiAgICBlbmRwb2ludCA9ICJwMi5mcmVlZG5zLmNvbnRyb2xkLmNvbSIKICAgIHR5cGUgPSAiZG9xIgoKICBbdXBzdHJlYW0uMV0KICAgIG5hbWUgPSAiQ2xvdWRmbGFyZSBEb1QiCiAgICBlbmRwb2ludCA9ICIxLjEuMS4xOjg1MyIKICAgIHR5cGUgPSAiZG90Ig=="
-    restart: always
+
 # Container updates
   watchtower:
     image: containrrr/watchtower:latest

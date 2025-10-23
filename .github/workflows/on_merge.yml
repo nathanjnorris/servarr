@@ -103,6 +103,10 @@ jobs:
       run: |
         ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash setup.sh"
 
+    - name: Update ctrld configuration
+      run: |
+        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && cp ctrld.toml config/ctrld-config/ctrld.toml"
+
     - name: Add secrets to .env file
       run: |
         ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && cat > .env <<EOF
