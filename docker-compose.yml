@@ -15,6 +15,8 @@ services:
     #  - /dev/dvb:/dev/dvb
     volumes: 
       - /home/nathan/servarr/config/plex-config:/config
+      # Add temp HDD
+      - /mnt/temp-data:/temp-data
       - /mnt/data/media:/data/media
       - /mnt/data/recordings:/data/recordings
       - /mnt/data/optimised:/data/optimised
