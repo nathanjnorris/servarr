@@ -268,11 +268,11 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     }
     ingress_rule {
       hostname = "ha.nathanjn.com"
-      service  = "http://home-assistant:8123"
+      service  = "http://host.docker.internal:8123"
     }
     ingress_rule {
       hostname = "matter.nathanjn.com"
-      service  = "http://matter-server:5580"
+      service  = "http://host.docker.internal:5580"
     }
     ingress_rule {
       service = "http_status:404"
