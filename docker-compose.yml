@@ -385,13 +385,10 @@ networks:
     driver: macvlan
     driver_opts:
       parent: enp1s0
-    enable_ipv6: true
     ipam:
       driver: default
       config:
         - subnet: 192.168.8.0/24
           # The ip_range 192.168.8.4/30 provides only 2 usable IP addresses (192.168.8.5 for the container, 192.168.8.6 for the host).
-          ip_range: 192.168.8.0/24
+          ip_range: 192.168.8.4/30
           gateway: 192.168.8.1
-        - subnet: fd69:59dc:f817:b798::/64
-          gateway: fd69:59dc:f817:b798:9683:c4ff:feb4:a502
