@@ -305,7 +305,7 @@ services:
     container_name: home-assistant
     networks:
       default:
-      macvlan1:
+      macvlan0:
         ipv4_address: 192.168.8.13
         ipv6_address: fd69:59dc:f817:b798::13
     environment:
@@ -327,7 +327,7 @@ services:
     user: 13012:13000
     networks:
       default:
-      macvlan1:
+      macvlan0:
         ipv4_address: 192.168.8.14
         ipv6_address: fd69:59dc:f817:b798::14
     environment:
@@ -391,23 +391,13 @@ networks:
     driver: macvlan
     driver_opts:
       parent: enp1s0
+    enable_ipv6: true
     ipam:
       driver: default
       config:
         - subnet: 192.168.8.0/24
           # The ip_range 192.168.8.4/30 provides only 2 usable IP addresses (192.168.8.5 for the container, 192.168.8.6 for the host).
-          ip_range: 192.168.8.4/30
-          gateway: 192.168.8.1
-  macvlan1:
-    driver: macvlan
-    enable_ipv6: true
-    driver_opts:
-      parent: enp1s0
-    ipam:
-      driver: default
-      config:
-        - subnet: 192.168.8.0/24
-          ip_range: 192.168.8.12/30
+          ip_range: 192.168.8.0/24
           gateway: 192.168.8.1
         - subnet: fd69:59dc:f817:b798::/64
           gateway: fd69:59dc:f817:b798:9683:c4ff:feb4:a502
