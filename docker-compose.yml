@@ -307,6 +307,7 @@ services:
       default:
       macvlan1:
         ipv4_address: 192.168.8.13
+        ipv6_address: fd69:59dc:f817:b798::13
     environment:
       - PUID=13011
       - PGID=13000
@@ -328,6 +329,7 @@ services:
       default:
       macvlan1:
         ipv4_address: 192.168.8.14
+        ipv6_address: fd69:59dc:f817:b798::14
     environment:
       - TZ=Australia/Brisbane
     read_only: true
@@ -407,3 +409,5 @@ networks:
         - subnet: 192.168.8.0/24
           ip_range: 192.168.8.12/30
           gateway: 192.168.8.1
+        - subnet: fd69:59dc:f817:b798::/64
+          gateway: fd69:59dc:f817:b798:9683:c4ff:feb4:a502
