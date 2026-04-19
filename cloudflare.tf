@@ -165,6 +165,22 @@ resource "cloudflare_record" "status_nathanjn_com" {
   proxied = true
 }
 
+resource "cloudflare_record" "ha_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "ha"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "matter_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "matter"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
 ###
 # Tunnel configuration 
 ###
@@ -251,6 +267,14 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
       service  = "http://uptime-kuma:3001"
     }
     ingress_rule {
+      hostname = "ha.nathanjn.com"
+      service  = "http://home-assistant:8123"
+    }
+    ingress_rule {
+      hostname = "matter.nathanjn.com"
+      service  = "http://matter-server:5580"
+    }
+    ingress_rule {
       service = "http_status:404"
     }
   }
@@ -326,6 +350,13 @@ resource "cloudflare_access_service_token" "github_actions" {
 resource "cloudflare_access_service_token" "uptime_kuma" {
   account_id = var.account_id
   name       = "Uptime Kuma"
+  duration   = "forever"
+}
+
+# Create a service token for Google Assistant to authenticate with Home Assistant
+resource "cloudflare_access_service_token" "google_assistant" {
+  account_id = var.account_id
+  name       = "Google Assistant"
   duration   = "forever"
 }
 
@@ -696,6 +727,79 @@ resource "cloudflare_access_policy" "user_kopia" {
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
   precedence     = "1"
+  decision       = "allow"
+  include {
+    email = ["nathan.james.norris@gmail.com"]
+  }
+}
+
+resource "cloudflare_access_application" "ha_nathanjn_com" {
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "ha.nathanjn.com"
+  domain                    = "ha.nathanjn.com"
+  session_duration          = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
+}
+
+resource "cloudflare_access_policy" "service_ha" {
+  application_id = cloudflare_access_application.ha_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
+resource "cloudflare_access_policy" "google_assistant_ha" {
+  application_id = cloudflare_access_application.ha_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Google Assistant auth"
+  precedence     = "2"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.google_assistant.id]
+  }
+}
+
+resource "cloudflare_access_policy" "user_ha" {
+  application_id = cloudflare_access_application.ha_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "3"
+  decision       = "allow"
+  include {
+    email = ["nathan.james.norris@gmail.com"]
+  }
+}
+
+resource "cloudflare_access_application" "matter_nathanjn_com" {
+  zone_id                   = data.cloudflare_zone.nathanjn_com.id
+  name                      = "matter.nathanjn.com"
+  domain                    = "matter.nathanjn.com"
+  session_duration          = "2h"
+  auto_redirect_to_identity = true
+  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
+}
+
+resource "cloudflare_access_policy" "service_matter" {
+  application_id = cloudflare_access_application.matter_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Service auth"
+  precedence     = "1"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+  }
+}
+
+resource "cloudflare_access_policy" "user_matter" {
+  application_id = cloudflare_access_application.matter_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "User auth"
+  precedence     = "2"
   decision       = "allow"
   include {
     email = ["nathan.james.norris@gmail.com"]
