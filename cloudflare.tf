@@ -353,6 +353,13 @@ resource "cloudflare_access_service_token" "uptime_kuma" {
   duration   = "forever"
 }
 
+# Create a service token for Google Assistant to authenticate with Home Assistant
+resource "cloudflare_access_service_token" "google_assistant" {
+  account_id = var.account_id
+  name       = "Google Assistant"
+  duration   = "forever"
+}
+
 # # Create an Access application to control who can connect to SSH.
 # resource "cloudflare_access_application" "servarr_nathanjn_com" {
 #   zone_id                   = data.cloudflare_zone.nathanjn_com.id
@@ -746,11 +753,22 @@ resource "cloudflare_access_policy" "service_ha" {
   }
 }
 
+resource "cloudflare_access_policy" "google_assistant_ha" {
+  application_id = cloudflare_access_application.ha_nathanjn_com.id
+  zone_id        = data.cloudflare_zone.nathanjn_com.id
+  name           = "Google Assistant auth"
+  precedence     = "2"
+  decision       = "non_identity"
+  include {
+    service_token = [cloudflare_access_service_token.google_assistant.id]
+  }
+}
+
 resource "cloudflare_access_policy" "user_ha" {
   application_id = cloudflare_access_application.ha_nathanjn_com.id
   zone_id        = data.cloudflare_zone.nathanjn_com.id
   name           = "User auth"
-  precedence     = "2"
+  precedence     = "3"
   decision       = "allow"
   include {
     email = ["nathan.james.norris@gmail.com"]
