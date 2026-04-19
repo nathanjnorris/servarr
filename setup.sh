@@ -12,6 +12,8 @@ id qbittorrent &>/dev/null || useradd qbittorrent -u 13007
 id maintainerr &>/dev/null || useradd maintainerr -u 13008
 id tautulli &>/dev/null || useradd tautulli -u 13009
 id wizarr &>/dev/null || useradd wizarr -u 13010
+id homeassistant &>/dev/null || useradd homeassistant -u 13011
+id matter &>/dev/null || useradd matter -u 13012
 
 # Make group (only if it doesn't exist)
 getent group servarr &>/dev/null || groupadd servarr -g 13000
@@ -28,12 +30,14 @@ id -nG qbittorrent 2>/dev/null | grep -qw servarr || usermod -a -G servarr qbitt
 id -nG maintainerr 2>/dev/null | grep -qw servarr || usermod -a -G servarr maintainerr &>/dev/null
 id -nG tautulli 2>/dev/null | grep -qw servarr || usermod -a -G servarr tautulli &>/dev/null
 id -nG wizarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr wizarr &>/dev/null
+id -nG homeassistant 2>/dev/null | grep -qw servarr || usermod -a -G servarr homeassistant &>/dev/null
+id -nG matter 2>/dev/null | grep -qw servarr || usermod -a -G servarr matter &>/dev/null
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies} &>/dev/null
 mkdir -p /mnt/data/{recordings,optimised}/{tv,movies} &>/dev/null
 mkdir -p /var/tmp/plex &>/dev/null
-mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun,tailscale,ctrld}-config &>/dev/null
+mkdir -p config/{plex,overseerr,sonarr,4ksonarr,radarr,4kradarr,bazarr,4kbazarr,prowlarr,qbittorrent,maintainerr,4kmaintainerr,tautulli,wizarr,gluetun,tailscale,ctrld,home-assistant,matter-server}-config &>/dev/null
 mkdir -p /mnt/kopia &>/dev/null
 mkdir -p /home/nathan/kopia/{config,cache,logs} &>/dev/null
 mkdir -p /home/nathan/uptime-kuma/data &>/dev/null
@@ -64,6 +68,8 @@ chown -R maintainerr:servarr config/maintainerr-config &>/dev/null
 chown -R maintainerr:servarr config/4kmaintainerr-config &>/dev/null
 chown -R tautulli:servarr config/tautulli-config &>/dev/null
 chown -R wizarr:servarr config/wizarr-config &>/dev/null
+chown -R homeassistant:servarr config/home-assistant-config &>/dev/null
+chown -R matter:servarr config/matter-server-config &>/dev/null
 chown -R nathan:servarr config/ctrld-config &>/dev/null
 
 ## Tailscale exit node

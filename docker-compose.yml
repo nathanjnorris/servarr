@@ -300,6 +300,41 @@ services:
       - TS_HOSTNAME=vpn
     restart: always
 
+  home-assistant:
+    image: lscr.io/linuxserver/homeassistant:latest
+    container_name: home-assistant
+    networks:
+      default:
+      macvlan1:
+        ipv4_address: 192.168.8.13
+    environment:
+      - PUID=13011
+      - PGID=13000
+      - UMASK=002
+      - TZ=Australia/Brisbane
+    volumes:
+      - /home/nathan/servarr/config/home-assistant-config:/config
+      - /run/dbus:/run/dbus:ro
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: always
+
+  matter-server:
+    image: ghcr.io/matter-js/matterjs-server:latest
+    container_name: matter-server
+    user: 13012:13000
+    networks:
+      default:
+      macvlan1:
+        ipv4_address: 192.168.8.14
+    environment:
+      - TZ=Australia/Brisbane
+    read_only: true
+    volumes:
+      - /home/nathan/servarr/config/matter-server-config:/data
+    restart: always
+
 # Container updates
   watchtower:
     image: containrrr/watchtower:latest
@@ -360,4 +395,15 @@ networks:
         - subnet: 192.168.8.0/24
           # The ip_range 192.168.8.4/30 provides only 2 usable IP addresses (192.168.8.5 for the container, 192.168.8.6 for the host).
           ip_range: 192.168.8.4/30
+          gateway: 192.168.8.1
+  macvlan1:
+    driver: macvlan
+    enable_ipv6: true
+    driver_opts:
+      parent: enp1s0
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.8.0/24
+          ip_range: 192.168.8.12/30
           gateway: 192.168.8.1
