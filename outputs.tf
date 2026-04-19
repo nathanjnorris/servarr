@@ -9,11 +9,6 @@ output "google_assistant_client_id" {
   sensitive   = true
 }
 
-output "google_assistant_client_id" {
-  value       = cloudflare_access_service_token.google_assistant.client_id
-  description = "Client ID for Google Assistant service token."
-}
-
 output "google_assistant_client_secret" {
   value       = cloudflare_access_service_token.google_assistant.client_secret
   description = "Client secret for Google Assistant service token."
