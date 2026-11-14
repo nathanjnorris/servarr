@@ -317,6 +317,8 @@ services:
     cap_add:
       - NET_ADMIN
       - NET_RAW
+    devices:
+      - /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_7832fe7bd4a0f011b6d92681bb936ffa-if00-port0:/dev/ttyUSB0
     restart: always
 
   matter-server:
