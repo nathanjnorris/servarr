@@ -307,9 +307,6 @@ services:
     container_name: home-assistant
     network_mode: host
     environment:
-      - PUID=13011
-      - PGID=13000
-      - UMASK=002
       - TZ=Australia/Brisbane
     volumes:
       - /home/nathan/servarr/config/home-assistant-config:/config
