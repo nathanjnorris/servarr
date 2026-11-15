@@ -29,7 +29,6 @@ No modules.
 |------|------|
 | [cloudflare_access_application.bazarr4k_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_application) | resource |
 | [cloudflare_access_application.bazarr_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_application) | resource |
-| [cloudflare_access_application.ha_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_application) | resource |
 | [cloudflare_access_application.kopia_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_application) | resource |
 | [cloudflare_access_application.maintainerr_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_application) | resource |
 | [cloudflare_access_application.matter_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_application) | resource |
@@ -40,10 +39,8 @@ No modules.
 | [cloudflare_access_application.sonarr4k_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_application) | resource |
 | [cloudflare_access_application.sonarr_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_application) | resource |
 | [cloudflare_access_application.tautulli_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_application) | resource |
-| [cloudflare_access_policy.google_assistant_ha](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.service_bazarr](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.service_bazarr4k](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
-| [cloudflare_access_policy.service_ha](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.service_maintainerr](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.service_matter](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.service_prowlarr](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
@@ -55,7 +52,6 @@ No modules.
 | [cloudflare_access_policy.service_tautulli](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.user_bazarr](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.user_bazarr4k](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
-| [cloudflare_access_policy.user_ha](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.user_kopia](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.user_maintainerr](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
 | [cloudflare_access_policy.user_matter](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/access_policy) | resource |
@@ -90,6 +86,7 @@ No modules.
 | [cloudflare_record.tautulli_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
 | [cloudflare_record.wizarr_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
 | [cloudflare_ruleset.cache_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/ruleset) | resource |
+| [cloudflare_ruleset.custom_firewall_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/ruleset) | resource |
 | [cloudflare_tunnel.servarr_tunnel](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/tunnel) | resource |
 | [cloudflare_tunnel_config.servarr_tunnel](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/tunnel_config) | resource |
 | [cloudflare_zone_dnssec.example](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/zone_dnssec) | resource |
