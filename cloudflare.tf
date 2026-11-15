@@ -284,7 +284,10 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
     }
     ingress_rule {
       hostname = "ha.nathanjn.com"
-      service  = "http://host.docker.internal:8123"
+      service  = "https://host.docker.internal:443"
+      origin_request {
+        origin_server_name = "ha.nathanjn.com"
+      }
     }
     ingress_rule {
       hostname = "matter.nathanjn.com"
@@ -337,6 +340,42 @@ resource "cloudflare_ruleset" "cache_nathanjn_com" {
     }
     expression  = "(http.request.full_uri wildcard r\"https://nathanjn.com/assets/*\") or (http.request.full_uri wildcard r\"https://consent.nathanjn.com/assets/*\")"
     description = "Cache static assets for nathanjn.com"
+    enabled     = true
+  }
+}
+
+###
+# Custom WAF rules
+###
+
+resource "cloudflare_ruleset" "custom_firewall_nathanjn_com" {
+  zone_id     = data.cloudflare_zone.nathanjn_com.id
+  name        = "Custom WAF rules"
+  description = "Custom WAF rules for nathanjn.com"
+  kind        = "zone"
+  phase       = "http_request_firewall_custom"
+
+  rules {
+    ref         = "challenge_failed_bot_detection"
+    description = "Challenge failed bot detection on posts"
+    action      = "managed_challenge"
+    expression  = "(any(http.request.cookies[\"cf.bot_management.js.detection.passed\"][*] eq \"false\") and http.request.full_uri wildcard r\"https://nathanjn.com/posts/*\" and not cf.client.bot)"
+    enabled     = true
+  }
+
+  rules {
+    ref         = "require_ha_client_certificate"
+    description = "Require mTLS for Home Assistant"
+    action      = "block"
+    expression  = "((not cf.tls_client_auth.cert_verified or cf.tls_client_auth.cert_revoked) and http.host eq \"ha.nathanjn.com\")"
+    enabled     = true
+  }
+
+  rules {
+    ref         = "block_selected_user_agents"
+    description = "Block AI bots by User Agent"
+    action      = "block"
+    expression  = "(http.user_agent contains \"Applebot\") or (http.user_agent contains \"bingbot\") or (http.user_agent contains \"ChatGPT-User\") or (http.user_agent contains \"DuckAssistBot\") or (http.user_agent contains \"Googlebot\") or (http.user_agent contains \"meta-externalfetcher\") or (http.user_agent contains \"MistralAI-User\") or (http.user_agent contains \"OAI-SearchBot\") or (http.user_agent contains \"Perplexity-User\") or (http.user_agent contains \"PerplexityBot\") or (http.user_agent contains \"ProRataInc\")"
     enabled     = true
   }
 }
@@ -749,47 +788,6 @@ resource "cloudflare_access_policy" "user_kopia" {
   }
 }
 
-resource "cloudflare_access_application" "ha_nathanjn_com" {
-  zone_id                   = data.cloudflare_zone.nathanjn_com.id
-  name                      = "ha.nathanjn.com"
-  domain                    = "ha.nathanjn.com"
-  session_duration          = "2h"
-  auto_redirect_to_identity = true
-  allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
-}
-
-resource "cloudflare_access_policy" "service_ha" {
-  application_id = cloudflare_access_application.ha_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  }
-}
-
-resource "cloudflare_access_policy" "google_assistant_ha" {
-  application_id = cloudflare_access_application.ha_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Google Assistant auth"
-  precedence     = "2"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.google_assistant.id]
-  }
-}
-
-resource "cloudflare_access_policy" "user_ha" {
-  application_id = cloudflare_access_application.ha_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "3"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
-  }
-}
 
 resource "cloudflare_access_application" "matter_nathanjn_com" {
   zone_id                   = data.cloudflare_zone.nathanjn_com.id
