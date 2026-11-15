@@ -30,8 +30,6 @@ id -nG qbittorrent 2>/dev/null | grep -qw servarr || usermod -a -G servarr qbitt
 id -nG maintainerr 2>/dev/null | grep -qw servarr || usermod -a -G servarr maintainerr &>/dev/null
 id -nG tautulli 2>/dev/null | grep -qw servarr || usermod -a -G servarr tautulli &>/dev/null
 id -nG wizarr 2>/dev/null | grep -qw servarr || usermod -a -G servarr wizarr &>/dev/null
-id -nG homeassistant 2>/dev/null | grep -qw servarr || usermod -a -G servarr homeassistant &>/dev/null
-id -nG matter 2>/dev/null | grep -qw servarr || usermod -a -G servarr matter &>/dev/null
 
 # Make directories
 mkdir -p /mnt/data/{torrents,media}/{tv,movies,4ktv,4kmovies} &>/dev/null
@@ -68,8 +66,6 @@ chown -R maintainerr:servarr config/maintainerr-config &>/dev/null
 chown -R maintainerr:servarr config/4kmaintainerr-config &>/dev/null
 chown -R tautulli:servarr config/tautulli-config &>/dev/null
 chown -R wizarr:servarr config/wizarr-config &>/dev/null
-chown -R homeassistant:servarr config/home-assistant-config &>/dev/null
-chown -R matter:servarr config/matter-server-config &>/dev/null
 chown -R nathan:servarr config/ctrld-config &>/dev/null
 
 ## Tailscale exit node
