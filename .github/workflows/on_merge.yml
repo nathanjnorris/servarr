@@ -113,6 +113,7 @@ jobs:
         GLUETUN_PORT=${{ secrets.GLUETUN_PORT }}
         TS_CLIENT_SECRET_EXIT_NODE=${{ secrets.TS_CLIENT_SECRET_EXIT_NODE }}
         KOPIA_PASSWORD=${{ secrets.KOPIA_PASSWORD }}
+        HOME_ASSISTANT_DNS_TOKEN=${{ secrets.HOME_ASSISTANT_DNS_TOKEN }}
         EOF'
     
     - name: Deploy with Docker Compose

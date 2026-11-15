@@ -322,6 +322,23 @@ services:
       - /dev/serial/by-id/usb-Itead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_V2_7832fe7bd4a0f011b6d92681bb936ffa-if00-port0:/dev/ttyUSB0
     restart: always
 
+  traefik-home-assistant:
+    image: traefik:v3.7
+    container_name: traefik-home-assistant
+    network_mode: host
+    command:
+      - --entrypoints.websecure.address=:443
+      - --providers.file.filename=/etc/traefik/home-assistant.yml
+      - --certificatesresolvers.cloudflare.acme.email=nathanjamesnorris@gmail.com
+      - --certificatesresolvers.cloudflare.acme.storage=/data/acme.json
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+    environment:
+      - CF_DNS_API_TOKEN=${HOME_ASSISTANT_DNS_TOKEN}
+    volumes:
+      - /home/nathan/servarr/config/traefik-home-assistant-config:/data
+      - /home/nathan/servarr/traefik-home-assistant.yml:/etc/traefik/home-assistant.yml:ro
+    restart: always
+
   matter-server:
     image: ghcr.io/matter-js/matterjs-server:latest
     container_name: matter-server
