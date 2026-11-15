@@ -13,6 +13,22 @@ data "cloudflare_zone" "nathanjn_com" {
   name = "nathanjn.com"
 }
 
+data "cloudflare_api_token_permission_groups" "all" {}
+
+resource "cloudflare_api_token" "home_assistant_dns" {
+  name = "home-assistant-traefik-dns"
+
+  policy {
+    permission_groups = [
+      data.cloudflare_api_token_permission_groups.all.zone["DNS Write"],
+      data.cloudflare_api_token_permission_groups.all.zone["Zone Read"],
+    ]
+    resources = {
+      "com.cloudflare.api.account.zone.${data.cloudflare_zone.nathanjn_com.id}" = "*"
+    }
+  }
+}
+
 # Enable DNSSEC
 resource "cloudflare_zone_dnssec" "example" {
   zone_id = data.cloudflare_zone.nathanjn_com.id

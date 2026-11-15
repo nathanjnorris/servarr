@@ -1,0 +1,18 @@
+http:
+  routers:
+    home-assistant:
+      entryPoints:
+        - websecure
+      rule: "Host(`ha.nathanjn.com`) || Host(`local-ha.nathanjn.com`)"
+      service: home-assistant
+      tls:
+        certResolver: cloudflare
+        domains:
+          - main: ha.nathanjn.com
+            sans:
+              - local-ha.nathanjn.com
+  services:
+    home-assistant:
+      loadBalancer:
+        servers:
+          - url: http://127.0.0.1:8123

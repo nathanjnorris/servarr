@@ -4,6 +4,12 @@ resource "github_actions_secret" "servar_tunnel_token" {
   plaintext_value = cloudflare_tunnel.servarr_tunnel.tunnel_token
 }
 
+resource "github_actions_secret" "home_assistant_dns_token" {
+  repository      = "servarr"
+  secret_name     = "home_assistant_dns_token"
+  plaintext_value = cloudflare_api_token.home_assistant_dns.value
+}
+
 # resource "github_actions_variable" "service_token_id" {
 #   repository    = "servarr"
 #   variable_name = "service_token_id"
