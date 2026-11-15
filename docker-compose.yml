@@ -324,13 +324,15 @@ services:
   matter-server:
     image: ghcr.io/matter-js/matterjs-server:latest
     container_name: matter-server
-    user: 13012:13000
     network_mode: host
-    environment:
-      - TZ=Australia/Brisbane
     read_only: true
     volumes:
+      - /run/dbus:/run/dbus:ro
       - /home/nathan/servarr/config/matter-server-config:/data
+    environment:
+      - TZ=Australia/Brisbane
+      - NOBLE_BINDINGS=dbus
+      - BLUETOOTH_ADAPTER=0
     restart: always
 
 # Container updates
