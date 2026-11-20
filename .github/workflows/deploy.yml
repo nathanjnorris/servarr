@@ -63,7 +63,7 @@ jobs:
 
       - name: Setup Tailscale
         if: steps.window.outputs.in_window == 'true'
-        uses: tailscale/github-action@v3
+        uses: tailscale/github-action@v4
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
@@ -126,7 +126,7 @@ jobs:
 
       - name: Upload configuration
         if: steps.win.outputs.ok == 'true'
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.2.0
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.3.2
         id: apply-upload
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -134,14 +134,14 @@ jobs:
 
       - name: Create apply run
         if: steps.win.outputs.ok == 'true'
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.2.0
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.3.2
         id: apply-run
         with:
           workspace: ${{ env.TF_WORKSPACE }}
           configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
 
       - name: Apply run
-        uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.2.0
+        uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.3.2
         if: steps.win.outputs.ok == 'true' && fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
         id: apply
         with:
@@ -173,7 +173,7 @@ jobs:
 
       - name: Setup Tailscale
         if: steps.win.outputs.ok == 'true'
-        uses: tailscale/github-action@v3
+        uses: tailscale/github-action@v4
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
