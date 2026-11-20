@@ -9,8 +9,9 @@ name: Deploy (maintenance window)
 
 on:
   schedule:
-    # 16:07 UTC = 02:07 AEST. Scheduled runs can start late; the window check below drops late ones.
-    - cron: "7 16 * * *"
+    # 16:40 UTC = 02:40 AEST: after Renovate's 02:00-03:00 automerge slot, so those merges deploy the same night.
+    # Scheduled runs can start late; the window check below drops late ones.
+    - cron: "40 16 * * *"
   workflow_dispatch:
     inputs:
       force:
