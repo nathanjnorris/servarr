@@ -1,0 +1,66 @@
+name: Host drift check
+
+# Weekly, read-only. Runs scripts/host-drift.sh on the media host and opens an issue assigned to the
+# owner (GitHub mobile pushes it) if the host no longer matches the repo: hand-edited tracked files,
+# unexpected containers, unhealthy containers, or the data disk missing. It changes nothing.
+
+on:
+  schedule:
+    - cron: "30 19 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    name: Check the host
+    runs-on: ubuntu-latest
+    env:
+      MACHINE: servarr
+      SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
+      USER: ${{ vars.SSH_USERNAME }}
+    steps:
+      - name: Setup Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:gha
+
+      - name: Connect to host
+        run: |
+          mkdir -p ~/.ssh
+          MACHINE_IP="$(tailscale ip -6 "$MACHINE")"
+          echo "MACHINE_IP=$MACHINE_IP" >> "$GITHUB_ENV"
+          ssh-keyscan "$MACHINE_IP" >> ~/.ssh/known_hosts
+          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
+
+      - name: Run the drift script
+        id: drift
+        run: |
+          set +e
+          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && bash scripts/host-drift.sh' | tee /tmp/drift.txt
+          status=${PIPESTATUS[0]}
+          {
+            echo "report<<EOF"
+            cat /tmp/drift.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          exit "$status"
+
+      - name: Open an issue assigned to the owner
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          REPORT: ${{ steps.drift.outputs.report }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --assignee "$GITHUB_REPOSITORY_OWNER" \
+            --title "Host drift detected ($(date -u +%F))" \
+            --body "The weekly host check found problems: $RUN_URL
+
+          $REPORT"
