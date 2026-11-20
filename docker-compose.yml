@@ -284,7 +284,7 @@ services:
     restart: always
 
   gluetun:
-    image: qmcgaw/gluetun:v3
+    image: qmcgaw/gluetun:1243
     container_name: gluetun
     devices:
       - /dev/net/tun:/dev/net/tun
