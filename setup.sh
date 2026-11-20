@@ -151,7 +151,12 @@ systemctl restart systemd-journald
 
 ## Protect the media containers if the data disk disappears while they are running.
 # A canary file proves the disk is mounted and readable; the guard stops anything using /mnt/data when it is not.
-touch /mnt/data/.mount-ok
+if mountpoint -q /mnt/data; then
+  touch /mnt/data/.mount-ok
+else
+  echo "ERROR: /mnt/data is not a mount point; refusing to create the canary or start containers against it" >&2
+  exit 1
+fi
 cat > /etc/systemd/system/data-mount-guard.service <<'UNIT'
 [Unit]
 Description=Stop media containers if /mnt/data disappears

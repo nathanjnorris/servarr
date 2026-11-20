@@ -22,6 +22,8 @@ PAIRS = [(3, 8, 1), (4, 9, 2)]
 OPTIMISED_PREFIX = "/data/optimised/"
 MIN_AGE_DAYS = 7
 DATA_MOUNT = "/mnt/data"
+CANARY = os.path.join(DATA_MOUNT, ".mount-ok")
+MIN_PARENT_GUID_RATIO = 0.9  # of 4K items must carry a usable id, else metadata looks half-loaded
 
 
 def guids(item):
@@ -75,12 +77,23 @@ def main():
     apply = "--apply" in sys.argv
     if not os.path.ismount(DATA_MOUNT):
         sys.exit(f"{DATA_MOUNT} is not mounted; refusing to run")
+    try:
+        with open(CANARY) as fh:  # actually read it: proves this is the real data disk and it is readable
+            fh.read(1)
+    except OSError as err:
+        sys.exit(f"cannot read {CANARY} ({err}); refusing to run")
     deletions = []
     for non4k, k4, typ in PAIRS:
         parents_items = section_items(k4, typ)
         if not parents_items:
             sys.exit(f"4K section {k4} returned no items; refusing to run (would look like every parent is gone)")
         parents = set().union(*(guids(i) for i in parents_items))
+        with_ids = sum(1 for i in parents_items if guids(i))
+        if not parents or with_ids / len(parents_items) < MIN_PARENT_GUID_RATIO:
+            sys.exit(
+                f"4K section {k4}: only {with_ids}/{len(parents_items)} items have a tmdb/tvdb/imdb id; "
+                "refusing to run (metadata looks incomplete)"
+            )
         candidates = []
         for it in section_items(non4k, typ):
             fs = files_of(it["ratingKey"])
@@ -90,10 +103,17 @@ def main():
     print(f"{len(deletions)} optimised-only item(s) with no 4K parent")
     for it in deletions:
         print(f"  {it['title']} (ratingKey {it['ratingKey']})")
+    failed = 0
     if apply:
         for it in deletions:
             code, _ = plex(f"/library/metadata/{it['ratingKey']}", "DELETE")
-            print(f"deleted {it['title']}: HTTP {code}")
+            if code.startswith("2"):
+                print(f"deleted {it['title']}: HTTP {code}")
+            else:
+                failed += 1
+                print(f"FAILED to delete {it['title']}: HTTP {code}", file=sys.stderr)
+        if failed:
+            sys.exit(f"{failed} deletion(s) failed; they will be retried on the next run")
     elif deletions:
         print("dry run; pass --apply to delete")
 

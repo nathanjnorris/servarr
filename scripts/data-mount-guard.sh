@@ -8,7 +8,7 @@ set -u
 MOUNT=/mnt/data
 CANARY="$MOUNT/.mount-ok"
 
-if mountpoint -q "$MOUNT" && timeout 10 test -f "$CANARY"; then
+if mountpoint -q "$MOUNT" && timeout 10 cat "$CANARY" >/dev/null; then
   exit 0
 fi
 
