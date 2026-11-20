@@ -25,19 +25,30 @@ services:
     ports:
       - 32400:32400 # enable local access
     restart: always
-# Media requests  
-  overseerr:
-    image: lscr.io/linuxserver/overseerr:latest
-    container_name: overseerr
+# Media requests
+  # Seerr (successor to Overseerr). The "overseerr" network alias keeps existing
+  # in-network references (Maintainerr, Uptime Kuma, tunnel routes) resolving.
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    init: true
+    container_name: seerr
+    networks:
+      default:
+        aliases:
+          - overseerr
     environment:
-      - PUID=13002
-      - PGID=13000
-      - UMASK=002
       - TZ=Australia/Brisbane
     volumes:
-      - /home/nathan/servarr/config/overseerr-config:/config
+      # Runs as UID 1000 (node); host dir must be owned 1000:1000 (see setup.sh)
+      - /home/nathan/servarr/config/overseerr-config:/app/config
     # ports:
     #   - 5055:5055
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/settings/public || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
     restart: always
 # Media monitoring
   sonarr:
@@ -52,6 +63,8 @@ services:
       - PGID=13000
       - UMASK=002
       - TZ=Australia/Brisbane
+      # Cloudflare Access (Google SSO) is the gate when coming via the tunnel; don't ask for a second login
+      - SONARR__AUTH__METHOD=External
     volumes:
       - /home/nathan/servarr/config/sonarr-config:/config
       - /mnt/data:/data
@@ -69,6 +82,8 @@ services:
       - PGID=13000
       - UMASK=002
       - TZ=Australia/Brisbane
+      # Cloudflare Access (Google SSO) is the gate when coming via the tunnel; don't ask for a second login
+      - SONARR__AUTH__METHOD=External
     volumes:
       - /home/nathan/servarr/config/4ksonarr-config:/config
       - /mnt/data:/data
@@ -86,6 +101,8 @@ services:
       - PGID=13000
       - UMASK=002
       - TZ=Australia/Brisbane
+      # Cloudflare Access (Google SSO) is the gate when coming via the tunnel; don't ask for a second login
+      - RADARR__AUTH__METHOD=External
     volumes:
       - /home/nathan/servarr/config/radarr-config:/config
       - /mnt/data:/data
@@ -103,6 +120,8 @@ services:
       - PGID=13000
       - UMASK=002
       - TZ=Australia/Brisbane
+      # Cloudflare Access (Google SSO) is the gate when coming via the tunnel; don't ask for a second login
+      - RADARR__AUTH__METHOD=External
     volumes:
       - /home/nathan/servarr/config/4kradarr-config:/config
       - /mnt/data:/data
@@ -154,6 +173,8 @@ services:
       - PGID=13000
       - UMASK=002
       - TZ=Australia/Brisbane
+      # Cloudflare Access (Google SSO) is the gate when coming via the tunnel; don't ask for a second login
+      - PROWLARR__AUTH__METHOD=External
     volumes:
       - /home/nathan/servarr/config/prowlarr-config:/config
     restart: always
@@ -189,7 +210,7 @@ services:
     restart: always
 # Media management
   maintainerr:
-    image: ghcr.io/jorenn92/maintainerr:latest 
+    image: ghcr.io/maintainerr/maintainerr:latest
     container_name: maintainerr
     user: 13008:13000
     volumes:
@@ -201,7 +222,7 @@ services:
     restart: always
 
   # 4kmaintainerr:
-  #   image: ghcr.io/jorenn92/maintainerr:latest 
+  #   image: ghcr.io/maintainerr/maintainerr:latest
   #   container_name: 4kmaintainerr
   #   user: 13008:13000
   #   volumes:
@@ -231,6 +252,7 @@ services:
   wizarr:
     image: ghcr.io/wizarrrr/wizarr:latest
     container_name: wizarr
+    init: true # reaps the defunct curl healthcheck process
     environment:
       - PUID=13010
       - PGID=13000
@@ -394,7 +416,7 @@ services:
       restart: "always"
 # Web monitoring
   uptime-kuma:
-    image: louislam/uptime-kuma:latest
+    image: louislam/uptime-kuma:2
     container_name: uptime-kuma
     volumes:
       - /home/nathan/uptime-kuma/data:/app/data

@@ -53,7 +53,8 @@ chown -R plex:servarr /mnt/data/recordings &>/dev/null
 chown -R plex:servarr /mnt/data/optimised &>/dev/null
 chown -R plex:servarr /var/tmp/plex &>/dev/null
 chown -R plex:servarr config/plex-config &>/dev/null
-chown -R overseerr:servarr config/overseerr-config &>/dev/null
+# Seerr runs as UID 1000 (node) and needs to own its config
+chown -R 1000:1000 config/overseerr-config &>/dev/null
 chown -R sonarr:servarr config/sonarr-config &>/dev/null
 chown -R sonarr:servarr config/4ksonarr-config &>/dev/null
 chown -R radarr:servarr config/radarr-config &>/dev/null
@@ -136,3 +137,18 @@ if [ ! -f /etc/networkd-dispatcher/routable.d/50-tailscale ]; then
     # Run it now for immediate setup
     /etc/networkd-dispatcher/routable.d/50-tailscale || echo 'An error occurred.'
 fi
+
+## Boot ordering: never start Docker (and therefore Plex) without the data disk.
+# Without this, a slow/missing disk lets containers start against an empty /mnt/data,
+# and Plex can mark the whole library as missing.
+mkdir -p /etc/systemd/system/docker.service.d
+printf '[Unit]\nRequiresMountsFor=/mnt/data\n' > /etc/systemd/system/docker.service.d/10-require-data-mount.conf
+systemctl daemon-reload
+
+## Keep a healthy amount of journal history for root-cause analysis.
+# The data disk dropped off the bus on 2026-11-15 and the evidence only survived because the
+# journal was large. A noisy unit once filled the old 4 GB default; the offender is gone, so
+# allow plenty of room and a long retention instead of a tight cap.
+mkdir -p /etc/systemd/journald.conf.d
+printf '[Journal]\nSystemMaxUse=8G\nSystemMaxFileSize=128M\nMaxRetentionSec=6month\n' > /etc/systemd/journald.conf.d/10-size.conf
+systemctl restart systemd-journald

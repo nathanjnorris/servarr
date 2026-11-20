@@ -1,15 +1,29 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
 version: 2
 updates:
-  - package-ecosystem: "docker" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform" 
+  # Docker Compose image tags. Dependabot only sees pinned tags, not `latest`.
+  - package-ecosystem: "docker-compose"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    groups:
+      linuxserver:
+        patterns: ["lscr.io/linuxserver/*"]
+        update-types: ["minor", "patch"]
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "terraform"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Cloudflare v5 needs the staged migration in TERRAFORM_UPLIFT_PLAN.md; do not let it arrive on its own.
+    ignore:
+      - dependency-name: "cloudflare/cloudflare"
+        update-types: ["version-update:semver-major"]

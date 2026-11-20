@@ -9,15 +9,15 @@
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.7.0 |
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | < 5.0.0 |
 | <a name="requirement_github"></a> [github](#requirement\_github) | ~> 6.2.1 |
-| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 5.28.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.7 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_cloudflare"></a> [cloudflare](#provider\_cloudflare) | < 5.0.0 |
-| <a name="provider_github"></a> [github](#provider\_github) | ~> 6.2.1 |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_cloudflare"></a> [cloudflare](#provider\_cloudflare) | 4.52.10 |
+| <a name="provider_github"></a> [github](#provider\_github) | 6.2.3 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.9.1 |
 
 ## Modules
 
@@ -80,6 +80,7 @@ No modules.
 | [cloudflare_record.qbittorrent_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
 | [cloudflare_record.radarr4k_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
 | [cloudflare_record.radarr_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
+| [cloudflare_record.seerr_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
 | [cloudflare_record.sonarr4k_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
 | [cloudflare_record.sonarr_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
 | [cloudflare_record.status_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
