@@ -27,7 +27,7 @@ jobs:
       terraform: ${{ steps.diff.outputs.terraform }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -51,12 +51,12 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Terraform Setup
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
 
       - name: Terraform Format (check only)
         run: terraform fmt -check -recursive .
@@ -64,7 +64,7 @@ jobs:
       # Dependabot bumps change the generated README tables; the author regenerates them for human PRs only.
       - name: Terraform Docs (check only)
         if: github.actor != 'dependabot[bot]'
-        uses: terraform-docs/gh-actions@v1.1.0
+        uses: terraform-docs/gh-actions@v1.4.1
         with:
           find-dir: .
           output-file: README.md
@@ -85,12 +85,12 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Upload configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.2.0
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.3.2
         id: plan-upload
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -98,7 +98,7 @@ jobs:
           speculative: true
 
       - name: Create plan run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.2.0
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.3.2
         id: plan-run
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -106,13 +106,13 @@ jobs:
           plan_only: true
 
       - name: Get plan output
-        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.2.0
+        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.3.2
         id: plan-output
         with:
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
 
       - name: Update PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         id: plan-comment
         env:
           ADD: ${{ steps.plan-output.outputs.add }}
