@@ -19,7 +19,7 @@ jobs:
         run: docker compose config --quiet
 
       - name: ShellCheck
-        run: shellcheck deploy.sh setup.sh macvlan.sh
+        run: shellcheck deploy.sh setup.sh macvlan.sh scripts/*.sh
 
       - name: Actionlint
         run: |
