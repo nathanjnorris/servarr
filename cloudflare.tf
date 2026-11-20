@@ -42,6 +42,9 @@ resource "cloudflare_zone_settings_override" "nathanjn_com" {
     min_tls_version          = "1.2"
     opportunistic_encryption = "on"
     tls_1_3                  = "zrt"
+    # HTTP/3 (QUIC) disabled: Home Assistant relies on mTLS (client certificates),
+    # which does not work reliably over QUIC. Previously set manually in the dashboard.
+    http3                    = "off"
     automatic_https_rewrites = "on"
     security_level           = "high"
     challenge_ttl            = 7200
@@ -72,6 +75,14 @@ resource "cloudflare_record" "plex_nathanjn_com" {
 resource "cloudflare_record" "overseerr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "overseerr"
+  value   = cloudflare_tunnel.servarr_tunnel.cname
+  type    = "CNAME"
+  proxied = true
+}
+
+resource "cloudflare_record" "seerr_nathanjn_com" {
+  zone_id = data.cloudflare_zone.nathanjn_com.id
+  name    = "seerr"
   value   = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
@@ -226,8 +237,14 @@ resource "cloudflare_tunnel_config" "servarr_tunnel" {
       hostname = "plex.nathanjn.com"
       service  = "http://plex:32400"
     }
+    # Both hostnames target the "overseerr" network alias on the seerr container,
+    # so the route is valid before and after the container is renamed.
     ingress_rule {
       hostname = "overseerr.nathanjn.com"
+      service  = "http://overseerr:5055"
+    }
+    ingress_rule {
+      hostname = "seerr.nathanjn.com"
       service  = "http://overseerr:5055"
     }
     ingress_rule {

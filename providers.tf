@@ -2,7 +2,8 @@ terraform {
   required_version = "~> 1.7.0"
 
   backend "remote" {
-    hostname = "nathanjnorris-org"
+    hostname     = "app.terraform.io"
+    organization = "nathanjnorris-org"
     workspaces {
       name = "servarr"
     }
@@ -14,17 +15,13 @@ terraform {
       version = "< 5.0.0"
     }
     random = {
-      source = "hashicorp/random"
+      source  = "hashicorp/random"
+      version = "~> 3.7"
     }
     github = {
       source  = "integrations/github"
       version = "~> 6.2.1"
     }
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 5.28.0"
-    }
-
   }
 }
 
