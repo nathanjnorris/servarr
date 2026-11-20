@@ -85,6 +85,16 @@ resource "github_repository_ruleset" "main" {
         context        = "Terraform plan"
         integration_id = 15368
       }
+
+      required_check {
+        context        = "Static checks"
+        integration_id = 15368
+      }
+
+      # Published as a commit status by .github/workflows/review-replies.yml (no app integration).
+      required_check {
+        context = "Review replies"
+      }
     }
 
     required_code_scanning {
