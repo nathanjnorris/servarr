@@ -369,21 +369,6 @@ services:
       - BLUETOOTH_ADAPTER=0
     restart: always
 
-# Container updates
-  # Archived upstream (last release 2023) and now inert: every image is pinned, so there is nothing for it to pull.
-  # Remove after Dependabot has opened its first image-bump PR for the pinned tags.
-  watchtower:
-    image: containrrr/watchtower:1.7.1
-    container_name: watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime:ro
-    environment: 
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_REMOVE_VOLUMES=true
-      - WATCHTOWER_SCOPE=none
-      - WATCHTOWER_SCHEDULE=0 30 9 * * *
-    restart: always
 # Backups
   kopia:
       image: kopia/kopia:0.23.1

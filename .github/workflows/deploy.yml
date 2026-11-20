@@ -1,0 +1,262 @@
+name: Deploy (maintenance window)
+
+# Nothing that restarts a container or changes live infrastructure runs when a PR merges.
+# Merges (including automatic ones) only update main. This workflow applies them, once a night,
+# inside the 02:00-03:00 AEST window (the host is on AEST all year, UTC+10, no daylight saving).
+#
+# It does nothing if main is already deployed, and it skips the night if anyone is streaming on Plex.
+# Manual runs outside the window need the "force" input ticked.
+
+on:
+  schedule:
+    # 16:07 UTC = 02:07 AEST. Scheduled runs can start late; the window check below drops late ones.
+    - cron: "7 16 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Run outside the 02:00-03:00 AEST window (never do this while someone may be watching)"
+        type: boolean
+        default: false
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  TF_CLOUD_ORGANIZATION: "nathanjnorris-org"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  TF_WORKSPACE: "servarr"
+  CONFIG_DIRECTORY: "./"
+
+permissions:
+  contents: read
+
+jobs:
+  window:
+    name: Check window and pending changes
+    # Manual runs from any other branch would apply and deploy that branch, so refuse them.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.decide.outputs.run }}
+      sha: ${{ github.sha }}
+    env:
+      MACHINE: servarr
+      SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
+      USER: ${{ vars.SSH_USERNAME }}
+      FORCE: ${{ inputs.force }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Inside the window?
+        id: window
+        run: |
+          hour=$(TZ=Australia/Brisbane date +%H)
+          echo "Brisbane hour: $hour"
+          if [ "$hour" = "02" ] || [ "$FORCE" = "true" ]; then
+            echo "in_window=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Outside the 02:00-03:00 AEST window; nothing to do."
+            echo "in_window=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Tailscale
+        if: steps.window.outputs.in_window == 'true'
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:gha
+
+      - name: Connect to host
+        if: steps.window.outputs.in_window == 'true'
+        run: |
+          mkdir -p ~/.ssh
+          MACHINE_IP="$(tailscale ip -6 "$MACHINE")"
+          echo "MACHINE_IP=$MACHINE_IP" >> "$GITHUB_ENV"
+          ssh-keyscan "$MACHINE_IP" >> ~/.ssh/known_hosts
+          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
+
+      - name: Decide
+        id: decide
+        if: steps.window.outputs.in_window == 'true'
+        run: |
+          deployed=$(ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cat servarr/.deployed-sha 2>/dev/null || true')
+          echo "deployed: ${deployed:-none}"
+          echo "main:     $GITHUB_SHA"
+          if [ "$deployed" = "$GITHUB_SHA" ]; then
+            echo "Already deployed; nothing to do."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Never restart anything while someone is watching; try again tomorrow night.
+          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && git fetch -q origin && git show '"$GITHUB_SHA"':scripts/plex-busy.sh > /tmp/plex-busy.sh && bash /tmp/plex-busy.sh' && busy=0 || busy=$?
+          if [ "$busy" = "10" ]; then
+            echo "::warning::Plex is in use; deploy postponed to the next window."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          [ "$busy" = "0" ] || exit "$busy"
+          echo "run=true" >> "$GITHUB_OUTPUT"
+
+  terraform_apply:
+    name: Terraform apply
+    needs: window
+    if: needs.window.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      FORCE: ${{ inputs.force }}
+    steps:
+      - name: Still inside the window?
+        id: win
+        run: |
+          hour=$(TZ=Australia/Brisbane date +%H)
+          if [ "$hour" != "02" ] && [ "$FORCE" != "true" ]; then
+            echo "::warning::The 02:00-03:00 AEST window has closed; postponing to the next window."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.win.outputs.ok == 'true'
+        uses: actions/checkout@v7
+
+      - name: Upload configuration
+        if: steps.win.outputs.ok == 'true'
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.2.0
+        id: apply-upload
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          directory: ${{ env.CONFIG_DIRECTORY }}
+
+      - name: Create apply run
+        if: steps.win.outputs.ok == 'true'
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.2.0
+        id: apply-run
+        with:
+          workspace: ${{ env.TF_WORKSPACE }}
+          configuration_version: ${{ steps.apply-upload.outputs.configuration_version_id }}
+
+      - name: Apply run
+        uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.2.0
+        if: steps.win.outputs.ok == 'true' && fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
+        id: apply
+        with:
+          run: ${{ steps.apply-run.outputs.run_id }}
+          comment: "Nightly window apply from GitHub Actions ${{ github.sha }}"
+
+  host_deploy:
+    name: Deploy to host
+    needs: [window, terraform_apply]
+    if: needs.window.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      MACHINE: servarr
+      SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
+      USER: ${{ vars.SSH_USERNAME }}
+      FORCE: ${{ inputs.force }}
+      DEPLOY_SHA: ${{ github.sha }}
+    steps:
+      - name: Still inside the window?
+        id: win
+        run: |
+          hour=$(TZ=Australia/Brisbane date +%H)
+          if [ "$hour" != "02" ] && [ "$FORCE" != "true" ]; then
+            echo "::warning::The 02:00-03:00 AEST window has closed; postponing to the next window."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Tailscale
+        if: steps.win.outputs.ok == 'true'
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:gha
+
+      - name: Connect to host
+        if: steps.win.outputs.ok == 'true'
+        run: |
+          mkdir -p ~/.ssh
+          MACHINE_IP="$(tailscale ip -6 "$MACHINE")"
+          echo "MACHINE_IP=$MACHINE_IP" >> "$GITHUB_ENV"
+          ssh-keyscan "$MACHINE_IP" >> ~/.ssh/known_hosts
+          printf "%s" "$SSH_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
+
+      - name: Pull the exact commit this run evaluated
+        if: steps.win.outputs.ok == 'true'
+        run: |
+          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && git fetch -q origin && git reset --hard $DEPLOY_SHA"
+
+      - name: Setup users, folders, and permissions
+        if: steps.win.outputs.ok == 'true'
+        env:
+          SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
+        run: |
+          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && sudo -S bash setup.sh' <<< "$SUDO_PASSWORD"
+
+      - name: Add secrets to .env file
+        if: steps.win.outputs.ok == 'true'
+        env:
+          TUNNEL_TOKEN: ${{ secrets.SERVARR_TUNNEL_TOKEN }}
+          GLUETUN_PRIVATE_KEY: ${{ secrets.GLUETUN_PRIVATE_KEY }}
+          GLUETUN_PRESHARED_KEY: ${{ secrets.GLUETUN_PRESHARED_KEY }}
+          GLUETUN_WIREGUARD_ADDRESS: ${{ secrets.GLUETUN_WIREGUARD_ADDRESS }}
+          GLUETUN_PORT: ${{ secrets.GLUETUN_PORT }}
+          TS_CLIENT_SECRET_EXIT_NODE: ${{ secrets.TS_CLIENT_SECRET_EXIT_NODE }}
+          KOPIA_PASSWORD: ${{ secrets.KOPIA_PASSWORD }}
+          HOME_ASSISTANT_DNS_TOKEN: ${{ secrets.HOME_ASSISTANT_DNS_TOKEN }}
+        run: |
+          # Values travel over stdin, never inside a remote shell command, so nothing is expanded on the host.
+          printf '%s=%s\n' \
+            TUNNEL_TOKEN "$TUNNEL_TOKEN" \
+            GLUETUN_PRIVATE_KEY "$GLUETUN_PRIVATE_KEY" \
+            GLUETUN_PRESHARED_KEY "$GLUETUN_PRESHARED_KEY" \
+            GLUETUN_WIREGUARD_ADDRESS "$GLUETUN_WIREGUARD_ADDRESS" \
+            GLUETUN_PORT "$GLUETUN_PORT" \
+            TS_CLIENT_SECRET_EXIT_NODE "$TS_CLIENT_SECRET_EXIT_NODE" \
+            KOPIA_PASSWORD "$KOPIA_PASSWORD" \
+            HOME_ASSISTANT_DNS_TOKEN "$HOME_ASSISTANT_DNS_TOKEN" \
+            | ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && umask 077 && cat > .env'
+
+      - name: Last check, then deploy with Docker Compose
+        if: steps.win.outputs.ok == 'true'
+        run: |
+          hour=$(TZ=Australia/Brisbane date +%H)
+          if [ "$hour" != "02" ] && [ "$FORCE" != "true" ]; then
+            echo "::warning::The window closed before the restart; postponing to the next window."
+            exit 0
+          fi
+          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && bash scripts/plex-busy.sh' && busy=0 || busy=$?
+          if [ "$busy" = "10" ]; then
+            echo "::warning::Plex is in use; restart postponed to the next window."
+            exit 0
+          fi
+          [ "$busy" = "0" ] || exit "$busy"
+          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && bash deploy.sh"
+
+  notify_failure:
+    name: Tell me if it failed
+    needs: [window, terraform_apply, host_deploy]
+    if: always() && (needs.window.result == 'failure' || needs.terraform_apply.result == 'failure' || needs.host_deploy.result == 'failure')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Open an issue assigned to the owner (GitHub mobile pushes this)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --assignee "$GITHUB_REPOSITORY_OWNER" \
+            --title "Nightly deploy failed ($(date -u +%F))" \
+            --body "The maintenance-window deploy failed: $RUN_URL
+
+          It retries automatically next window, or run it by hand from the Actions tab."
