@@ -9,7 +9,9 @@ services:
       - PGID=13000
       - UMASK=002
       - TZ=Australia/Brisbane
-      - VERSION=public
+      # docker = the image decides the Plex version (pinned by the image tag). public would let a restart
+      # self-update Plex to the newest public release behind the pin's back.
+      - VERSION=docker
     devices:
       - /dev/dri:/dev/dri
     #  - /dev/dvb:/dev/dvb

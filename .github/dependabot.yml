@@ -7,7 +7,7 @@ updates:
       interval: "weekly"
     groups:
       linuxserver:
-        patterns: ["ghcr.io/linuxserver/*"]
+        patterns: ["linuxserver/*"] # Dependabot records the registry separately from the image name
         update-types: ["minor", "patch"]
     open-pull-requests-limit: 10
 
