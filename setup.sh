@@ -148,3 +148,55 @@ systemctl daemon-reload
 mkdir -p /etc/systemd/journald.conf.d
 printf '[Journal]\nSystemMaxUse=8G\nSystemMaxFileSize=128M\nMaxRetentionSec=6month\n' > /etc/systemd/journald.conf.d/10-size.conf
 systemctl restart systemd-journald
+
+## Protect the media containers if the data disk disappears while they are running.
+# A canary file proves the disk is mounted and readable; the guard stops anything using /mnt/data when it is not.
+if mountpoint -q /mnt/data; then
+  touch /mnt/data/.mount-ok
+else
+  echo "ERROR: /mnt/data is not a mount point; refusing to create the canary or start containers against it" >&2
+  exit 1
+fi
+cat > /etc/systemd/system/data-mount-guard.service <<'UNIT'
+[Unit]
+Description=Stop media containers if /mnt/data disappears
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /home/nathan/servarr/scripts/data-mount-guard.sh
+UNIT
+cat > /etc/systemd/system/data-mount-guard.timer <<'UNIT'
+[Unit]
+Description=Check /mnt/data every minute
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=1min
+
+[Install]
+WantedBy=timers.target
+UNIT
+
+## Clean up optimised copies whose 4K parent was deleted. Deletes media, so it only runs in the maintenance window.
+cat > /etc/systemd/system/optimised-cleanup.service <<'UNIT'
+[Unit]
+Description=Delete optimised-only Plex items whose 4K parent is gone
+
+[Service]
+Type=oneshot
+User=nathan
+ExecStart=/usr/bin/python3 /home/nathan/servarr/scripts/optimised-cleanup.py --apply
+UNIT
+cat > /etc/systemd/system/optimised-cleanup.timer <<'UNIT'
+[Unit]
+Description=Nightly optimised-copy cleanup (02:20, inside the maintenance window)
+
+[Timer]
+OnCalendar=*-*-* 02:20:00
+
+[Install]
+WantedBy=timers.target
+UNIT
+systemctl daemon-reload
+systemctl enable --now data-mount-guard.timer optimised-cleanup.timer
+
