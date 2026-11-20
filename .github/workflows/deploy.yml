@@ -34,9 +34,12 @@ permissions:
 jobs:
   window:
     name: Check window and pending changes
+    # Manual runs from any other branch would apply and deploy that branch, so refuse them.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
       run: ${{ steps.decide.outputs.run }}
+      sha: ${{ github.sha }}
     env:
       MACHINE: servarr
       SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
@@ -89,7 +92,7 @@ jobs:
             exit 0
           fi
           # Never restart anything while someone is watching; try again tomorrow night.
-          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && git fetch -q origin && git show origin/main:scripts/plex-busy.sh > /tmp/plex-busy.sh && bash /tmp/plex-busy.sh' && busy=0 || busy=$?
+          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && git fetch -q origin && git show '"$GITHUB_SHA"':scripts/plex-busy.sh > /tmp/plex-busy.sh && bash /tmp/plex-busy.sh' && busy=0 || busy=$?
           if [ "$busy" = "10" ]; then
             echo "::warning::Plex is in use; deploy postponed to the next window."
             echo "run=false" >> "$GITHUB_OUTPUT"
@@ -103,11 +106,26 @@ jobs:
     needs: window
     if: needs.window.outputs.run == 'true'
     runs-on: ubuntu-latest
+    env:
+      FORCE: ${{ inputs.force }}
     steps:
+      - name: Still inside the window?
+        id: win
+        run: |
+          hour=$(TZ=Australia/Brisbane date +%H)
+          if [ "$hour" != "02" ] && [ "$FORCE" != "true" ]; then
+            echo "::warning::The 02:00-03:00 AEST window has closed; postponing to the next window."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout
+        if: steps.win.outputs.ok == 'true'
         uses: actions/checkout@v7
 
       - name: Upload configuration
+        if: steps.win.outputs.ok == 'true'
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.2.0
         id: apply-upload
         with:
@@ -115,6 +133,7 @@ jobs:
           directory: ${{ env.CONFIG_DIRECTORY }}
 
       - name: Create apply run
+        if: steps.win.outputs.ok == 'true'
         uses: hashicorp/tfc-workflows-github/actions/create-run@v1.2.0
         id: apply-run
         with:
@@ -123,7 +142,7 @@ jobs:
 
       - name: Apply run
         uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.2.0
-        if: fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
+        if: steps.win.outputs.ok == 'true' && fromJSON(steps.apply-run.outputs.payload).data.attributes.actions.IsConfirmable
         id: apply
         with:
           run: ${{ steps.apply-run.outputs.run_id }}
@@ -138,8 +157,22 @@ jobs:
       MACHINE: servarr
       SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
       USER: ${{ vars.SSH_USERNAME }}
+      FORCE: ${{ inputs.force }}
+      DEPLOY_SHA: ${{ github.sha }}
     steps:
+      - name: Still inside the window?
+        id: win
+        run: |
+          hour=$(TZ=Australia/Brisbane date +%H)
+          if [ "$hour" != "02" ] && [ "$FORCE" != "true" ]; then
+            echo "::warning::The 02:00-03:00 AEST window has closed; postponing to the next window."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup Tailscale
+        if: steps.win.outputs.ok == 'true'
         uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
@@ -147,6 +180,7 @@ jobs:
           tags: tag:gha
 
       - name: Connect to host
+        if: steps.win.outputs.ok == 'true'
         run: |
           mkdir -p ~/.ssh
           MACHINE_IP="$(tailscale ip -6 "$MACHINE")"
@@ -155,31 +189,56 @@ jobs:
           printf "%s" "$SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
 
-      - name: Pull main
+      - name: Pull the exact commit this run evaluated
+        if: steps.win.outputs.ok == 'true'
         run: |
-          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && git fetch -q origin && git reset --hard origin/main"
+          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && git fetch -q origin && git reset --hard $DEPLOY_SHA"
 
       - name: Setup users, folders, and permissions
+        if: steps.win.outputs.ok == 'true'
         env:
           SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
         run: |
           ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && sudo -S bash setup.sh' <<< "$SUDO_PASSWORD"
 
       - name: Add secrets to .env file
+        if: steps.win.outputs.ok == 'true'
+        env:
+          TUNNEL_TOKEN: ${{ secrets.SERVARR_TUNNEL_TOKEN }}
+          GLUETUN_PRIVATE_KEY: ${{ secrets.GLUETUN_PRIVATE_KEY }}
+          GLUETUN_PRESHARED_KEY: ${{ secrets.GLUETUN_PRESHARED_KEY }}
+          GLUETUN_WIREGUARD_ADDRESS: ${{ secrets.GLUETUN_WIREGUARD_ADDRESS }}
+          GLUETUN_PORT: ${{ secrets.GLUETUN_PORT }}
+          TS_CLIENT_SECRET_EXIT_NODE: ${{ secrets.TS_CLIENT_SECRET_EXIT_NODE }}
+          KOPIA_PASSWORD: ${{ secrets.KOPIA_PASSWORD }}
+          HOME_ASSISTANT_DNS_TOKEN: ${{ secrets.HOME_ASSISTANT_DNS_TOKEN }}
         run: |
-          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && umask 077 && cat > .env <<EOF
-          TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}
-          GLUETUN_PRIVATE_KEY=${{ secrets.GLUETUN_PRIVATE_KEY }}
-          GLUETUN_PRESHARED_KEY=${{ secrets.GLUETUN_PRESHARED_KEY }}
-          GLUETUN_WIREGUARD_ADDRESS=${{ secrets.GLUETUN_WIREGUARD_ADDRESS }}
-          GLUETUN_PORT=${{ secrets.GLUETUN_PORT }}
-          TS_CLIENT_SECRET_EXIT_NODE=${{ secrets.TS_CLIENT_SECRET_EXIT_NODE }}
-          KOPIA_PASSWORD=${{ secrets.KOPIA_PASSWORD }}
-          HOME_ASSISTANT_DNS_TOKEN=${{ secrets.HOME_ASSISTANT_DNS_TOKEN }}
-          EOF'
+          # Values travel over stdin, never inside a remote shell command, so nothing is expanded on the host.
+          printf '%s=%s\n' \
+            TUNNEL_TOKEN "$TUNNEL_TOKEN" \
+            GLUETUN_PRIVATE_KEY "$GLUETUN_PRIVATE_KEY" \
+            GLUETUN_PRESHARED_KEY "$GLUETUN_PRESHARED_KEY" \
+            GLUETUN_WIREGUARD_ADDRESS "$GLUETUN_WIREGUARD_ADDRESS" \
+            GLUETUN_PORT "$GLUETUN_PORT" \
+            TS_CLIENT_SECRET_EXIT_NODE "$TS_CLIENT_SECRET_EXIT_NODE" \
+            KOPIA_PASSWORD "$KOPIA_PASSWORD" \
+            HOME_ASSISTANT_DNS_TOKEN "$HOME_ASSISTANT_DNS_TOKEN" \
+            | ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && umask 077 && cat > .env'
 
-      - name: Deploy with Docker Compose
+      - name: Last check, then deploy with Docker Compose
+        if: steps.win.outputs.ok == 'true'
         run: |
+          hour=$(TZ=Australia/Brisbane date +%H)
+          if [ "$hour" != "02" ] && [ "$FORCE" != "true" ]; then
+            echo "::warning::The window closed before the restart; postponing to the next window."
+            exit 0
+          fi
+          ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && bash scripts/plex-busy.sh' && busy=0 || busy=$?
+          if [ "$busy" = "10" ]; then
+            echo "::warning::Plex is in use; restart postponed to the next window."
+            exit 0
+          fi
+          [ "$busy" = "0" ] || exit "$busy"
           ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && bash deploy.sh"
 
   notify_failure:
