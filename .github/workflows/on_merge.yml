@@ -89,9 +89,9 @@ jobs:
     - name: Add SSH key
       run: |
         mkdir -p ~/.ssh
-        MACHINE_IP="$(tailscale ip -6 $MACHINE)"
-        echo "MACHINE_IP=$MACHINE_IP" >> $GITHUB_ENV
-        ssh-keyscan $MACHINE_IP >> ~/.ssh/known_hosts
+        MACHINE_IP="$(tailscale ip -6 "$MACHINE")"
+        echo "MACHINE_IP=$MACHINE_IP" >> "$GITHUB_ENV"
+        ssh-keyscan "$MACHINE_IP" >> ~/.ssh/known_hosts
         printf "%s" "$SSH_KEY" > ~/.ssh/key
         chmod 600 ~/.ssh/key                              
 
@@ -100,12 +100,14 @@ jobs:
         ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && git reset --hard HEAD && git pull"
 
     - name: Setup users, folders, and permissions
+      env:
+        SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
       run: |
-        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S bash setup.sh"
+        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && sudo -S bash setup.sh' <<< "$SUDO_PASSWORD"
 
     - name: Add secrets to .env file
       run: |
-        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && cat > .env <<EOF
+        ssh -i ~/.ssh/key "$USER@$MACHINE_IP" 'cd servarr && umask 077 && cat > .env <<EOF
         TUNNEL_TOKEN=${{ secrets.SERVARR_TUNNEL_TOKEN }}
         GLUETUN_PRIVATE_KEY=${{ secrets.GLUETUN_PRIVATE_KEY }}
         GLUETUN_PRESHARED_KEY=${{ secrets.GLUETUN_PRESHARED_KEY }}
