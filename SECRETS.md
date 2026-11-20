@@ -26,7 +26,8 @@ re-confirmed. Names are the exact secret or variable names.
 | --- | --- | --- | --- | --- |
 | `TF_API_TOKEN` (Dependabot) | GitHub Dependabot | Dependabot/Renovate PR plans | TFC team token (a team has one token: regenerating it revokes the old one, so set both copies in the same step). Expires after 1 year. | 2027-11-20 |
 | `TF_API_TOKEN` (Actions) | GitHub Actions | `tfci` plan and apply in CI | a long-lived TFC token; replace it with the team token above | 2027-03-23 |
-| `github_access_token` | TFC variable | Terraform GitHub provider (repo, ruleset, secrets) | fine-grained PAT, repo `servarr` only, Administration **write**, Secrets **write**, Metadata read, 1 year; paste into the TFC variable | unknown, confirm and update |
+| `github_access_token` (TFC sensitive variable, PAT `tfc_servarr`) | TFC | Terraform GitHub provider: repo settings, ruleset, Actions secrets and variables | fine-grained PAT, this repo only, Administration + Secrets + Variables read/write; created without an expiry, so review yearly | 2027-11-21 |
+| `GHA_SERVARR_CODE_SCAN` (PAT `gha_servarr_code_scan`) | GitHub Actions | `scripts/github-settings.sh` in the deploy workflow (AI Scan setting) | fine-grained PAT, this repo only, Administration + Code scanning alerts read/write; created without an expiry, so review yearly | 2027-11-21 |
 | `cloudflare_api_token` | TFC variable | Terraform Cloudflare provider | Cloudflare dashboard, My Profile, API Tokens; paste into the TFC variable | unknown, confirm and update |
 | `GOOGLE_CREDENTIALS` | TFC env variable | Terraform Google provider | rotate the service account key in GCP IAM, paste the JSON into the variable | 2027-03-23 |
 | `tailscale_client_id`, `tailscale_client_secret`, `tailscale_client_secret_exit_node` | TFC variables | Terraform Tailscale provider | Tailscale admin console, Settings, OAuth clients; regenerate the secret | 2027-09-28 |
