@@ -6,6 +6,9 @@ set -euo pipefail
 
 FILE="${1:-SECRETS.md}"
 WARN_DAYS="${WARN_DAYS:-30}"
+[ -r "$FILE" ] || { echo "ERROR: cannot read $FILE"; exit 2; }
+rows=$(grep -cE '^\| `' "$FILE" || true)
+[ "$rows" -gt 0 ] || { echo "ERROR: no inventory rows found in $FILE (table format changed?)"; exit 2; }
 now=$(date -u +%s)
 status=0
 

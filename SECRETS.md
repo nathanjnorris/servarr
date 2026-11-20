@@ -1,6 +1,6 @@
 # Secrets inventory and rotation
 
-No secret values live in this repo. This file records **where each secret is stored, who uses it, when it
+No secret values live in this repo, and this file deliberately holds no identifiers beyond the secret names (which are already visible in the workflows), because the repository is public. This file records **where each secret is stored, who uses it, when it
 must be rotated, and how**. A weekly workflow (`.github/workflows/secrets-expiry.yml`) reads the table below
 and opens an issue assigned to the owner when a row's **Review by** date is within 30 days.
 
@@ -14,7 +14,7 @@ same PR. `scripts/secrets-expiry-check.sh` is what parses the table, so keep the
 | --- | --- | --- |
 | GitHub Actions secrets | values the workflows need (deploy, plan) | `gh secret set NAME` (reads stdin, never put the value on the command line) |
 | GitHub Dependabot secrets | the same TFC token, because Dependabot PRs cannot read Actions secrets | `gh secret set TF_API_TOKEN --app dependabot` |
-| Terraform Cloud workspace variables (`servarr`) | values Terraform itself needs (providers, `.env` contents) | TFC API `PATCH /api/v2/workspaces/ws-XG6CTSfjg3x13dv6/vars/<var-id>` with `sensitive: true` |
+| Terraform Cloud workspace variables (`servarr`) | values Terraform itself needs (providers, `.env` contents) | TFC API `PATCH /api/v2/workspaces/<workspace-id>/vars/<var-id>` with `sensitive: true` |
 | Host `.env` | written by the deploy workflow from the secrets above, mode 0600, never committed | nothing to do, re-written every deploy |
 
 ## Inventory
@@ -24,8 +24,8 @@ re-confirmed. Names are the exact secret or variable names.
 
 | Name | Store | Used by | Rotate how | Review by |
 | --- | --- | --- | --- | --- |
-| `TF_API_TOKEN` (Dependabot) | GitHub Dependabot | Dependabot/Renovate PR plans | TFC team token `servarr-ci-automation` on the `owners` team (a team has one token: regenerating it revokes the old one, so set both copies in the same step). Expires after 1 year. | 2027-11-20 |
-| `TF_API_TOKEN` (Actions) | GitHub Actions | `tfci` plan and apply in CI | currently a personal TFC user token ("GitHub Actions", created 2024-03-23, no expiry); replace with the team token above | 2027-03-23 |
+| `TF_API_TOKEN` (Dependabot) | GitHub Dependabot | Dependabot/Renovate PR plans | TFC team token (a team has one token: regenerating it revokes the old one, so set both copies in the same step). Expires after 1 year. | 2027-11-20 |
+| `TF_API_TOKEN` (Actions) | GitHub Actions | `tfci` plan and apply in CI | a long-lived TFC token; replace it with the team token above | 2027-03-23 |
 | `github_access_token` | TFC variable | Terraform GitHub provider (repo, ruleset, secrets) | fine-grained PAT, repo `servarr` only, Administration **write**, Secrets **write**, Metadata read, 1 year; paste into the TFC variable | unknown, confirm and update |
 | `cloudflare_api_token` | TFC variable | Terraform Cloudflare provider | Cloudflare dashboard, My Profile, API Tokens; paste into the TFC variable | unknown, confirm and update |
 | `GOOGLE_CREDENTIALS` | TFC env variable | Terraform Google provider | rotate the service account key in GCP IAM, paste the JSON into the variable | 2027-03-23 |
