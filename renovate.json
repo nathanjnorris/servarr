@@ -21,7 +21,7 @@
       "matchDatasources": [
         "docker"
       ],
-      "allowedVersions": "!/(?i)(rc|alpha|beta|nightly|develop|dev|canary|preview|unstable|snapshot)/"
+      "allowedVersions": "!/(rc|alpha|beta|nightly|develop|dev|canary|preview|unstable|snapshot)/i"
     },
     {
       "description": "LinuxServer tags look like 4.0.20.3014-ls5 or v2.19.1-ls252; compare the numeric part",
@@ -31,7 +31,7 @@
       "versioning": "regex:^(?<prefix>v)?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:\\.(?<build>\\d+))?(?:-[0-9a-f]{7,9})?(?:_v[\\d.]+)?-ls(?<revision>\\d+)$"
     },
     {
-      "description": "Minor and patch updates merge themselves once required checks pass; the nightly deploy applies them",
+      "description": "Minor and patch updates merge themselves, but only inside the 02:00-03:00 AEST window (Renovate's own schedule, not GitHub auto-merge); the nightly deploy applies them",
       "matchUpdateTypes": [
         "minor",
         "patch",
@@ -39,7 +39,10 @@
       ],
       "automerge": true,
       "automergeType": "pr",
-      "platformAutomerge": true
+      "platformAutomerge": false,
+      "automergeSchedule": [
+        "after 2am and before 3am"
+      ]
     },
     {
       "description": "Major updates only ever open a PR, assigned to the owner so the GitHub mobile app notifies them",
