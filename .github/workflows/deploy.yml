@@ -187,10 +187,26 @@ jobs:
           [ "$busy" = "0" ] || exit "$busy"
           ssh -i ~/.ssh/key "$USER@$MACHINE_IP" "cd servarr && bash deploy.sh"
 
+  github_settings:
+    name: Settings Terraform cannot manage
+    # Idempotent script (scripts/github-settings.sh), tracked in NON_TERRAFORM_CONFIG.md. Runs after the apply
+    # so it never races Terraform, and does not touch the host or Plex.
+    needs: [window, terraform_apply]
+    if: needs.window.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Apply GitHub settings
+        env:
+          GH_TOKEN: ${{ secrets.SERVARR_REPO_ADMIN_RW }}
+        run: bash scripts/github-settings.sh
+
   notify_failure:
     name: Tell me if it failed
-    needs: [window, terraform_apply, host_deploy]
-    if: always() && (needs.window.result == 'failure' || needs.terraform_apply.result == 'failure' || needs.host_deploy.result == 'failure')
+    needs: [window, terraform_apply, host_deploy, github_settings]
+    if: always() && (needs.window.result == 'failure' || needs.terraform_apply.result == 'failure' || needs.host_deploy.result == 'failure' || needs.github_settings.result == 'failure')
     runs-on: ubuntu-latest
     permissions:
       issues: write
