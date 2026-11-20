@@ -23,7 +23,8 @@ jobs:
 
       - name: Actionlint
         run: |
-          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+          # Pinned: the installer script and the binary are both fixed to this release, not whatever main holds today.
+          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.12/scripts/download-actionlint.bash) 1.7.12
           ./actionlint
 
       - name: Terraform setup
