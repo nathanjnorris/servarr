@@ -39,24 +39,6 @@ resource "github_repository" "servarr" {
 
   lifecycle {
     prevent_destroy = true
-
-    # TEMPORARY. Provider 6.13 does not read these settings on import, so the first plan wants to "update"
-    # them to the values that are already live. The workspace's github_access_token cannot write to the
-    # repository (403 on PATCH; it needs Administration: read/write), so the apply failed. Ignoring them
-    # means the apply only imports. Remove this block once the token has Administration write; the
-    # next plan will then apply values equal to what is live today.
-    ignore_changes = [
-      allow_merge_commit,
-      allow_squash_merge,
-      allow_rebase_merge,
-      allow_update_branch,
-      delete_branch_on_merge,
-      merge_commit_title,
-      merge_commit_message,
-      squash_merge_commit_title,
-      squash_merge_commit_message,
-      ignore_vulnerability_alerts_during_read,
-    ]
   }
 }
 
