@@ -2,7 +2,7 @@ name: servarr
 services:
 # Media server  
   plex:
-    image: lscr.io/linuxserver/plex:latest
+    image: ghcr.io/linuxserver/plex:1.43.5.11079-b3b13e506-ls333
     container_name: plex
     environment:
       - PUID=13001
@@ -29,7 +29,7 @@ services:
   # Seerr (successor to Overseerr). The "overseerr" network alias keeps existing
   # in-network references (Maintainerr, Uptime Kuma, tunnel routes) resolving.
   seerr:
-    image: ghcr.io/seerr-team/seerr:latest
+    image: ghcr.io/seerr-team/seerr:v3.5.2
     init: true
     container_name: seerr
     networks:
@@ -52,7 +52,7 @@ services:
     restart: always
 # Media monitoring
   sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
+    image: ghcr.io/linuxserver/sonarr:4.0.20.3014-ls5
     container_name: sonarr
     network_mode: service:gluetun
     depends_on:
@@ -71,7 +71,7 @@ services:
     restart: always
 
   4ksonarr:
-    image: lscr.io/linuxserver/sonarr:latest
+    image: ghcr.io/linuxserver/sonarr:4.0.20.3014-ls5
     container_name: 4ksonarr
     network_mode: service:gluetun
     depends_on:
@@ -90,7 +90,7 @@ services:
     restart: always
 
   radarr:
-    image: lscr.io/linuxserver/radarr:latest
+    image: ghcr.io/linuxserver/radarr:7.0.3.10918-ls328
     container_name: radarr
     network_mode: service:gluetun
     depends_on:
@@ -109,7 +109,7 @@ services:
     restart: always
 
   4kradarr:
-    image: lscr.io/linuxserver/radarr:latest
+    image: ghcr.io/linuxserver/radarr:7.0.3.10918-ls328
     container_name: 4kradarr
     network_mode: service:gluetun
     depends_on:
@@ -128,7 +128,7 @@ services:
     restart: always
 # Subtitles
   bazarr: 
-    image: lscr.io/linuxserver/bazarr:latest
+    image: ghcr.io/linuxserver/bazarr:v1.6.2-ls373
     container_name: bazarr
     network_mode: service:gluetun
     depends_on:
@@ -145,7 +145,7 @@ services:
     restart: always
 
   4kbazarr: 
-    image: lscr.io/linuxserver/bazarr:latest
+    image: ghcr.io/linuxserver/bazarr:v1.6.2-ls373
     container_name: 4kbazarr
     network_mode: service:gluetun
     depends_on:
@@ -162,7 +162,7 @@ services:
     restart: always
 # Media download
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
+    image: ghcr.io/linuxserver/prowlarr:3.0.2.5780-ls169
     container_name: prowlarr
     network_mode: service:gluetun
     depends_on:
@@ -180,7 +180,7 @@ services:
     restart: always
 
   flaresolverr:
-    image: ghcr.io/flaresolverr/flaresolverr:latest
+    image: ghcr.io/flaresolverr/flaresolverr:v3.5.2
     container_name: flaresolverr
     network_mode: service:gluetun
     depends_on:
@@ -191,7 +191,7 @@ services:
     restart: always
 
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
+    image: ghcr.io/linuxserver/qbittorrent:5.3.0_v2.1.2-ls487
     container_name: qbittorrent
     network_mode: service:gluetun
     depends_on:
@@ -210,7 +210,7 @@ services:
     restart: always
 # Media management
   maintainerr:
-    image: ghcr.io/maintainerr/maintainerr:latest
+    image: ghcr.io/maintainerr/maintainerr:3.32.0
     container_name: maintainerr
     user: 13008:13000
     volumes:
@@ -222,7 +222,7 @@ services:
     restart: always
 
   # 4kmaintainerr:
-  #   image: ghcr.io/maintainerr/maintainerr:latest
+  #   image: ghcr.io/maintainerr/maintainerr:3.32.0
   #   container_name: 4kmaintainerr
   #   user: 13008:13000
   #   volumes:
@@ -234,7 +234,7 @@ services:
   #   restart: always
 # User management
   tautulli:
-    image: lscr.io/linuxserver/tautulli:latest
+    image: ghcr.io/linuxserver/tautulli:v2.19.1-ls252
     container_name: tautulli
     depends_on:
       - plex
@@ -250,7 +250,7 @@ services:
     restart: always
 
   wizarr:
-    image: ghcr.io/wizarrrr/wizarr:latest
+    image: ghcr.io/wizarrrr/wizarr:v2026.10.1
     container_name: wizarr
     init: true # reaps the defunct curl healthcheck process
     environment:
@@ -265,7 +265,7 @@ services:
     restart: always
 # Networking
   cloudflared:
-    image: cloudflare/cloudflared:latest
+    image: cloudflare/cloudflared:2026.11.1
     container_name: cloudflared
     command: tunnel run --protocol http2
     extra_hosts:
@@ -274,17 +274,8 @@ services:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     restart: always
 
-  ctrld:
-    image: controldns/ctrld:latest
-    container_name: ctrld
-    volumes:
-      - /home/nathan/servarr/config/ctrld-config:/etc/controld
-    ports:
-      - 53:53/udp
-    restart: always
-
   gluetun:
-    image: qmcgaw/gluetun:v3
+    image: qmcgaw/gluetun:v3.41.3
     container_name: gluetun
     devices:
       - /dev/net/tun:/dev/net/tun
@@ -307,7 +298,7 @@ services:
 
   # Tailscale exit node via VPN on router
   tailscale-exit-node:
-    image: tailscale/tailscale:latest
+    image: tailscale/tailscale:v1.104.7
     container_name: tailscale-exit-node
     networks:
       macvlan0:
@@ -325,7 +316,7 @@ services:
     restart: always
 
   home-assistant:
-    image: lscr.io/linuxserver/homeassistant:latest
+    image: ghcr.io/linuxserver/homeassistant:2026.11.2-ls267
     container_name: home-assistant
     network_mode: host
     environment:
@@ -345,7 +336,7 @@ services:
     restart: always
 
   traefik-home-assistant:
-    image: traefik:v3.7
+    image: traefik:v3.7.19
     container_name: traefik-home-assistant
     network_mode: host
     command:
@@ -362,7 +353,7 @@ services:
     restart: always
 
   matter-server:
-    image: ghcr.io/matter-js/matterjs-server:latest
+    image: ghcr.io/matter-js/matterjs-server:1.6.0
     container_name: matter-server
     network_mode: host
     security_opt:
@@ -377,8 +368,10 @@ services:
     restart: always
 
 # Container updates
+  # Archived upstream (last release 2023) and now inert: every image is pinned, so there is nothing for it to pull.
+  # Remove after Dependabot has opened its first image-bump PR for the pinned tags.
   watchtower:
-    image: containrrr/watchtower:latest
+    image: containrrr/watchtower:1.7.1
     container_name: watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -391,7 +384,7 @@ services:
     restart: always
 # Backups
   kopia:
-      image: kopia/kopia:latest
+      image: kopia/kopia:0.23.1
       container_name: kopia
       # ports:
       #       - 51515:51515
@@ -416,7 +409,7 @@ services:
       restart: "always"
 # Web monitoring
   uptime-kuma:
-    image: louislam/uptime-kuma:2
+    image: louislam/uptime-kuma:2.5.12
     container_name: uptime-kuma
     volumes:
       - /home/nathan/uptime-kuma/data:/app/data

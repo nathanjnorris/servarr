@@ -7,7 +7,7 @@ updates:
       interval: "weekly"
     groups:
       linuxserver:
-        patterns: ["lscr.io/linuxserver/*"]
+        patterns: ["ghcr.io/linuxserver/*"]
         update-types: ["minor", "patch"]
     open-pull-requests-limit: 10
 
