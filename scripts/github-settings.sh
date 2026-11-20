@@ -16,10 +16,11 @@ status=0
 ensure_json() {
   local label=$1 path=$2; shift 2
   local live changes=() pair key want have
-  live=$(gh api "$path")
+  # The caller uses `|| status=1`, which turns errexit off inside this function, so every call is checked explicitly.
+  live=$(gh api "$path") || { echo "$label: could not read $path" >&2; return 1; }
   for pair in "$@"; do
     key=${pair%%=*}; want=${pair#*=}
-    have=$(jq -r --arg k "$key" '.[$k]' <<<"$live")
+    have=$(jq -r --arg k "$key" '.[$k]' <<<"$live") || return 1
     if [ "$have" != "$want" ]; then
       echo "$label: $key is '$have', want '$want'"
       changes+=(-f "$key=$want")
@@ -29,7 +30,7 @@ ensure_json() {
     echo "$label: already correct"
     return 0
   fi
-  gh api -X PATCH "$path" "${changes[@]}" >/dev/null
+  gh api -X PATCH "$path" "${changes[@]}" >/dev/null || { echo "$label: update FAILED" >&2; return 1; }
   echo "$label: updated"
 }
 
