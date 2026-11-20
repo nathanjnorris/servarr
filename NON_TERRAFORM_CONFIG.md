@@ -7,7 +7,7 @@ repo secret, listed here. No one-off live changes.
 
 | Setting | Why not Terraform | Where it is enforced | Secret | Checked |
 | --- | --- | --- | --- | --- |
-| GitHub AI Scan (`pr_scan`, `repository_scan`) on this repo | no resource or attribute in `integrations/github` 6.13.0 (latest, checked via Terraform MCP) | `scripts/github-settings.sh`, run by the `github_settings` job in `.github/workflows/deploy.yml` | `SERVARR_REPO_ADMIN_RW` | 2026-11-21 |
+| GitHub AI Scan (`pr_scan`, `repository_scan`) on this repo | no resource or attribute in `integrations/github` 6.13.0 (latest, checked via Terraform MCP) | `scripts/github-settings.sh`, run by the `github_settings` job in `.github/workflows/deploy.yml` | `GHA_SERVARR_CODE_SCAN` | 2026-11-21 |
 
 Not enforceable by script (UI or no API), noted so they are not forgotten:
 

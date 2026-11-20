@@ -200,7 +200,7 @@ jobs:
 
       - name: Apply GitHub settings
         env:
-          GH_TOKEN: ${{ secrets.SERVARR_REPO_ADMIN_RW }}
+          GH_TOKEN: ${{ secrets.GHA_SERVARR_CODE_SCAN }}
         run: bash scripts/github-settings.sh
 
   notify_failure:
