@@ -274,15 +274,6 @@ services:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
     restart: always
 
-  ctrld:
-    image: controldns/ctrld:latest
-    container_name: ctrld
-    volumes:
-      - /home/nathan/servarr/config/ctrld-config:/etc/controld
-    ports:
-      - 53:53/udp
-    restart: always
-
   gluetun:
     image: qmcgaw/gluetun:v3.41.3
     container_name: gluetun
@@ -377,8 +368,8 @@ services:
     restart: always
 
 # Container updates
-  # Archived upstream (last release 2023). Kept only so ctrld, the one image still on :latest, keeps updating.
-  # Remove once ctrld is pinned. Everything else is pinned and updated through Dependabot PRs.
+  # Archived upstream (last release 2023) and now inert: every image is pinned, so there is nothing for it to pull.
+  # Remove after Dependabot has opened its first image-bump PR for the pinned tags.
   watchtower:
     image: containrrr/watchtower:1.7.1
     container_name: watchtower
