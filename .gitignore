@@ -39,3 +39,6 @@ terraform.rc
 # Deployment secrets written by CI on the host
 .env
 .env.*
+
+__pycache__/
+*.pyc
