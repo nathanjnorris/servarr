@@ -59,6 +59,24 @@
       ]
     },
     {
+      "description": "GitHub Actions major bumps are not a concern: they merge like minor/patch, inside the same 02:00-03:00 AEST window. Only Terraform and Docker majors need the owner.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": true,
+      "platformAutomerge": false,
+      "automergeSchedule": [
+        "after 2am and before 3am"
+      ],
+      "assignees": [],
+      "labels": [
+        "dependencies"
+      ]
+    },
+    {
       "description": "Sonarr 5.x is not what we run; stay on v4 until deliberately moved",
       "matchPackageNames": [
         "ghcr.io/linuxserver/sonarr"
