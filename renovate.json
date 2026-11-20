@@ -1,0 +1,99 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "timezone": "Australia/Brisbane",
+  "enabledManagers": [
+    "docker-compose",
+    "github-actions",
+    "terraform"
+  ],
+  "ignoreUnstable": true,
+  "dependencyDashboard": true,
+  "labels": [
+    "dependencies"
+  ],
+  "prConcurrentLimit": 5,
+  "packageRules": [
+    {
+      "description": "Never move to pre-release tags, whatever the registry calls them",
+      "matchDatasources": [
+        "docker"
+      ],
+      "allowedVersions": "!/(?i)(rc|alpha|beta|nightly|develop|dev|canary|preview|unstable|snapshot)/"
+    },
+    {
+      "description": "LinuxServer tags look like 4.0.20.3014-ls5 or v2.19.1-ls252; compare the numeric part",
+      "matchPackageNames": [
+        "ghcr.io/linuxserver/**"
+      ],
+      "versioning": "regex:^(?<prefix>v)?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:\\.(?<build>\\d+))?(?:-[0-9a-f]{7,9})?(?:_v[\\d.]+)?-ls(?<revision>\\d+)$"
+    },
+    {
+      "description": "Minor and patch updates merge themselves once required checks pass; the nightly deploy applies them",
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
+    },
+    {
+      "description": "Major updates only ever open a PR, assigned to the owner so the GitHub mobile app notifies them",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": false,
+      "assignees": [
+        "nathanjnorris"
+      ],
+      "labels": [
+        "dependencies",
+        "major-update"
+      ]
+    },
+    {
+      "description": "Sonarr 5.x is not what we run; stay on v4 until deliberately moved",
+      "matchPackageNames": [
+        "ghcr.io/linuxserver/sonarr"
+      ],
+      "allowedVersions": "/^4\\./"
+    },
+    {
+      "description": "Cloudflare provider v5 is a staged migration (see Terraform uplift), not a bump",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false,
+      "matchDepNames": [
+        "cloudflare",
+        "cloudflare/cloudflare"
+      ]
+    },
+    {
+      "description": "Group GitHub Actions bumps into one PR",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "github actions"
+    },
+    {
+      "description": "Terraform core is upgraded deliberately (workspace version change), never by a bump PR",
+      "matchDepNames": [
+        "hashicorp/terraform",
+        "terraform"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "ubuntu-latest is a runner label, not a pin",
+      "matchDepNames": [
+        "ubuntu"
+      ],
+      "enabled": false
+    }
+  ]
+}
