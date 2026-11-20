@@ -61,7 +61,9 @@ jobs:
       - name: Terraform Format (check only)
         run: terraform fmt -check -recursive .
 
+      # Dependabot bumps change the generated README tables; the author regenerates them for human PRs only.
       - name: Terraform Docs (check only)
+        if: github.actor != 'dependabot[bot]'
         uses: terraform-docs/gh-actions@v1.1.0
         with:
           find-dir: .
