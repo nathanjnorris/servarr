@@ -34,20 +34,27 @@ resource "cloudflare_zone_dnssec" "example" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
 }
 
-# Customize zone settings
-resource "cloudflare_zone_settings_override" "nathanjn_com" {
-  zone_id = data.cloudflare_zone.nathanjn_com.id
-  settings {
-    always_use_https         = "on"
-    min_tls_version          = "1.2"
-    opportunistic_encryption = "on"
-    tls_1_3                  = "zrt"
-    # HTTP/3 (QUIC) disabled: Home Assistant relies on mTLS (client certificates),
-    # which does not work reliably over QUIC. Previously set manually in the dashboard.
-    http3                    = "off"
-    automatic_https_rewrites = "on"
-    security_level           = "high"
-    challenge_ttl            = 7200
+# tf-migrate: # Customize zone settings
+# tf-migrate: resource "cloudflare_zone_settings_override" "nathanjn_com" {
+# tf-migrate:   zone_id = data.cloudflare_zone.nathanjn_com.id
+# tf-migrate:   settings {
+# tf-migrate:     always_use_https         = "on"
+# tf-migrate:     min_tls_version          = "1.2"
+# tf-migrate:     opportunistic_encryption = "on"
+# tf-migrate:     tls_1_3                  = "zrt"
+# tf-migrate:     # HTTP/3 (QUIC) disabled: Home Assistant relies on mTLS (client certificates),
+# tf-migrate:     # which does not work reliably over QUIC. Previously set manually in the dashboard.
+# tf-migrate:     http3                    = "off"
+# tf-migrate:     automatic_https_rewrites = "on"
+# tf-migrate:     security_level           = "high"
+# tf-migrate:     challenge_ttl            = 7200
+# tf-migrate:   }
+# tf-migrate: }
+
+removed {
+  from = cloudflare_zone_settings_override.nathanjn_com
+  lifecycle {
+    destroy = false
   }
 }
 
