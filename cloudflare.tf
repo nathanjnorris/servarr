@@ -67,7 +67,7 @@ resource "cloudflare_zone_settings_override" "nathanjn_com" {
 resource "cloudflare_record" "plex_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "plex"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -75,7 +75,7 @@ resource "cloudflare_record" "plex_nathanjn_com" {
 resource "cloudflare_record" "overseerr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "overseerr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -83,7 +83,7 @@ resource "cloudflare_record" "overseerr_nathanjn_com" {
 resource "cloudflare_record" "seerr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "seerr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -91,7 +91,7 @@ resource "cloudflare_record" "seerr_nathanjn_com" {
 resource "cloudflare_record" "sonarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "sonarr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -99,7 +99,7 @@ resource "cloudflare_record" "sonarr_nathanjn_com" {
 resource "cloudflare_record" "sonarr4k_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "4ksonarr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -107,7 +107,7 @@ resource "cloudflare_record" "sonarr4k_nathanjn_com" {
 resource "cloudflare_record" "radarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "radarr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -115,7 +115,7 @@ resource "cloudflare_record" "radarr_nathanjn_com" {
 resource "cloudflare_record" "radarr4k_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "4kradarr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -123,7 +123,7 @@ resource "cloudflare_record" "radarr4k_nathanjn_com" {
 resource "cloudflare_record" "bazarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "bazarr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -131,7 +131,7 @@ resource "cloudflare_record" "bazarr_nathanjn_com" {
 resource "cloudflare_record" "bazarr4k_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "4kbazarr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -139,7 +139,7 @@ resource "cloudflare_record" "bazarr4k_nathanjn_com" {
 resource "cloudflare_record" "prowlarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "prowlarr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -147,7 +147,7 @@ resource "cloudflare_record" "prowlarr_nathanjn_com" {
 resource "cloudflare_record" "qbittorrent_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "qbittorrent"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -155,7 +155,7 @@ resource "cloudflare_record" "qbittorrent_nathanjn_com" {
 resource "cloudflare_record" "tautulli_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "tautulli"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -163,7 +163,7 @@ resource "cloudflare_record" "tautulli_nathanjn_com" {
 resource "cloudflare_record" "wizarr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "wizarr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -171,7 +171,7 @@ resource "cloudflare_record" "wizarr_nathanjn_com" {
 resource "cloudflare_record" "maintainerr_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "maintainerr"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -179,7 +179,7 @@ resource "cloudflare_record" "maintainerr_nathanjn_com" {
 resource "cloudflare_record" "kopia_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "kopia"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -187,7 +187,7 @@ resource "cloudflare_record" "kopia_nathanjn_com" {
 resource "cloudflare_record" "status_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "status"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -195,7 +195,7 @@ resource "cloudflare_record" "status_nathanjn_com" {
 resource "cloudflare_record" "ha_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "ha"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
@@ -203,7 +203,7 @@ resource "cloudflare_record" "ha_nathanjn_com" {
 resource "cloudflare_record" "matter_nathanjn_com" {
   zone_id = data.cloudflare_zone.nathanjn_com.id
   name    = "matter"
-  value   = cloudflare_tunnel.servarr_tunnel.cname
+  content = cloudflare_tunnel.servarr_tunnel.cname
   type    = "CNAME"
   proxied = true
 }
