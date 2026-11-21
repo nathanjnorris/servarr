@@ -212,7 +212,7 @@ services:
     restart: always
 # Media management
   maintainerr:
-    image: ghcr.io/maintainerr/maintainerr:3.32.0
+    image: ghcr.io/maintainerr/maintainerr:3.33.0
     container_name: maintainerr
     user: 13008:13000
     volumes:
@@ -224,7 +224,7 @@ services:
     restart: always
 
   # 4kmaintainerr:
-  #   image: ghcr.io/maintainerr/maintainerr:3.32.0
+  #   image: ghcr.io/maintainerr/maintainerr:3.33.0
   #   container_name: 4kmaintainerr
   #   user: 13008:13000
   #   volumes:
