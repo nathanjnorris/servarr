@@ -12,12 +12,6 @@ on:
     - cron: "0 19 * * 0"
   workflow_dispatch:
 
-env:
-  TF_CLOUD_ORGANIZATION: "nathanjnorris-org"
-  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: "servarr"
-  CONFIG_DIRECTORY: "./"
-
 permissions:
   contents: read
   issues: write
@@ -26,6 +20,12 @@ jobs:
   terraform_drift:
     name: Terraform drift (speculative plan)
     runs-on: ubuntu-latest
+    # Only this job gets the Terraform Cloud token; the host and secrets checks do not need it.
+    env:
+      TF_CLOUD_ORGANIZATION: "nathanjnorris-org"
+      TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+      TF_WORKSPACE: "servarr"
+      CONFIG_DIRECTORY: "./"
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -144,7 +144,7 @@ jobs:
           exit "$status"
 
       - name: Open (or update) an issue for the owner
-        if: steps.check.outcome == 'failure'
+        if: always() && steps.check.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
           REPORT: ${{ steps.check.outputs.report }}
