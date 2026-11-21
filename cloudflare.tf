@@ -490,25 +490,43 @@ resource "cloudflare_access_application" "sonarr_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_sonarr" {
-  application_id = cloudflare_access_application.sonarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_sonarr" {
+#   application_id = cloudflare_access_application.sonarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_sonarr
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_sonarr" {
-  application_id = cloudflare_access_application.sonarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_sonarr" {
+#   application_id = cloudflare_access_application.sonarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_sonarr
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -521,25 +539,43 @@ resource "cloudflare_access_application" "sonarr4k_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_sonarr4k" {
-  application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_sonarr4k" {
+#   application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_sonarr4k
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_sonarr4k" {
-  application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_sonarr4k" {
+#   application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_sonarr4k
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -552,25 +588,43 @@ resource "cloudflare_access_application" "radarr_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_radarr" {
-  application_id = cloudflare_access_application.radarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_radarr" {
+#   application_id = cloudflare_access_application.radarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_radarr
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_radarr" {
-  application_id = cloudflare_access_application.radarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_radarr" {
+#   application_id = cloudflare_access_application.radarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_radarr
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -583,25 +637,43 @@ resource "cloudflare_access_application" "radarr4k_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_radarr4k" {
-  application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_radarr4k" {
+#   application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_radarr4k
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_radarr4k" {
-  application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_radarr4k" {
+#   application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_radarr4k
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -614,25 +686,43 @@ resource "cloudflare_access_application" "bazarr_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_bazarr" {
-  application_id = cloudflare_access_application.bazarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_bazarr" {
+#   application_id = cloudflare_access_application.bazarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_bazarr
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_bazarr" {
-  application_id = cloudflare_access_application.bazarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_bazarr" {
+#   application_id = cloudflare_access_application.bazarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_bazarr
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -645,26 +735,44 @@ resource "cloudflare_access_application" "bazarr4k_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_bazarr4k" {
-  application_id = cloudflare_access_application.bazarr4k_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_bazarr4k" {
+#   application_id = cloudflare_access_application.bazarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_bazarr4k
+  lifecycle {
+    destroy = false
   }
 }
 
 
-resource "cloudflare_access_policy" "user_bazarr4k" {
-  application_id = cloudflare_access_application.bazarr4k_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_bazarr4k" {
+#   application_id = cloudflare_access_application.bazarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_bazarr4k
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -677,25 +785,43 @@ resource "cloudflare_access_application" "prowlarr_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_prowlarr" {
-  application_id = cloudflare_access_application.prowlarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_prowlarr" {
+#   application_id = cloudflare_access_application.prowlarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_prowlarr
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_prowlarr" {
-  application_id = cloudflare_access_application.prowlarr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_prowlarr" {
+#   application_id = cloudflare_access_application.prowlarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_prowlarr
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -708,25 +834,43 @@ resource "cloudflare_access_application" "qbittorrent_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_qbittorrent" {
-  application_id = cloudflare_access_application.qbittorrent_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_qbittorrent" {
+#   application_id = cloudflare_access_application.qbittorrent_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_qbittorrent
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_qbittorrent" {
-  application_id = cloudflare_access_application.qbittorrent_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_qbittorrent" {
+#   application_id = cloudflare_access_application.qbittorrent_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_qbittorrent
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -739,25 +883,43 @@ resource "cloudflare_access_application" "tautulli_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_tautulli" {
-  application_id = cloudflare_access_application.tautulli_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_tautulli" {
+#   application_id = cloudflare_access_application.tautulli_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_tautulli
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_tautulli" {
-  application_id = cloudflare_access_application.tautulli_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_tautulli" {
+#   application_id = cloudflare_access_application.tautulli_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_tautulli
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -770,25 +932,43 @@ resource "cloudflare_access_application" "maintainerr_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_maintainerr" {
-  application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_maintainerr" {
+#   application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_maintainerr
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_maintainerr" {
-  application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_maintainerr" {
+#   application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_maintainerr
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -801,14 +981,23 @@ resource "cloudflare_access_application" "kopia_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "user_kopia" {
-  application_id = cloudflare_access_application.kopia_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "1"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_kopia" {
+#   application_id = cloudflare_access_application.kopia_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "1"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_kopia
+  lifecycle {
+    destroy = false
   }
 }
 
@@ -822,25 +1011,43 @@ resource "cloudflare_access_application" "matter_nathanjn_com" {
   allowed_idps              = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
 }
 
-resource "cloudflare_access_policy" "service_matter" {
-  application_id = cloudflare_access_application.matter_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "Service auth"
-  precedence     = "1"
-  decision       = "non_identity"
-  include {
-    service_token = [cloudflare_access_service_token.uptime_kuma.id]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_matter" {
+#   application_id = cloudflare_access_application.matter_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_matter
+  lifecycle {
+    destroy = false
   }
 }
 
-resource "cloudflare_access_policy" "user_matter" {
-  application_id = cloudflare_access_application.matter_nathanjn_com.id
-  zone_id        = data.cloudflare_zone.nathanjn_com.id
-  name           = "User auth"
-  precedence     = "2"
-  decision       = "allow"
-  include {
-    email = ["nathan.james.norris@gmail.com"]
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_matter" {
+#   application_id = cloudflare_access_application.matter_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_matter
+  lifecycle {
+    destroy = false
   }
 }
 
