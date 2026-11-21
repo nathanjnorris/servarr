@@ -6,8 +6,7 @@ Things we know are unfinished, with why and the safe way to finish them. Delete 
 
 | Item | Why it is not done | Safe way to finish it |
 | --- | --- | --- |
-| Cloudflare deprecated resources: `cloudflare_access_application`, `cloudflare_access_policy`, `cloudflare_access_service_token`, `cloudflare_tunnel`, `cloudflare_tunnel_config` (replacements are `cloudflare_zero_trust_*`) | They produce the "Deprecated Resource" warnings. The replacements need an import. Service token client secrets and the tunnel token cannot be read back after an import, and outputs/secrets depend on them (Google Assistant, `SERVARR_TUNNEL_TOKEN`). | Part of the staged Cloudflare v5 migration. Never destroy or recreate the tunnel or the Access policies. Take a state backup and a Cloudflare snapshot first. Use `import` blocks plus `removed { lifecycle { destroy = false } }` blocks, and stop if any plan wants to recreate something. |
-| Cloudflare provider v4 to v5 (the `cloudflare_record` resource becomes `cloudflare_dns_record`) | Major provider upgrade with schema changes. Renovate is told not to raise it alone. | Same staged migration as above. |
+| Cloudflare Access applications still rely on their live application-scoped policies (`lifecycle { ignore_changes = [policies] }` on each `cloudflare_zero_trust_access_application`) | The v5 provider moved the policies inline on the application. The old policy resources were removed from state without destroying anything; converting them needs a plan read per application. | Convert one application at a time to inline `policies`, starting with a low-risk one (kopia, maintainerr). Read each plan: the application must update in place and nothing may be recreated. Confirm sign-in still works, then remove `ignore_changes` for that application. |
 
 ## CI and repository
 
