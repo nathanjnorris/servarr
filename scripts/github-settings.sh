@@ -11,10 +11,11 @@ REPO="${GITHUB_REPOSITORY:-nathanjnorris/servarr}"
 
 status=0
 
-# ensure_json <label> <GET/PATCH path> <field=value ...>
-# Compares each field of the live JSON object with the wanted value and PATCHes only the ones that differ.
+# ensure_json <label> <METHOD> <path> <field=value ...>
+# Compares each field of the live JSON object (GET path) with the wanted value and sends only the differing
+# fields with METHOD (PATCH or PUT) to the same path.
 ensure_json() {
-  local label=$1 path=$2; shift 2
+  local label=$1 method=$2 path=$3; shift 3
   local live changes=() pair key want have
   # The caller uses `|| status=1`, which turns errexit off inside this function, so every call is checked explicitly.
   live=$(gh api "$path") || { echo "$label: could not read $path" >&2; return 1; }
@@ -30,11 +31,17 @@ ensure_json() {
     echo "$label: already correct"
     return 0
   fi
-  gh api -X PATCH "$path" "${changes[@]}" >/dev/null || { echo "$label: update FAILED" >&2; return 1; }
+  gh api -X "$method" "$path" "${changes[@]}" >/dev/null || { echo "$label: update FAILED" >&2; return 1; }
   echo "$label: updated"
 }
 
 # AI Scan (code scanning). No Terraform resource exists in integrations/github 6.13.0.
-ensure_json "AI Scan" "repos/$REPO/code-scanning/ai-scan" pr_scan=enabled repository_scan=enabled || status=1
+ensure_json "AI Scan" PATCH "repos/$REPO/code-scanning/ai-scan" pr_scan=enabled repository_scan=enabled || status=1
+
+# Which actors need a manual approval before their workflow runs start. "all_external_contributors" also held back
+# runs started by the Copilot reviewer app (every review comment became an action_required run). The owner approved
+# changing this to first_time_contributors on 2026-11-21. No attribute for it exists in
+# github_actions_repository_permissions (integrations/github 6.13.0, checked via Terraform MCP).
+ensure_json "Fork PR approval policy" PUT "repos/$REPO/actions/permissions/fork-pr-contributor-approval" approval_policy=first_time_contributors || status=1
 
 exit "$status"
