@@ -15,9 +15,7 @@ Things we know are unfinished, with why and the safe way to finish them. Delete 
 | Item | Why it is not done | Safe way to finish it |
 | --- | --- | --- |
 | Actions are pinned by tag, not by commit SHA | Renovate has `helpers:pinGitHubActionDigests` but has not yet opened its first PR. | Merge Renovate's pin PR; then enable `sha_pinning_required` (above). |
-| `.github/dependabot.yml` still exists | Waiting for proof that Renovate works. | Delete it once Renovate has opened and merged a PR. |
 | AI Scan "repository" scan does not run by itself | GitHub has no schedule or API for it. | Start it from the repo's code scanning alerts page after large changes. |
-| `cloudflare_api_token` expiry is unknown | Value is only readable inside Terraform Cloud. | Check it in the Cloudflare dashboard and set the date in `SECRETS.md`. |
 | Both GitHub PATs have no expiry | Chosen for low maintenance. | Review yearly (dates in `SECRETS.md`). |
 
 See also `NON_TERRAFORM_CONFIG.md` (settings with no Terraform resource) and `SECRETS.md` (credential inventory and rotation).
