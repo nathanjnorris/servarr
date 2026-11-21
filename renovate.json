@@ -35,11 +35,13 @@
       "versioning": "regex:^(?<prefix>v)?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:\\.(?<build>\\d+))?(?:-[0-9a-f]{7,9})?(?:_v[\\d.]+)?-ls(?<revision>\\d+)$"
     },
     {
-      "description": "Minor and patch updates merge themselves, but only inside the 02:00-03:00 AEST window (Renovate's own schedule, not GitHub auto-merge); the nightly deploy applies them",
+      "description": "Minor, patch, digest and pin updates merge themselves, but only inside the 02:00-03:00 AEST window (Renovate's own schedule, not GitHub auto-merge); the nightly deploy applies them",
       "matchUpdateTypes": [
         "minor",
         "patch",
-        "digest"
+        "digest",
+        "pin",
+        "pinDigest"
       ],
       "automerge": true,
       "automergeType": "pr",
