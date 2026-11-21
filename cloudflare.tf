@@ -155,6 +155,8 @@ resource "cloudflare_bot_management" "bots_nathanjn_com" {
   zone_id    = data.cloudflare_zone.nathanjn_com.id
   fight_mode = true
   enable_js  = true
+  # Live value is true (Cloudflare manages robots.txt). v4 did not set it; v5 treats an unset value as false, which would turn it off.
+  is_robots_txt_managed = true
 }
 
 ###
@@ -1131,7 +1133,9 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "servarr_tunnel" {
         hostname = "ha.nathanjn.com"
         service  = "https://host.docker.internal:443"
         origin_request = {
-          origin_server_name       = "ha.nathanjn.com"
+          origin_server_name = "ha.nathanjn.com"
+          # The live value is an empty string; keep it explicit so v5 does not rewrite it as null.
+          http_host_header         = ""
           ca_pool                  = ""
           connect_timeout          = 30
           disable_chunked_encoding = false
