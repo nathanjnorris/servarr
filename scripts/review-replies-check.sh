@@ -99,4 +99,7 @@ while :; do
   sleep 30
 done
 
-[ "$state" != failure ]
+# Intentional exit: drop the ERR trap first, otherwise a failing check would overwrite its own "failure" status with "error".
+trap - ERR
+if [ "$state" = failure ]; then exit 1; fi
+exit 0
