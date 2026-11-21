@@ -8,7 +8,6 @@ Things we know are unfinished, with why and the safe way to finish them. Delete 
 | --- | --- | --- |
 | Cloudflare deprecated resources: `cloudflare_access_application`, `cloudflare_access_policy`, `cloudflare_access_service_token`, `cloudflare_tunnel`, `cloudflare_tunnel_config` (replacements are `cloudflare_zero_trust_*`) | They produce the "Deprecated Resource" warnings. The replacements need an import. Service token client secrets and the tunnel token cannot be read back after an import, and outputs/secrets depend on them (Google Assistant, `SERVARR_TUNNEL_TOKEN`). | Part of the staged Cloudflare v5 migration. Never destroy or recreate the tunnel or the Access policies. Take a state backup and a Cloudflare snapshot first. Use `import` blocks plus `removed { lifecycle { destroy = false } }` blocks, and stop if any plan wants to recreate something. |
 | Cloudflare provider v4 to v5 (the `cloudflare_record` resource becomes `cloudflare_dns_record`) | Major provider upgrade with schema changes. Renovate is told not to raise it alone. | Same staged migration as above. |
-| Terraform core is 1.7.5 in the HCP workspace and in `validate.yml`; latest is 1.17.x | Step 1 (loosen `required_version`) is done. Steps 2 to 3 are not. | Back up the state. Set the workspace `terraform-version` to the current 1.x. Confirm a zero-diff plan. Then tighten `required_version` and the `terraform_version` in `validate.yml`. |
 
 ## CI and repository
 

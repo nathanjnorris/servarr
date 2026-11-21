@@ -6,7 +6,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7.0, < 2.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.17.0, < 2.0.0 |
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | < 5.0.0 |
 | <a name="requirement_github"></a> [github](#requirement\_github) | ~> 6.13.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.7 |
