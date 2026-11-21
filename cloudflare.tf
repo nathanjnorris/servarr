@@ -1431,11 +1431,18 @@ resource "cloudflare_zero_trust_access_application" "kopia_nathanjn_com" {
   type                       = "self_hosted"
   http_only_cookie_attribute = false
 
-  # Policies are converted to inline policies app by app in follow-up PRs; until then keep the live
-  # application-scoped policies attached.
-  lifecycle {
-    ignore_changes = [policies]
-  }
+  policies = [
+    {
+      name       = "User auth"
+      decision   = "allow"
+      precedence = 1
+      include = [
+        {
+          email = { email = "nathan.james.norris@gmail.com" }
+        }
+      ]
+    }
+  ]
 }
 
 moved {
