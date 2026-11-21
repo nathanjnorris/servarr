@@ -12,6 +12,15 @@ sha=${2:?head commit sha}
 owner=${GITHUB_REPOSITORY%/*}
 repo=${GITHUB_REPOSITORY#*/}
 
+# If anything below fails, replace any earlier status (for example an old "success") with "error" so a stale pass
+# can never keep satisfying the required check. Best effort: if posting also fails, the original error still exits.
+# shellcheck disable=SC2329  # invoked via trap
+post_error() {
+  gh api "repos/$GITHUB_REPOSITORY/statuses/$sha" -f state=error -f context="Review replies" \
+    -f description="The check could not run; it will retry on the next sweep" >/dev/null 2>&1 || true
+}
+trap post_error ERR
+
 # shellcheck disable=SC2016  # $o/$r/$n/$endCursor are GraphQL variables, not shell
 unanswered=$(gh api graphql --paginate -f query='
   query($o:String!,$r:String!,$n:Int!,$endCursor:String){repository(owner:$o,name:$r){pullRequest(number:$n){

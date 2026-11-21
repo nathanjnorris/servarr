@@ -48,7 +48,11 @@ jobs:
       PR: ${{ github.event.pull_request.number }}
       SHA: ${{ github.event.pull_request.head.sha }}
     steps:
+      # Run the checker from the BASE commit, never the PR's own copy: this token can write commit statuses, so a PR
+      # must not be able to change the script that grades it. (Changes to the script take effect once merged.)
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
       - name: Check this pull request
         run: bash scripts/review-replies-check.sh "$PR" "$SHA"
 
@@ -63,8 +67,8 @@ jobs:
       - name: Refresh every open PR (a failing PR never fails this job; its status carries the result)
         run: |
           set -uo pipefail
-          gh pr list --repo "$GITHUB_REPOSITORY" --state open --limit 500 --json number,headRefOid \
-            --jq '.[] | "\(.number) \(.headRefOid)"' |
+          gh api --paginate "repos/$GITHUB_REPOSITORY/pulls?state=open&per_page=100" \
+            --jq '.[] | "\(.number) \(.head.sha)"' |
           while read -r pr sha; do
             bash scripts/review-replies-check.sh "$pr" "$sha" || echo "::notice::#$pr is not passing (see its Review replies status)"
           done
