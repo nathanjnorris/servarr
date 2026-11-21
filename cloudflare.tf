@@ -1046,6 +1046,8 @@ resource "cloudflare_zero_trust_tunnel_cloudflared" "servarr_tunnel" {
   account_id    = var.account_id
   name          = "servarr tunnel"
   tunnel_secret = base64sha256(random_password.servarr_tunnel_secret.result)
+  # The tunnel is configured remotely (ingress is managed by the config resource below); v5 would otherwise default this to "local".
+  config_src = "cloudflare"
 }
 
 moved {
