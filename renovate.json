@@ -35,18 +35,29 @@
       "versioning": "regex:^(?<prefix>v)?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:\\.(?<build>\\d+))?(?:-[0-9a-f]{7,9})?(?:_v[\\d.]+)?-ls(?<revision>\\d+)$"
     },
     {
-      "description": "Minor and patch updates merge themselves, but only inside the 02:00-03:00 AEST window (Renovate's own schedule, not GitHub auto-merge); the nightly deploy applies them",
+      "description": "Minor, patch, digest and pinDigest updates merge themselves once checks pass; the Plex-gated hourly deploy applies them when nobody is streaming",
       "matchUpdateTypes": [
         "minor",
         "patch",
-        "digest"
+        "digest",
+        "pinDigest"
       ],
       "automerge": true,
       "automergeType": "pr",
-      "platformAutomerge": false,
-      "automergeSchedule": [
-        "after 2am and before 3am"
-      ]
+      "platformAutomerge": false
+    },
+    {
+      "description": "Pinning GitHub Actions to a commit SHA keeps the same version, so it merges like a digest bump. Terraform and other 'pin' updates stay manual (they can change which version is used).",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "pin",
+        "pinDigest"
+      ],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": false
     },
     {
       "description": "Major updates only ever open a PR, assigned to the owner so the GitHub mobile app notifies them",
@@ -63,7 +74,7 @@
       ]
     },
     {
-      "description": "GitHub Actions major bumps are not a concern: they merge like minor/patch, inside the same 02:00-03:00 AEST window. Only Terraform and Docker majors need the owner.",
+      "description": "GitHub Actions major bumps are not a concern: they merge like minor/patch. Only Terraform and Docker majors need the owner.",
       "matchManagers": [
         "github-actions"
       ],
@@ -72,9 +83,6 @@
       ],
       "automerge": true,
       "platformAutomerge": false,
-      "automergeSchedule": [
-        "after 2am and before 3am"
-      ],
       "assignees": [],
       "labels": [
         "dependencies"
