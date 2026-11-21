@@ -1,7 +1,7 @@
 resource "github_actions_secret" "servar_tunnel_token" {
   repository  = "servarr"
   secret_name = "servarr_tunnel_token"
-  value       = cloudflare_tunnel.servarr_tunnel.tunnel_token
+  value       = data.cloudflare_zero_trust_tunnel_cloudflared_token.servarr_tunnel.token
 }
 
 resource "github_actions_secret" "home_assistant_dns_token" {
@@ -13,13 +13,13 @@ resource "github_actions_secret" "home_assistant_dns_token" {
 # resource "github_actions_variable" "service_token_id" {
 #   repository    = "servarr"
 #   variable_name = "service_token_id"
-#   value         = cloudflare_access_service_token.github_actions.client_id
+#   value         = cloudflare_zero_trust_access_service_token.github_actions.client_id
 # }
 
 # resource "github_actions_secret" "service_token_secret" {
 #   repository      = "servarr"
 #   secret_name     = "service_token_secret"
-#   plaintext_value = cloudflare_access_service_token.github_actions.client_secret
+#   plaintext_value = cloudflare_zero_trust_access_service_token.github_actions.client_secret
 # }
 
 # resource "github_actions_variable" "ssh_host" {
