@@ -53,7 +53,7 @@ jobs:
     steps:
       # Run the checker from the BASE commit, never the PR's own copy: this token can write commit statuses, so a PR
       # must not be able to change the script that grades it. (Changes to the script take effect once merged.)
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           ref: ${{ github.event.pull_request.base.sha }}
       - name: Check this pull request
@@ -66,7 +66,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Refresh every open PR (a failing PR never fails this job; its status carries the result)
         run: |
           set -uo pipefail

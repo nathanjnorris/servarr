@@ -28,10 +28,10 @@ jobs:
       CONFIG_DIRECTORY: "./"
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Upload configuration
-        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.3.2
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@8e08d1ba957673f5fbf971a22b3219639dc45661 # v1.3.2
         id: upload
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -39,7 +39,7 @@ jobs:
           speculative: true
 
       - name: Create plan run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.3.2
+        uses: hashicorp/tfc-workflows-github/actions/create-run@8e08d1ba957673f5fbf971a22b3219639dc45661 # v1.3.2
         id: run
         with:
           workspace: ${{ env.TF_WORKSPACE }}
@@ -47,14 +47,14 @@ jobs:
           plan_only: true
 
       - name: Get plan output
-        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.3.2
+        uses: hashicorp/tfc-workflows-github/actions/plan-output@8e08d1ba957673f5fbf971a22b3219639dc45661 # v1.3.2
         id: plan
         with:
           plan: ${{ fromJSON(steps.run.outputs.payload).data.relationships.plan.data.id }}
 
       - name: Open an issue if there is drift
         if: steps.plan.outputs.add != '0' || steps.plan.outputs.change != '0' || steps.plan.outputs.destroy != '0'
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
         env:
           ADD: ${{ steps.plan.outputs.add }}
           CHANGE: ${{ steps.plan.outputs.change }}
@@ -78,10 +78,10 @@ jobs:
       SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY_VALUE }}
       USER: ${{ vars.SSH_USERNAME }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Setup Tailscale
-        uses: tailscale/github-action@v3
+        uses: tailscale/github-action@6cae46e2d796f265265cfcf628b72a32b4d7cade # v3
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
@@ -128,7 +128,7 @@ jobs:
     name: Secrets expiry
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Check the inventory
         id: check
