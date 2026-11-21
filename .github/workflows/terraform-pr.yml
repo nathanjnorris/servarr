@@ -63,16 +63,16 @@ jobs:
       - name: Terraform Format (check only)
         run: terraform fmt -check -recursive .
 
-      # Dependabot bumps change the generated README tables; the author regenerates them for human PRs only.
+      # Regenerates the README tables with the same terraform-docs release you run locally (0.25.1), straight from the
+      # official image, because the terraform-docs/gh-actions wrapper is pinned to an older release. Renovate keeps the
+      # image current; regenerate the README with the same image when it moves.
       - name: Terraform Docs (check only)
-        if: github.actor != 'dependabot[bot]'
-        uses: terraform-docs/gh-actions@6de6da0cefcc6b4b7a5cbea4d79d97060733093c # v1.4.1
+        uses: docker://quay.io/terraform-docs/terraform-docs:0.25.1@sha256:7b2a74a2b9a9e6af41200335da47b73a64c39a0edd5afb91bc921f0a77eae681
         with:
-          find-dir: .
-          output-file: README.md
-          output-method: inject
-          fail-on-diff: true
-          git-push: false
+          args: markdown table --indent 2 --output-mode inject --output-file README.md .
+
+      - name: Fail if the README tables are stale
+        run: git --no-pager diff --exit-code -- README.md
 
   terraform_plan:
     name: Terraform plan
