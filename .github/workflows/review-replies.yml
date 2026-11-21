@@ -43,10 +43,13 @@ jobs:
     # Fork PRs get a read-only token on pull_request events and cannot post a status; the sweep covers them.
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     env:
       GH_TOKEN: ${{ github.token }}
       PR: ${{ github.event.pull_request.number }}
       SHA: ${{ github.event.pull_request.head.sha }}
+      # Keep checking while Copilot or CodeQL are still running, so the status flips as soon as they finish.
+      WAIT_MINUTES: "20"
     steps:
       # Run the checker from the BASE commit, never the PR's own copy: this token can write commit statuses, so a PR
       # must not be able to change the script that grades it. (Changes to the script take effect once merged.)
