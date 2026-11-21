@@ -2,6 +2,8 @@ name: Validate
 
 on:
   pull_request:
+    # edited: fixing a PR title re-runs the check
+    types: [opened, synchronize, reopened, edited]
   workflow_dispatch:
 
 permissions:
@@ -14,6 +16,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Conventional commits (PR title and every commit)
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          bash scripts/conventional-check.sh --self-test
+          bash scripts/conventional-check.sh "$BASE_SHA" "$HEAD_SHA"
 
       - name: Docker Compose config
         run: docker compose config --quiet
