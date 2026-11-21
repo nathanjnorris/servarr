@@ -1,7 +1,7 @@
 # Secrets inventory and rotation
 
 No secret values live in this repo, and this file deliberately holds no identifiers beyond the secret names (which are already visible in the workflows), because the repository is public. This file records **where each secret is stored, who uses it, when it
-must be rotated, and how**. A weekly workflow (`.github/workflows/secrets-expiry.yml`) reads the table below
+must be rotated, and how**. A weekly workflow (the `secrets_expiry` job in `.github/workflows/scheduled-checks.yml`) reads the table below
 and opens an issue assigned to the owner when a row's **Review by** date is within 30 days.
 
 **Keeping this honest:** whenever you rotate or add a secret, update its row (including the date) in the
