@@ -8,6 +8,7 @@ repo secret, listed here. No one-off live changes.
 | Setting | Why not Terraform | Where it is enforced | Secret | Checked |
 | --- | --- | --- | --- | --- |
 | GitHub AI Scan (`pr_scan`, `repository_scan`) on this repo | no resource or attribute in `integrations/github` 6.13.0 (latest, checked via Terraform MCP) | `scripts/github-settings.sh`, run by the `github_settings` job in `.github/workflows/deploy.yml` | `GHA_SERVARR_CODE_SCAN` | 2026-11-21 |
+| Fork PR contributor approval policy (`first_time_contributors`, approved by the owner 2026-11-21) | `github_actions_repository_permissions` (6.13.0) has no attribute for it (checked via Terraform MCP) | `scripts/github-settings.sh` | `GHA_SERVARR_CODE_SCAN` | 2026-11-21 |
 
 Not enforceable by script (UI or no API), noted so they are not forgotten:
 
