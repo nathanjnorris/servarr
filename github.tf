@@ -2,14 +2,12 @@ resource "github_actions_secret" "servar_tunnel_token" {
   repository  = "servarr"
   secret_name = "servarr_tunnel_token"
   value       = cloudflare_tunnel.servarr_tunnel.tunnel_token
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "home_assistant_dns_token" {
   repository  = "servarr"
   secret_name = "home_assistant_dns_token"
   value       = cloudflare_api_token.home_assistant_dns.value
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 # resource "github_actions_variable" "service_token_id" {
@@ -52,68 +50,58 @@ resource "github_actions_secret" "ssh_private_key_value" {
   repository  = "servarr"
   secret_name = "ssh_private_key_value"
   value       = var.ssh_private_key_value
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "sudo_password" {
   repository  = "servarr"
   secret_name = "sudo_password"
   value       = var.sudo_password
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "kopia_password" {
   repository  = "servarr"
   secret_name = "kopia_password"
   value       = var.kopia_password
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "gluetun_private_key" {
   repository  = "servarr"
   secret_name = "gluetun_private_key"
   value       = var.gluetun_private_key
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "gluetun_preshared_key" {
   repository  = "servarr"
   secret_name = "gluetun_preshared_key"
   value       = var.gluetun_preshared_key
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "tailscale_client_id" {
   repository  = "servarr"
   secret_name = "ts_oauth_client_id"
   value       = var.tailscale_client_id
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "tailscale_client_secret" {
   repository  = "servarr"
   secret_name = "ts_oauth_secret"
   value       = var.tailscale_client_secret
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "gluetun_wireguard_address" {
   repository  = "servarr"
   secret_name = "gluetun_wireguard_address"
   value       = var.gluetun_wireguard_address
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "gluetun_port" {
   repository  = "servarr"
   secret_name = "gluetun_port"
   value       = var.gluetun_port
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
 
 resource "github_actions_secret" "tailscale_client_secret_exit_node" {
   repository  = "servarr"
   secret_name = "ts_client_secret_exit_node"
   value       = var.tailscale_client_secret_exit_node
-  # Explicit so provider 6.13 does not plan an in-place rewrite of every secret.
 }
