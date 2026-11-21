@@ -5,7 +5,7 @@
 ## Requirements
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.17.0, < 2.0.0 |
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 5.29 |
 | <a name="requirement_github"></a> [github](#requirement\_github) | ~> 6.13.0 |
@@ -14,7 +14,7 @@
 ## Providers
 
 | Name | Version |
-|------|---------|
+| ---- | ------- |
 | <a name="provider_cloudflare"></a> [cloudflare](#provider\_cloudflare) | 5.29.0 |
 | <a name="provider_github"></a> [github](#provider\_github) | 6.13.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | 3.9.1 |
@@ -26,7 +26,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-|------|------|
+| ---- | ---- |
 | [cloudflare_api_token.home_assistant_dns](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/api_token) | resource |
 | [cloudflare_bot_management.bots_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/bot_management) | resource |
 | [cloudflare_dns_record.bazarr4k_nathanjn_com](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/dns_record) | resource |
@@ -101,7 +101,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+| ---- | ----------- | ---- | ------- | :------: |
 | <a name="input_account_id"></a> [account\_id](#input\_account\_id) | The account identifier, the basic resource for working with Cloudflare zones, teams and users | `string` | n/a | yes |
 | <a name="input_cloudflare_api_token"></a> [cloudflare\_api\_token](#input\_cloudflare\_api\_token) | Token for Terraform provider to work with the Cloudflare API | `string` | n/a | yes |
 | <a name="input_github_access_token"></a> [github\_access\_token](#input\_github\_access\_token) | Personal access token for Terraform provider to act on user behalf | `string` | n/a | yes |
@@ -121,7 +121,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-|------|-------------|
+| ---- | ----------- |
 | <a name="output_google_assistant_client_id"></a> [google\_assistant\_client\_id](#output\_google\_assistant\_client\_id) | Client ID for Google Assistant service token. |
 | <a name="output_google_assistant_client_secret"></a> [google\_assistant\_client\_secret](#output\_google\_assistant\_client\_secret) | Client secret for Google Assistant service token. |
 | <a name="output_servarr_tunnel_token"></a> [servarr\_tunnel\_token](#output\_servarr\_tunnel\_token) | Token used by a connector to authenticate and run the tunnel. |

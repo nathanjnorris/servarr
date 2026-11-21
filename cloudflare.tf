@@ -206,6 +206,478 @@ resource "cloudflare_bot_management" "bots_nathanjn_com" {
 # }
 
 
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_sonarr" {
+#   application_id = cloudflare_zero_trust_access_application.sonarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_sonarr
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_sonarr" {
+#   application_id = cloudflare_zero_trust_access_application.sonarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_sonarr
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_sonarr4k" {
+#   application_id = cloudflare_zero_trust_access_application.sonarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_sonarr4k
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_sonarr4k" {
+#   application_id = cloudflare_zero_trust_access_application.sonarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_sonarr4k
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_radarr" {
+#   application_id = cloudflare_zero_trust_access_application.radarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_radarr
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_radarr" {
+#   application_id = cloudflare_zero_trust_access_application.radarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_radarr
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_radarr4k" {
+#   application_id = cloudflare_zero_trust_access_application.radarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_radarr4k
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_radarr4k" {
+#   application_id = cloudflare_zero_trust_access_application.radarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_radarr4k
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_bazarr" {
+#   application_id = cloudflare_zero_trust_access_application.bazarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_bazarr
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_bazarr" {
+#   application_id = cloudflare_zero_trust_access_application.bazarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_bazarr
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_bazarr4k" {
+#   application_id = cloudflare_zero_trust_access_application.bazarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_bazarr4k
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_bazarr4k" {
+#   application_id = cloudflare_zero_trust_access_application.bazarr4k_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_bazarr4k
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_prowlarr" {
+#   application_id = cloudflare_zero_trust_access_application.prowlarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_prowlarr
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_prowlarr" {
+#   application_id = cloudflare_zero_trust_access_application.prowlarr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_prowlarr
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_qbittorrent" {
+#   application_id = cloudflare_zero_trust_access_application.qbittorrent_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_qbittorrent
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_qbittorrent" {
+#   application_id = cloudflare_zero_trust_access_application.qbittorrent_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_qbittorrent
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_tautulli" {
+#   application_id = cloudflare_zero_trust_access_application.tautulli_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_tautulli
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_tautulli" {
+#   application_id = cloudflare_zero_trust_access_application.tautulli_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_tautulli
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_maintainerr" {
+#   application_id = cloudflare_zero_trust_access_application.maintainerr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_maintainerr
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_maintainerr" {
+#   application_id = cloudflare_zero_trust_access_application.maintainerr_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_maintainerr
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_kopia" {
+#   application_id = cloudflare_zero_trust_access_application.kopia_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "1"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_kopia
+  lifecycle {
+    destroy = false
+  }
+}
+
+
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "service_matter" {
+#   application_id = cloudflare_zero_trust_access_application.matter_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "Service auth"
+#   precedence     = "1"
+#   decision       = "non_identity"
+#   include {
+#     service_token = [cloudflare_zero_trust_access_service_token.uptime_kuma.id]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.service_matter
+  lifecycle {
+    destroy = false
+  }
+}
+
+# v5 migration phase 1b: the v5 provider has no cloudflare_access_policy schema, so the policy leaves state here
+# (destroy = false: the live application-scoped policy is not touched). Original definition kept for the inline-policy conversion:
+# resource "cloudflare_access_policy" "user_matter" {
+#   application_id = cloudflare_zero_trust_access_application.matter_nathanjn_com.id
+#   zone_id        = data.cloudflare_zone.nathanjn_com.id
+#   name           = "User auth"
+#   precedence     = "2"
+#   decision       = "allow"
+#   include {
+#     email = ["nathan.james.norris@gmail.com"]
+#   }
+# }
+
+removed {
+  from = cloudflare_access_policy.user_matter
+  lifecycle {
+    destroy = false
+  }
+}
 
 ###
 # R2 (S3-compatible storage)
@@ -747,54 +1219,6 @@ moved {
   to   = cloudflare_zero_trust_access_application.sonarr_nathanjn_com
 }
 
-removed {
-  from = cloudflare_access_policy.service_sonarr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_sonarr" {
-  #   application_id = cloudflare_access_application.sonarr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_sonarr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_sonarr" {
-  #   application_id = cloudflare_access_application.sonarr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
-}
-
 resource "cloudflare_zero_trust_access_application" "sonarr4k_nathanjn_com" {
   zone_id                    = data.cloudflare_zone.nathanjn_com.id
   name                       = "4ksonarr.nathanjn.com"
@@ -815,54 +1239,6 @@ resource "cloudflare_zero_trust_access_application" "sonarr4k_nathanjn_com" {
 moved {
   from = cloudflare_access_application.sonarr4k_nathanjn_com
   to   = cloudflare_zero_trust_access_application.sonarr4k_nathanjn_com
-}
-
-removed {
-  from = cloudflare_access_policy.service_sonarr4k
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_sonarr4k" {
-  #   application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_sonarr4k
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_sonarr4k" {
-  #   application_id = cloudflare_access_application.sonarr4k_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
 }
 
 resource "cloudflare_zero_trust_access_application" "radarr_nathanjn_com" {
@@ -887,54 +1263,6 @@ moved {
   to   = cloudflare_zero_trust_access_application.radarr_nathanjn_com
 }
 
-removed {
-  from = cloudflare_access_policy.service_radarr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_radarr" {
-  #   application_id = cloudflare_access_application.radarr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_radarr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_radarr" {
-  #   application_id = cloudflare_access_application.radarr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
-}
-
 resource "cloudflare_zero_trust_access_application" "radarr4k_nathanjn_com" {
   zone_id                    = data.cloudflare_zone.nathanjn_com.id
   name                       = "4kradarr.nathanjn.com"
@@ -955,54 +1283,6 @@ resource "cloudflare_zero_trust_access_application" "radarr4k_nathanjn_com" {
 moved {
   from = cloudflare_access_application.radarr4k_nathanjn_com
   to   = cloudflare_zero_trust_access_application.radarr4k_nathanjn_com
-}
-
-removed {
-  from = cloudflare_access_policy.service_radarr4k
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_radarr4k" {
-  #   application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_radarr4k
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_radarr4k" {
-  #   application_id = cloudflare_access_application.radarr4k_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
 }
 
 resource "cloudflare_zero_trust_access_application" "bazarr_nathanjn_com" {
@@ -1027,54 +1307,6 @@ moved {
   to   = cloudflare_zero_trust_access_application.bazarr_nathanjn_com
 }
 
-removed {
-  from = cloudflare_access_policy.service_bazarr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_bazarr" {
-  #   application_id = cloudflare_access_application.bazarr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_bazarr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_bazarr" {
-  #   application_id = cloudflare_access_application.bazarr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
-}
-
 resource "cloudflare_zero_trust_access_application" "bazarr4k_nathanjn_com" {
   zone_id                    = data.cloudflare_zone.nathanjn_com.id
   name                       = "4kbazarr.nathanjn.com"
@@ -1095,54 +1327,6 @@ resource "cloudflare_zero_trust_access_application" "bazarr4k_nathanjn_com" {
 moved {
   from = cloudflare_access_application.bazarr4k_nathanjn_com
   to   = cloudflare_zero_trust_access_application.bazarr4k_nathanjn_com
-}
-
-removed {
-  from = cloudflare_access_policy.service_bazarr4k
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_bazarr4k" {
-  #   application_id = cloudflare_access_application.bazarr4k_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_bazarr4k
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_bazarr4k" {
-  #   application_id = cloudflare_access_application.bazarr4k_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
 }
 
 resource "cloudflare_zero_trust_access_application" "prowlarr_nathanjn_com" {
@@ -1167,54 +1351,6 @@ moved {
   to   = cloudflare_zero_trust_access_application.prowlarr_nathanjn_com
 }
 
-removed {
-  from = cloudflare_access_policy.service_prowlarr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_prowlarr" {
-  #   application_id = cloudflare_access_application.prowlarr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_prowlarr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_prowlarr" {
-  #   application_id = cloudflare_access_application.prowlarr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
-}
-
 resource "cloudflare_zero_trust_access_application" "qbittorrent_nathanjn_com" {
   zone_id                    = data.cloudflare_zone.nathanjn_com.id
   name                       = "qbittorrent.nathanjn.com"
@@ -1235,54 +1371,6 @@ resource "cloudflare_zero_trust_access_application" "qbittorrent_nathanjn_com" {
 moved {
   from = cloudflare_access_application.qbittorrent_nathanjn_com
   to   = cloudflare_zero_trust_access_application.qbittorrent_nathanjn_com
-}
-
-removed {
-  from = cloudflare_access_policy.service_qbittorrent
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_qbittorrent" {
-  #   application_id = cloudflare_access_application.qbittorrent_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_qbittorrent
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_qbittorrent" {
-  #   application_id = cloudflare_access_application.qbittorrent_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
 }
 
 resource "cloudflare_zero_trust_access_application" "tautulli_nathanjn_com" {
@@ -1307,54 +1395,6 @@ moved {
   to   = cloudflare_zero_trust_access_application.tautulli_nathanjn_com
 }
 
-removed {
-  from = cloudflare_access_policy.service_tautulli
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_tautulli" {
-  #   application_id = cloudflare_access_application.tautulli_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_tautulli
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_tautulli" {
-  #   application_id = cloudflare_access_application.tautulli_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
-}
-
 resource "cloudflare_zero_trust_access_application" "maintainerr_nathanjn_com" {
   zone_id                    = data.cloudflare_zone.nathanjn_com.id
   name                       = "maintainerr.nathanjn.com"
@@ -1375,54 +1415,6 @@ resource "cloudflare_zero_trust_access_application" "maintainerr_nathanjn_com" {
 moved {
   from = cloudflare_access_application.maintainerr_nathanjn_com
   to   = cloudflare_zero_trust_access_application.maintainerr_nathanjn_com
-}
-
-removed {
-  from = cloudflare_access_policy.service_maintainerr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_maintainerr" {
-  #   application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_maintainerr
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_maintainerr" {
-  #   application_id = cloudflare_access_application.maintainerr_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
 }
 
 resource "cloudflare_zero_trust_access_application" "kopia_nathanjn_com" {
@@ -1447,30 +1439,6 @@ moved {
   to   = cloudflare_zero_trust_access_application.kopia_nathanjn_com
 }
 
-removed {
-  from = cloudflare_access_policy.user_kopia
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_kopia" {
-  #   application_id = cloudflare_access_application.kopia_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "1"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
-}
-
 resource "cloudflare_zero_trust_access_application" "matter_nathanjn_com" {
   zone_id                    = data.cloudflare_zone.nathanjn_com.id
   name                       = "matter.nathanjn.com"
@@ -1491,52 +1459,4 @@ resource "cloudflare_zero_trust_access_application" "matter_nathanjn_com" {
 moved {
   from = cloudflare_access_application.matter_nathanjn_com
   to   = cloudflare_zero_trust_access_application.matter_nathanjn_com
-}
-
-removed {
-  from = cloudflare_access_policy.service_matter
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "service_matter" {
-  #   application_id = cloudflare_access_application.matter_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "Service auth"
-  #   precedence     = "1"
-  #   decision       = "non_identity"
-  #   include {
-  #     service_token = [cloudflare_access_service_token.uptime_kuma.id]
-  #   }
-  # }
-}
-
-removed {
-  from = cloudflare_access_policy.user_matter
-  lifecycle {
-    destroy = false
-  }
-  # MIGRATION WARNING: You MUST add a policies = [...] attribute to the parent
-  # MIGRATION WARNING: cloudflare_zero_trust_access_application resource BEFORE running terraform apply.
-  # MIGRATION WARNING: Applying without inline policies will detach all policies from the application.
-  # MIGRATION WARNING: Cloudflare then garbage-collects the orphaned app-scoped policies.
-  # MIGRATION WARNING: This is NOT recoverable without reconstructing policies from git history or backups.
-
-  # Original v4 policy — convert to inline policies before applying:
-  # resource "cloudflare_access_policy" "user_matter" {
-  #   application_id = cloudflare_access_application.matter_nathanjn_com.id
-  #   zone_id        = data.cloudflare_zone.nathanjn_com.id
-  #   name           = "User auth"
-  #   precedence     = "2"
-  #   decision       = "allow"
-  #   include {
-  #     email = ["nathan.james.norris@gmail.com"]
-  #   }
-  # }
 }
