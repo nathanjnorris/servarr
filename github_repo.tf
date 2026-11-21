@@ -106,3 +106,17 @@ resource "github_repository_ruleset" "main" {
     prevent_destroy = true
   }
 }
+
+# Every action reference in the workflows is a full commit SHA (Renovate keeps them current), so GitHub can refuse
+# any unpinned reference. Existing values (enabled, allow all actions) are kept as they are.
+import {
+  to = github_actions_repository_permissions.servarr
+  id = "servarr"
+}
+
+resource "github_actions_repository_permissions" "servarr" {
+  repository           = github_repository.servarr.name
+  enabled              = true
+  allowed_actions      = "all"
+  sha_pinning_required = true
+}
