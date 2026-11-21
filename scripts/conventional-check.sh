@@ -34,17 +34,20 @@ if [ -n "${PR_TITLE:-}" ]; then
   fi
 fi
 
+# Capture first so a failing git log (bad or missing SHA) aborts the script instead of looking like "no commits".
+commits=$(git log --no-merges --format='%H%x09%s' "$base..$head")
 while IFS=$'\t' read -r sha subject; do
   [ -n "$sha" ] || continue
   if ! valid "$subject"; then
     echo "Commit ${sha:0:7} is not a conventional commit: $subject"
     bad=1
   fi
-done < <(git log --no-merges --format='%H%x09%s' "$base..$head")
+done <<< "$commits"
 
 if [ "$bad" != 0 ]; then
   echo
-  echo "Expected: <type>(<optional scope>): <description>, with type one of: ${TYPES//|/, }"
+  echo "Expected: <type>(<optional scope>)<optional !>: <description>, with type one of: ${TYPES//|/, }"
+  echo "Add ! before the colon for a breaking change, e.g. 'feat!: drop the old trigger'"
   echo "Examples: 'feat: add data mount guard', 'fix(deploy): stop failing on a 403', 'chore(deps): update sonarr'"
 fi
 exit "$bad"
