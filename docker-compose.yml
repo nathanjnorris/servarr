@@ -54,7 +54,7 @@ services:
     restart: always
 # Media monitoring
   sonarr:
-    image: ghcr.io/linuxserver/sonarr:4.0.20.3014-ls5
+    image: ghcr.io/linuxserver/sonarr:4.0.20.3014-ls329
     container_name: sonarr
     network_mode: service:gluetun
     depends_on:
@@ -73,7 +73,7 @@ services:
     restart: always
 
   4ksonarr:
-    image: ghcr.io/linuxserver/sonarr:4.0.20.3014-ls5
+    image: ghcr.io/linuxserver/sonarr:4.0.20.3014-ls329
     container_name: 4ksonarr
     network_mode: service:gluetun
     depends_on:
