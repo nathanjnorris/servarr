@@ -14,6 +14,7 @@ Not enforceable by script (UI or no API), noted so they are not forgotten:
 
 | Item | What | Notes |
 | --- | --- | --- |
+| Mend Renovate dashboard (`developer.mend.io`): Silent mode must be OFF, Dependency Updates ON | web-only settings of the hosted Renovate app, no API or Terraform resource | Silent mode produces no PRs, branches or Dependency Dashboard issue at all. Found on 2026-11-21 as the reason Renovate was inert. The in-repo `"mode": "full"` in `renovate.json` is set as well. |
 | AI Scan, repository scan | must be started by hand from the repo's code scanning alerts page | no schedule, no API; run it after large changes |
 | Scan for AI applications | organisation-level setting | not available on a personal-account repo |
 
