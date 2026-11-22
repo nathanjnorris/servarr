@@ -3,6 +3,8 @@
 # at arguments, so this checks every call to a mutating Terraform MCP tool and blocks (exit 2) unless it targets org
 # nathanjnorris-org and workspace servarr (by name or id), and does not rename it. Read tools pass through. Fails
 # closed: unknown argument shapes, unparseable input or a missing jq are blocked.
+# Claude Code calls it directly (.claude/settings.json); GitHub Copilot calls it through .github/hooks/permission-policy.py.
+# Tool names: Claude mcp__plugin_terraform_terraform__<tool>, Copilot terraform-<tool>.
 set -u
 ORG=nathanjnorris-org
 WS_NAME=servarr
@@ -11,7 +13,11 @@ WS_ID="ws-XG6CTSfjg3x13dv6"
 input=$(cat)
 command -v jq >/dev/null 2>&1 || { echo "tfc-workspace-guard: jq is required; blocking" >&2; exit 2; }
 tool=$(jq -r '.tool_name // empty' <<<"$input") || { echo "tfc-workspace-guard: unreadable hook input; blocking" >&2; exit 2; }
-name=${tool#mcp__plugin_terraform_terraform__}
+case "$tool" in
+  mcp__plugin_terraform_terraform__*) name=${tool#mcp__plugin_terraform_terraform__} ;;
+  terraform-*) name=${tool#terraform-} ;;
+  *) echo "tfc-workspace-guard: unexpected tool '$tool'; blocking" >&2; exit 2 ;;
+esac
 
 case "$name" in
   # Read-only tools: nothing to check.
