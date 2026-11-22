@@ -35,8 +35,8 @@ automatically.
    password: it is also the repository key. Keep `docs/SECRETS.md` dates current when anything rotates.
 7. **Renovate** (hosted Mend app) is the only updater. Never run Renovate yourself or with the user's token. Never
    `gh pr update-branch` a Renovate PR (use the rebase checkbox on Dependency Dashboard #192). Terraform and Docker
-   majors are PRs assigned to `nathanjnorris`; minor/patch and GitHub Actions majors automerge. Workflow-opened issues (deploy failed, drift, secrets expiry) only @-mention the owner, and are never
-   auto-assigned: the owner assigns them, possibly to another account.
+   majors are PRs assigned to `nathanjnorris`; minor/patch and GitHub Actions majors automerge. The "servarr deploy failed [HH:mm DD/MM/YY]" issue (Brisbane time) only @-mentions the owner, with no
+   assignee: the owner assigns it, possibly to another account. Drift and secrets-expiry issues still mention and assign.
 8. **Git**: Conventional Commits on PR titles and every commit (`feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert`).
    Branch off `main`, never force-push an open PR branch, use explicit `git add <paths>` (local-only files exist), and
    merge your own PRs once every gate is green.

@@ -1,6 +1,6 @@
 name: Scheduled checks
 
-# One weekly workflow, three read-only checks, each opening an issue that @-mentions the owner (not assigned: the mention is the one notification, and the owner assigns it)
+# One weekly workflow, three read-only checks, each opening an issue that @-mentions and is assigned to the owner
 # (GitHub mobile pushes it) when something needs attention:
 #   terraform_drift  speculative plan: live Cloudflare/GitHub/etc. no longer match the code
 #   host_drift       the media host no longer matches the repo (scripts/host-drift.sh)
@@ -110,7 +110,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
           exit "$status"
 
-      - name: Open an issue that @-mentions the owner
+      - name: Open an issue assigned to the owner
         if: failure()
         env:
           GH_TOKEN: ${{ github.token }}
@@ -118,6 +118,7 @@ jobs:
           REPORT: ${{ steps.drift.outputs.report }}
         run: |
           gh issue create --repo "$GITHUB_REPOSITORY" \
+            --assignee "$GITHUB_REPOSITORY_OWNER" \
             --title "Host drift detected ($(date -u +%F))" \
             --body "@${GITHUB_REPOSITORY_OWNER} the weekly host check found problems: $RUN_URL
 
@@ -161,5 +162,5 @@ jobs:
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "$body"
           else
-            gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body "$body"
+            gh issue create --repo "$GITHUB_REPOSITORY" --assignee "$OWNER" --title "$title" --body "$body"
           fi

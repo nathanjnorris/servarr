@@ -230,7 +230,7 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           gh issue create --repo "$GITHUB_REPOSITORY" \
-            --title "Deploy failed ($(date -u +%F))" \
+            --title "servarr deploy failed [$(TZ=Australia/Brisbane date '+%H:%M %d/%m/%y')]" \
             --body "@${GITHUB_REPOSITORY_OWNER} the deploy failed: $RUN_URL
 
           It retries at the next hourly run, or run it by hand from the Actions tab."
