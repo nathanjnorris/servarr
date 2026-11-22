@@ -71,7 +71,6 @@
       "mcp__plugin_terraform_terraform__attach_policy_set_to_workspaces",
       "mcp__plugin_terraform_terraform__attach_variable_set_to_projects",
       "mcp__plugin_terraform_terraform__attach_variable_set_to_workspaces",
-      "mcp__plugin_terraform_terraform__cancel_run",
       "mcp__plugin_terraform_terraform__create_no_code_workspace",
       "mcp__plugin_terraform_terraform__create_project",
       "mcp__plugin_terraform_terraform__create_run",
@@ -80,8 +79,6 @@
       "mcp__plugin_terraform_terraform__create_variable_in_variable_set",
       "mcp__plugin_terraform_terraform__create_variable_set",
       "mcp__plugin_terraform_terraform__create_workspace",
-      "mcp__plugin_terraform_terraform__create_workspace_tags",
-      "mcp__plugin_terraform_terraform__create_workspace_variable",
       "mcp__plugin_terraform_terraform__delete_project",
       "mcp__plugin_terraform_terraform__delete_stack",
       "mcp__plugin_terraform_terraform__delete_team",
@@ -90,26 +87,21 @@
       "mcp__plugin_terraform_terraform__delete_variable_set",
       "mcp__plugin_terraform_terraform__delete_workspace",
       "mcp__plugin_terraform_terraform__delete_workspace_safely",
-      "mcp__plugin_terraform_terraform__delete_workspace_tags",
-      "mcp__plugin_terraform_terraform__delete_workspace_variable",
       "mcp__plugin_terraform_terraform__detach_policy_set_from_workspaces",
       "mcp__plugin_terraform_terraform__detach_variable_set_from_projects",
       "mcp__plugin_terraform_terraform__detach_variable_set_from_workspaces",
-      "mcp__plugin_terraform_terraform__discard_run",
       "mcp__plugin_terraform_terraform__force_unlock_workspace",
       "mcp__plugin_terraform_terraform__grant_team_access",
-      "mcp__plugin_terraform_terraform__lock_workspace",
       "mcp__plugin_terraform_terraform__remove_team_member",
       "mcp__plugin_terraform_terraform__revoke_team_access",
-      "mcp__plugin_terraform_terraform__unlock_workspace",
       "mcp__plugin_terraform_terraform__update_project",
       "mcp__plugin_terraform_terraform__update_stack",
       "mcp__plugin_terraform_terraform__update_team",
       "mcp__plugin_terraform_terraform__update_team_access",
       "mcp__plugin_terraform_terraform__update_variable_in_variable_set",
       "mcp__plugin_terraform_terraform__update_variable_set",
-      "mcp__plugin_terraform_terraform__update_workspace",
-      "mcp__plugin_terraform_terraform__update_workspace_variable"
+      "mcp__plugin_terraform_terraform__cancel_run",
+      "mcp__plugin_terraform_terraform__discard_run"
     ]
   },
   "hooks": {
@@ -120,6 +112,18 @@
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/skills/servarr-doctor/scripts/doctor.sh\" --quick || true",
             "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__plugin_terraform_terraform__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/tfc-workspace-guard.sh\"",
+            "timeout": 10
           }
         ]
       }

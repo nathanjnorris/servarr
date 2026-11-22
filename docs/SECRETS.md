@@ -14,7 +14,7 @@ same PR. `scripts/secrets-expiry-check.sh` is what parses the table, so keep the
 | --- | --- | --- |
 | GitHub Actions secrets | values the workflows need (deploy, plan) | `gh secret set NAME` (reads stdin, never put the value on the command line) |
 | GitHub Dependabot secrets | the same TFC token, because Dependabot PRs cannot read Actions secrets | `gh secret set TF_API_TOKEN --app dependabot` |
-| Terraform Cloud workspace variables (`servarr`) | values Terraform itself needs (providers, `.env` contents) | TFC API `PATCH /api/v2/workspaces/<workspace-id>/vars/<var-id>` with `sensitive: true` |
+| Terraform Cloud workspace variables (`servarr`) | values Terraform itself needs (providers, `.env` contents) | Terraform MCP: `create_workspace_variable` for a new variable, or `update_workspace_variable` (needs its `variable_id`, from `list_workspace_variables`) for an existing one. Use category `terraform`; set `sensitive: true` for secrets (non-secret settings may stay plain). API equivalents: `POST` / `PATCH /api/v2/workspaces/<workspace-id>/vars[/<var-id>]`. |
 | Host `.env` | written by the deploy workflow from the secrets above, mode 0600, never committed | nothing to do, re-written every deploy |
 
 ## Inventory
