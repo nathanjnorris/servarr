@@ -10,6 +10,19 @@ repo secret, listed here. No one-off live changes.
 | GitHub AI Scan (`pr_scan`, `repository_scan`) on this repo | no resource or attribute in `integrations/github` 6.13.0 (latest, checked via Terraform MCP) | `scripts/github-settings.sh`, run by the `github_settings` job in `.github/workflows/deploy.yml` | `GHA_SERVARR_CODE_SCAN` | 2026-11-21 |
 | Fork PR contributor approval policy (`first_time_contributors`, approved by the owner 2026-11-21) | `github_actions_repository_permissions` (6.13.0) has no attribute for it (checked via Terraform MCP) | `scripts/github-settings.sh` | `GHA_SERVARR_CODE_SCAN` | 2026-11-21 |
 
+## Terraform Cloud workspace `servarr` (managed through the Terraform MCP)
+
+No HCL manages TFC itself (the `hashicorp/tfe` provider is not used). The owner decided on 2026-11-22 that agents
+change this workspace through the Terraform MCP (rules in `CLAUDE.md`, "Terraform Cloud workspace"). Record every
+change here.
+
+| Setting | Value | Changed |
+| --- | --- | --- |
+| Organization / workspace | `nathanjnorris-org` / `servarr` (`ws-XG6CTSfjg3x13dv6`), free plan (only the `owners` team) | - |
+| Terraform version | 1.17.2 (matches `validate.yml` and `providers.tf`) | 2026-11-21 |
+| Execution / apply | remote execution, auto-apply (applies come from the Deploy workflow's `terraform_apply` job and merges) | - |
+| Variables | Terraform variables for every input in `variables.tf` (see README "Inputs"). Secrets are `sensitive`, and their rotation is tracked in `SECRETS.md`. | - |
+
 Not enforceable by script (UI or no API), noted so they are not forgotten:
 
 | Item | What | Notes |

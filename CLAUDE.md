@@ -76,11 +76,34 @@ automatically.
 | `servarr-host` skill / `host-auditor` agent | live host health, diagnosis, post-deploy verification |
 | `servarr-cloudflare` skill | Cloudflare Terraform v5 changes and `cf` CLI verification |
 | `tailscale` skill (vendored, `skills-lock.json`) | tailnet, Tailscale SSH, GitHub Action `tag:gha` questions |
-| Terraform MCP (terraform plugin) | provider resource lookup before any config change. With `TFE_TOKEN` it can also read TFC workspaces, runs and plan logs (org `nathanjnorris-org`). Every mutating tool it has (runs, workspaces, locks, variables, variable sets, policy sets, projects, teams, stacks) is denied in `.claude/settings.json`: Terraform changes go through PRs only. If a server upgrade adds a new write tool, add it to the deny list. |
+| Terraform MCP (terraform plugin) | provider resource lookup before any config change. With `TFE_TOKEN` it also reads TFC workspaces, runs and plan logs, and **manages the `servarr` workspace** (see "Terraform Cloud workspace" below). Org-wide and run-starting tools are denied in `.claude/settings.json`. If a server upgrade adds a new write tool, decide which side it belongs on. |
 | Renovate MCP (`.mcp.json`, `npm i -g renovate-mcp`) | validate, lint and explain `renovate.json`. Never to run Renovate. |
 | `cf` CLI | read-only live Cloudflare checks (`cf cli search "<task>"` to discover commands) |
 | `gh` CLI | everything GitHub (the GitHub plugin's MCP server is not needed) |
 | `claude-md-management` plugin | keep this file current: update it in the same PR when a rule or workflow changes |
+
+## Terraform Cloud workspace
+
+TFC itself is **not** managed by HCL in this repo (no `hashicorp/tfe` provider). By the owner's decision (2026-11-22),
+the `servarr` workspace in org `nathanjnorris-org` (id `ws-XG6CTSfjg3x13dv6`) is managed through the Terraform MCP:
+
+- **Allowed, on `servarr` only:** `update_workspace` (settings such as the Terraform version), workspace variables
+  (create, update, delete), workspace tags, lock/unlock, and cancel/discard of a stuck run. Never touch another
+  workspace, even if the token can.
+- **Denied in settings:**
+  - `create_run`, `apply_run` and `action_run`. The workspace auto-applies, so a run would change Cloudflare and
+    GitHub outside the PR and Plex-gated deploy path. Infrastructure changes stay PR → plan → merge → Deploy.
+  - Creating or deleting workspaces, force-unlock, projects, teams, variable sets, policy sets and stacks.
+- **Before a write:** read the current value first and tell the user the exact change. Get a yes for anything that
+  affects runs: the Terraform version, execution or apply mode, or variables.
+- **Secret variables:**
+  - Always `sensitive: true`, and the value goes in through the tool call only. Never print or commit it.
+  - Update the row in `docs/SECRETS.md` (store, review date) in a PR.
+  - Leave the TFC token variables alone unless the owner asks.
+- **Record it.** Every change goes into the "Terraform Cloud workspace `servarr`" section of
+  `docs/NON_TERRAFORM_CONFIG.md` in a PR, because no HCL tracks it. Changing the workspace Terraform version also means
+  matching `validate.yml`, `providers.tf` and the `CLAUDE.md` layout table.
+- **Check the result:** run a speculative plan on a PR, or read the next Deploy's `terraform_apply` job.
 
 ## Gotchas
 
