@@ -51,7 +51,7 @@ Then the public side, without credentials:
 | Deploy postponed repeatedly | someone is streaming; `scripts/plex-busy.sh` output. Wait. Never force. |
 | Deploy failed at "Connect to host" | usually a transient tailnet lookup race; re-run with `gh workflow run deploy.yml` and close the auto-opened issue |
 | arr apps unreachable | they share `gluetun`'s network: `docker logs gluetun --tail 50` (VPN down takes all of them down) |
-| Kuma Docker monitors red | `docker logs docker-proxy`; Kuma's Docker host must be TCP `http://docker-proxy:2375` (proxy allows only `GET /containers/*`) |
+| A Kuma monitor is red | Run its check by hand from inside Kuma, for example `docker exec uptime-kuma curl -s http://gluetun:8989/ping`. The per-service URLs are in `docs/HOST.md`. Host-network services go through `host.docker.internal`. |
 | Disk health | `sudo smartctl` needs sudo, so ask the user to run `! ssh nathan@192.168.8.10 sudo smartctl -a /dev/disk/by-id/usb-174c_USB_3.1_Storage_0000000000B0-0:0 -d sat` and paste the output |
 | Host drift | `bash ~/servarr/scripts/host-drift.sh` (the same check the weekly Scheduled checks workflow runs) |
 
@@ -61,4 +61,4 @@ Then the public side, without credentials:
   `docs/SECRETS.md`). Each opens an issue on a problem.
 - `Review replies` sweep (every 5 minutes): keeps the PR gate status fresh.
 - Hourly `Deploy`: converges the host to `main`.
-- Uptime Kuma monitors the containers through docker-proxy and the public endpoints, and alerts via Pushbullet.
+- Uptime Kuma checks every service directly (health endpoints, no Docker access) plus the public endpoints, and alerts via Pushbullet.

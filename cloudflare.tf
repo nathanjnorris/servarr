@@ -1197,7 +1197,7 @@ resource "cloudflare_zero_trust_access_application" "sonarr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1226,7 +1226,7 @@ resource "cloudflare_zero_trust_access_application" "sonarr4k_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1255,7 +1255,7 @@ resource "cloudflare_zero_trust_access_application" "radarr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1284,7 +1284,7 @@ resource "cloudflare_zero_trust_access_application" "radarr4k_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1313,7 +1313,7 @@ resource "cloudflare_zero_trust_access_application" "bazarr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1342,7 +1342,7 @@ resource "cloudflare_zero_trust_access_application" "bazarr4k_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1371,7 +1371,7 @@ resource "cloudflare_zero_trust_access_application" "prowlarr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1400,7 +1400,7 @@ resource "cloudflare_zero_trust_access_application" "qbittorrent_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1429,7 +1429,7 @@ resource "cloudflare_zero_trust_access_application" "tautulli_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1458,7 +1458,7 @@ resource "cloudflare_zero_trust_access_application" "maintainerr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1487,7 +1487,7 @@ resource "cloudflare_zero_trust_access_application" "kopia_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1516,7 +1516,7 @@ resource "cloudflare_zero_trust_access_application" "matter_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
