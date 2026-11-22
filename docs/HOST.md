@@ -19,8 +19,9 @@ Everything about the machine this repo deploys to that is **not** expressed in c
 | Networks | `servarr_default` (bridge); `docker_proxy` (internal, Kuma to docker-proxy only); `macvlan0`; the arr apps share `gluetun`'s network namespace; Home Assistant, Traefik-HA and Matter use host networking |
 
 SSH from the deploy workflow goes over the tailnet as `tag:gha`. The tailnet policy file is **not** managed in this
-repo. Because Tailscale SSH authenticates with WireGuard node identity, `ssh-keyscan` on the tailnet address is not a
-MITM risk, and pinning an OpenSSH host key would break deploys.
+repo. Tailscale SSH still presents the host's own OpenSSH ed25519 key, so every workflow pins it
+(`.github/ssh_known_hosts`, `StrictHostKeyChecking yes`). If the host is rebuilt or its keys change, update that file
+in the same PR, otherwise deploys and the drift check refuse to connect.
 
 ## Host settings that are not in `setup.sh`
 
