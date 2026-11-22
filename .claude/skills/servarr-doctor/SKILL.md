@@ -28,7 +28,7 @@ prints tokens.
 | `ssh nathan@192.168.8.10` | Read-only host inspection (`servarr-host` skill) | Works only on the owner's machine (their personal key is authorised on the host; never copy or commit it). Elsewhere: no direct access. Read Actions logs and ship changes through a PR and the Deploy workflow. Do not run `tailscale up` without asking. |
 | `renovate-mcp` | Renovate MCP server: lint/explain/validate `renovate.json` | Edit `renovate.json` carefully by hand; never run Renovate itself. |
 | Terraform MCP (terraform plugin, Docker) | Provider resource lookup before any config change | Fall back to registry docs on the web; still record the lookup. |
-| `TFE_TOKEN` env var | Terraform MCP's HCP Terraform tools (workspaces, runs) | Registry tools still work; read runs with `plan-diff.sh` instead. |
+| `TFE_TOKEN` env var | Terraform MCP's HCP Terraform tools (read-only here: workspaces, runs, plan logs; write tools are denied) | Add to `~/.zshrc`: `export TFE_TOKEN="$(jq -r '.credentials["app.terraform.io"].token // empty' ~/.terraform.d/credentials.tfrc.json)"`, then restart `claude` from a terminal (the desktop app does not read `.zshrc`). Never put it in settings.json or .mcp.json. Without it, registry tools still work; read runs with `plan-diff.sh`. |
 | tailscale skill (`.claude/skills/tailscale`, vendored) | Tailscale SSH / tailnet questions | `npx skills add https://github.com/tailscale/tailscale-skill` |
 | `tailscale-docs` MCP (`.mcp.json`) | Tailscale docs search | Optional; it often fails with ECONNRESET. Use the tailscale skill or WebFetch tailscale.com/docs. |
 
