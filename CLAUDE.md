@@ -60,7 +60,7 @@ automatically.
 | `.github/workflows/deploy.yml` | push to main, hourly `:40`, or manual. `window` (deploy marker + Plex check) → `terraform_apply` → `host_deploy` / `github_settings` → `notify_failure` (opens an issue) |
 | `.github/workflows/terraform-pr.yml` | required `Terraform plan` (speculative TFC plan) plus terraform-docs and fmt checks |
 | `.github/workflows/validate.yml` | required `Static checks`: conventional commits, compose config, ShellCheck, actionlint, terraform fmt/validate |
-| `.github/workflows/review-replies.yml` | required `Review replies` status (`scripts/review-replies-check.sh`, run from `main`'s copy): pending until Copilot has reviewed and CodeQL and the AI Scan PR check have finished; fails if a resolved thread has no reply |
+| `.github/workflows/review-replies.yml` | required `Review replies` status (`scripts/review-replies-check.sh`, run from `main`'s copy): pending until Copilot has reviewed, CodeQL has finished and the AI Scan PR check (`github-advanced-security`) has been seen to run and finish (it is silent when clean, and a missing run blocks); fails if a resolved thread has no reply |
 | `.github/workflows/scheduled-checks.yml` | weekly: Terraform drift, host drift (`scripts/host-drift.sh`), secrets expiry (`scripts/secrets-expiry-check.sh`) |
 | `scripts/` | `plex-busy.sh`, `data-mount-guard.sh`, `optimised-cleanup.py` (deletes via the Plex API, dry run by default), `github-settings.sh`, `conventional-check.sh`, checks |
 | `renovate.json` | update policy |

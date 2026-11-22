@@ -41,9 +41,20 @@ is_dependency_bot() {
   [[ "$author" =~ ^(dependabot|renovate)\[bot\]$ ]]
 }
 
+# Collapses a list of check-run statuses into missing | running | finished.
+scan_state() {
+  local statuses
+  statuses=$(sort -u <<<"$1" | sed '/^$/d' | tr '\n' ' ')
+  case "$statuses" in
+    "") echo missing ;;
+    "completed ") echo finished ;;
+    *) echo running ;;
+  esac
+}
+
 # Sets: state, desc
 evaluate() {
-  local unanswered copilot scanning bot=0
+  local unanswered copilot scanning ai_scan runs bot=0
   if is_dependency_bot; then bot=1; fi
   # shellcheck disable=SC2016  # $o/$r/$n/$endCursor are GraphQL variables, not shell
   unanswered=$(gh api graphql --paginate -f query='
@@ -64,18 +75,18 @@ evaluate() {
     -f o="$owner" -f r="$repo" -F n="$pr" \
     --jq '.data.repository.pullRequest.reviews.nodes[].author | select(.__typename == "Bot" and .login == "copilot-pull-request-reviewer") | .login' | wc -l | tr -d ' ')
 
-  scanning=$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$sha/check-runs?per_page=100" \
-    --jq '.check_runs[] | select(.name == "CodeQL" or (.name | startswith("Analyze")) or .name == "github-advanced-security") | .status' | sort -u | tr '\n' ' ')
-  case "$scanning" in
-    "") scanning=missing ;;
-    "completed ") scanning=finished ;;
-    *) scanning=running ;;
-  esac
+  runs=$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$sha/check-runs?per_page=100" --jq '.check_runs[] | "\(.name)\t\(.status)"')
+  scanning=$(scan_state "$(awk -F'\t' '$1 == "CodeQL" || $1 ~ /^Analyze/ {print $2}' <<<"$runs")")
+  # AI Scan PR review: it posts findings as review threads and stays silent when it finds nothing, so it must be
+  # seen to run and finish. A missing run blocks (pending) rather than passing.
+  ai_scan=$(scan_state "$(awk -F'\t' '$1 == "github-advanced-security" {print $2}' <<<"$runs")")
 
   if [ "$bot" = 0 ] && [ "$copilot" = "0" ]; then
     state=pending; desc="Waiting for the Copilot review"
   elif [ "$bot" = 0 ] && [ "$scanning" != "finished" ]; then
-    state=pending; desc="Waiting for CodeQL and the AI Scan PR review ($scanning)"
+    state=pending; desc="Waiting for CodeQL ($scanning)"
+  elif [ "$bot" = 0 ] && [ "$ai_scan" != "finished" ]; then
+    state=pending; desc="Waiting for the AI Scan PR review ($ai_scan); re-run it from the PR checks if it never starts"
   elif [ -n "$unanswered" ]; then
     state=failure
     desc="Resolved without a reply: $(echo "$unanswered" | sort -u | tr '\n' ' ' | cut -c1-100)"
