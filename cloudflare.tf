@@ -1177,16 +1177,6 @@ moved {
   to   = cloudflare_zero_trust_access_service_token.github_actions
 }
 
-# Former Uptime Kuma service token. No Access policy references it any more, but it is kept for exactly one apply:
-# Cloudflare refuses to delete a token that a policy still uses, and Terraform would run that delete in parallel with
-# the policy updates (no dependency edge remains), so the delete failed in #220. A follow-up PR removes this block
-# once the policy updates have been applied.
-resource "cloudflare_zero_trust_access_service_token" "uptime_kuma" {
-  account_id = var.account_id
-  name       = "Uptime Kuma"
-  duration   = "forever"
-}
-
 # Create a service token for Google Assistant to authenticate with Home Assistant
 resource "cloudflare_zero_trust_access_service_token" "google_assistant" {
   account_id = var.account_id
