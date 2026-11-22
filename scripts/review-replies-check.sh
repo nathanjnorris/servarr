@@ -48,19 +48,20 @@ evaluate() {
   unanswered=$(gh api graphql --paginate -f query='
     query($o:String!,$r:String!,$n:Int!,$endCursor:String){repository(owner:$o,name:$r){pullRequest(number:$n){
       reviewThreads(first:100,after:$endCursor){pageInfo{hasNextPage endCursor}
-        nodes{isResolved path comments(first:100){nodes{author{login}}}}}}}}' \
+        nodes{isResolved path comments(first:100){nodes{author{__typename login}}}}}}}}' \
     -f o="$owner" -f r="$repo" -F n="$pr" \
     --jq '.data.repository.pullRequest.reviewThreads.nodes[]
           | select(.isResolved and ([.comments.nodes[].author.login] | unique | length) < 2)
           | .path')
 
-  # The login match tolerates a "[bot]" suffix (GraphQL omits it, REST adds it).
+  # Only the real Copilot bot counts: a Bot-type account with the exact login (GraphQL omits the "[bot]" suffix),
+  # so a user account whose name merely starts with it cannot satisfy the gate.
   # shellcheck disable=SC2016
   copilot=$(gh api graphql --paginate -f query='
     query($o:String!,$r:String!,$n:Int!,$endCursor:String){repository(owner:$o,name:$r){pullRequest(number:$n){
-      reviews(first:100,after:$endCursor){pageInfo{hasNextPage endCursor}nodes{author{login}}}}}}' \
+      reviews(first:100,after:$endCursor){pageInfo{hasNextPage endCursor}nodes{author{__typename login}}}}}}' \
     -f o="$owner" -f r="$repo" -F n="$pr" \
-    --jq '.data.repository.pullRequest.reviews.nodes[].author.login | select(startswith("copilot-pull-request-reviewer"))' | wc -l | tr -d ' ')
+    --jq '.data.repository.pullRequest.reviews.nodes[].author | select(.__typename == "Bot" and .login == "copilot-pull-request-reviewer") | .login' | wc -l | tr -d ' ')
 
   scanning=$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$sha/check-runs?per_page=100" \
     --jq '.check_runs[] | select(.name == "CodeQL" or (.name | startswith("Analyze"))) | .status' | sort -u | tr '\n' ' ')
