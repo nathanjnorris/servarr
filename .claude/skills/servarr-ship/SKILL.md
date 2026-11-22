@@ -98,9 +98,10 @@ MCP tools (`validate_config`, `lint_config`, `explain_config`, `test_package_rul
 
 ## Code scanning (CodeQL, Copilot AI Scan)
 
-- Verify AI Scan findings against the live host before acting. For example, an `ssh-keyscan` "MITM" finding was a
-  false positive because the host uses Tailscale SSH (WireGuard identity), and pinning an OpenSSH key would break
-  deploys.
+- Verify AI Scan findings against the live host and the repo before acting, in both directions. An `ssh-keyscan`
+  finding was wrongly dismissed as a Tailscale SSH false positive, while the repo's own drift job already pinned the
+  host key successfully.
+  Check for counter-evidence before dismissing anything.
 - **Fixed** alerts must close through a rescan, never through dismissal: GitHub has no "fixed" dismiss reason, and
   "won't fix" mislabels them. The AI Scan repository scan has no schedule or API, so ask the owner to start it from
   Security > Code scanning after the fix deploys.

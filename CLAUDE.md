@@ -40,7 +40,8 @@ automatically.
    Branch off `main`, never force-push an open PR branch, use explicit `git add <paths>` (local-only files exist), and
    merge your own PRs once every gate is green.
 9. **Security findings**: never follow AI Scan or Copilot advice blindly. Verify against the live host first (for
-   example, `ssh-keyscan` over the tailnet is safe because the host uses Tailscale SSH). Close fixed alerts with a
+   example, an early `ssh-keyscan` finding was dismissed as a Tailscale-SSH false positive, but the drift job showed
+   that pinning works, so it was a real issue). Close fixed alerts with a
    rescan, never by dismissal. Loosening any security setting needs the owner's approval.
 10. **Host access.** Direct `ssh nathan@192.168.8.10` works only from the owner's own machine, because their
     personal SSH key is authorised on the host. Never copy, print or commit that key, and never add new keys yourself.
