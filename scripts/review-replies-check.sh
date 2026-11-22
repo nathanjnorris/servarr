@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Publishes the "Review replies" commit status for ONE pull request and exits 1 only if that PR is in "failure".
 #   GH_TOKEN=... GITHUB_REPOSITORY=owner/repo [WAIT_MINUTES=15] bash scripts/review-replies-check.sh <pr-number> <head-sha>
-# States: pending  = Copilot has not reviewed yet, or CodeQL has not finished (blocks merge, not an error)
+# States: pending  = Copilot has not reviewed yet, or CodeQL / the AI Scan PR review ("github-advanced-security" check
+#                    run, which posts its findings as review threads) has not finished (blocks merge, not an error)
 #         failure  = a resolved review thread has no comment from anyone but its opener
 #         success  = Copilot reviewed, CodeQL finished, every resolved thread has a reply
 # With WAIT_MINUTES > 0 (the pull_request job) a pending state is re-checked every 30 seconds until it resolves or the
@@ -64,7 +65,7 @@ evaluate() {
     --jq '.data.repository.pullRequest.reviews.nodes[].author | select(.__typename == "Bot" and .login == "copilot-pull-request-reviewer") | .login' | wc -l | tr -d ' ')
 
   scanning=$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$sha/check-runs?per_page=100" \
-    --jq '.check_runs[] | select(.name == "CodeQL" or (.name | startswith("Analyze"))) | .status' | sort -u | tr '\n' ' ')
+    --jq '.check_runs[] | select(.name == "CodeQL" or (.name | startswith("Analyze")) or .name == "github-advanced-security") | .status' | sort -u | tr '\n' ' ')
   case "$scanning" in
     "") scanning=missing ;;
     "completed ") scanning=finished ;;
@@ -74,7 +75,7 @@ evaluate() {
   if [ "$bot" = 0 ] && [ "$copilot" = "0" ]; then
     state=pending; desc="Waiting for the Copilot review"
   elif [ "$bot" = 0 ] && [ "$scanning" != "finished" ]; then
-    state=pending; desc="Waiting for CodeQL ($scanning)"
+    state=pending; desc="Waiting for CodeQL and the AI Scan PR review ($scanning)"
   elif [ -n "$unanswered" ]; then
     state=failure
     desc="Resolved without a reply: $(echo "$unanswered" | sort -u | tr '\n' ' ' | cut -c1-100)"
@@ -82,7 +83,7 @@ evaluate() {
     if [ "$bot" = 1 ]; then
       state=success; desc="Dependency bot PR: no unanswered resolved threads (Copilot and CodeQL do not apply)"
     else
-      state=success; desc="Copilot reviewed, CodeQL done, every resolved thread has a reply"
+      state=success; desc="Copilot reviewed, CodeQL and AI Scan done, every resolved thread has a reply"
     fi
   fi
 }

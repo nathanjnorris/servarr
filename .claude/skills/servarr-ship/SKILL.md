@@ -49,14 +49,16 @@ docker run --rm -v "$PWD":/w -w /w \
 
 ## 4. Gates (ruleset 8276307 on `main`, no bypass actors)
 
-Required: `Terraform plan`, `Static checks`, `Review replies` status, CodeQL, Copilot review, all threads resolved,
+Required: `Terraform plan`, `Static checks`, `Review replies` status (waits for the Copilot review, CodeQL and the AI
+Scan PR review check `github-advanced-security`, whose findings arrive as review threads), CodeQL, all threads resolved,
 branch up to date (strict). Each merge puts the other open PRs BEHIND.
 
 1. **Read the plan.** `bash .claude/skills/servarr-ship/scripts/plan-diff.sh <pr> <pushed-sha>`. Check every change:
    no unexpected `delete`/`create+delete`, no `replace_paths` on the tunnel or Access apps (their IDs and AUDs must not
    change). Never skip or bypass the plan check for any actor. If the TFC token is rejected, ask the user to
    `terraform login`.
-2. **Read every review.** `bash .claude/skills/servarr-ship/scripts/threads.sh <pr>`. Copilot findings are often
+2. **Read every review**, including `github-advanced-security` (AI Scan) threads, which need a reply like any other.
+   `bash .claude/skills/servarr-ship/scripts/threads.sh <pr>`. Copilot findings are often
    right. Verify each one against the code or the live system, then fix it or explain why not. Do not agree just to
    be agreeable.
 3. **Answer every thread, then resolve it:** write the replies (one per unresolved thread, in order) to a JSON list and
