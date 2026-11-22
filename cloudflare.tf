@@ -1027,20 +1027,6 @@ moved {
   to   = cloudflare_dns_record.ha_nathanjn_com
 }
 
-resource "cloudflare_dns_record" "matter_nathanjn_com" {
-  zone_id = data.cloudflare_zone.nathanjn_com.id
-  name    = "matter"
-  content = "${cloudflare_zero_trust_tunnel_cloudflared.servarr_tunnel.id}.cfargotunnel.com"
-  type    = "CNAME"
-  proxied = true
-  ttl     = 1
-}
-
-moved {
-  from = cloudflare_record.matter_nathanjn_com
-  to   = cloudflare_dns_record.matter_nathanjn_com
-}
-
 # Create a new locally-managed tunnel for the servarr.
 resource "cloudflare_zero_trust_tunnel_cloudflared" "servarr_tunnel" {
   account_id    = var.account_id
@@ -1148,10 +1134,6 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "servarr_tunnel" {
           tcp_keep_alive           = 30
           tls_timeout              = 10
         }
-      },
-      {
-        hostname = "matter.nathanjn.com"
-        service  = "http://host.docker.internal:5580"
       },
       {
         service = "http_status:404"
@@ -1508,31 +1490,3 @@ moved {
   to   = cloudflare_zero_trust_access_application.kopia_nathanjn_com
 }
 
-resource "cloudflare_zero_trust_access_application" "matter_nathanjn_com" {
-  zone_id                    = data.cloudflare_zone.nathanjn_com.id
-  name                       = "matter.nathanjn.com"
-  domain                     = "matter.nathanjn.com"
-  session_duration           = "2h"
-  auto_redirect_to_identity  = true
-  allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
-  type                       = "self_hosted"
-  http_only_cookie_attribute = true
-
-  policies = [
-    {
-      name       = "User auth"
-      decision   = "allow"
-      precedence = 1
-      include = [
-        {
-          email = { email = "nathan.james.norris@gmail.com" }
-        }
-      ]
-    }
-  ]
-}
-
-moved {
-  from = cloudflare_access_application.matter_nathanjn_com
-  to   = cloudflare_zero_trust_access_application.matter_nathanjn_com
-}
