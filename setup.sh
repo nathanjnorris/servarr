@@ -157,13 +157,19 @@ else
   echo "ERROR: /mnt/data is not a mount point; refusing to create the canary or start containers against it" >&2
   exit 1
 fi
+# The unit runs as root, so it must not execute a script from the user-writable checkout. Install a root-owned
+# copy (refreshed on every deploy) and run that instead.
+if ! install -o root -g root -m 0755 /home/nathan/servarr/scripts/data-mount-guard.sh /usr/local/sbin/data-mount-guard; then
+  echo "ERROR: could not install /usr/local/sbin/data-mount-guard; leaving the existing guard unit untouched" >&2
+  exit 1
+fi
 cat > /etc/systemd/system/data-mount-guard.service <<'UNIT'
 [Unit]
 Description=Stop media containers if /mnt/data disappears
 
 [Service]
 Type=oneshot
-ExecStart=/bin/bash /home/nathan/servarr/scripts/data-mount-guard.sh
+ExecStart=/bin/bash /usr/local/sbin/data-mount-guard
 UNIT
 cat > /etc/systemd/system/data-mount-guard.timer <<'UNIT'
 [Unit]
