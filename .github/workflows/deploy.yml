@@ -224,14 +224,13 @@ jobs:
     permissions:
       issues: write
     steps:
-      - name: Open an issue assigned to the owner (GitHub mobile pushes this)
+      - name: Open an issue that @-mentions the owner (one notification; the owner assigns it)
         env:
           GH_TOKEN: ${{ github.token }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           gh issue create --repo "$GITHUB_REPOSITORY" \
-            --assignee "$GITHUB_REPOSITORY_OWNER" \
-            --title "Deploy failed ($(date -u +%F))" \
+            --title "servarr deploy failed [$(TZ=Australia/Brisbane date '+%H:%M %d/%m/%y')]" \
             --body "@${GITHUB_REPOSITORY_OWNER} the deploy failed: $RUN_URL
 
           It retries at the next hourly run, or run it by hand from the Actions tab."
