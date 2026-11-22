@@ -62,7 +62,13 @@ Extended self-tests take about 14 hours, and rebooting interrupts them.
   dropout. The mount guard is the real protection.
 - **Maintainerr rules**: live in Maintainerr's DB. Never edit them without the owner's approval.
 - **Uptime Kuma**: monitors live in its SQLite DB. Read-only inspection only; the owner edits monitors in the UI. Its
-  Docker host is type TCP `http://docker-proxy:2375`. The status page `status.nathanjn.com` is public by design; the
+  Docker host is type TCP `http://docker-proxy:2375`. The arr apps, Bazarr, Tautulli and Maintainerr are checked
+  directly on the Docker network through their unauthenticated health endpoints, not through Cloudflare, so no Access
+  credential is stored in Kuma:
+  - Sonarr, Radarr (and 4K) and Prowlarr: `http://gluetun:<port>/ping`, keyword `OK`.
+  - Bazarr (and 4K): `/api/system/ping`, keyword `OK`. `/ping` is a single-page-app fallback page, not a health check.
+  - Tautulli: `/status`, keyword `success`.
+  - Maintainerr: `/api/health`, keyword `"database":"ok"`. The status page `status.nathanjn.com` is public by design; the
   dashboard needs the owner's login and MFA.
 - **Kopia**: the repository password is also the web UI password (`KOPIA_PASSWORD`). Rotating it means re-keying the
   repository. Do not rotate it casually.
