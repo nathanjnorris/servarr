@@ -44,6 +44,10 @@ Verification pattern for any Access/tunnel change:
   **replacement**: a new tunnel ID and token, which takes everything down. This is tracked in `docs/TECH_DEBT.md`.
 - Keep `http_host_header = ""` explicit in the tunnel config, and `is_robots_txt_managed = true` on bot management.
   Leaving these to defaults produces perpetual drift.
+- **Never remove a resource and its last references in the same PR.** For example, deleting a service token while also
+  removing it from Access policies: with no dependency edge left, Terraform runs the delete in parallel with the policy
+  updates, and Cloudflare rejects deleting an in-use token (`service_token_in_use`). That broke the #220 apply. Do it
+  in two PRs: first remove the references (keep the resource), apply, then delete the resource.
 - Removing a policy from an application makes Cloudflare garbage-collect it. Plan carefully, one app per PR when
   risky.
 - Resource names: `cloudflare_record` is now `cloudflare_dns_record`; zone settings moved from `zone_settings_override`
