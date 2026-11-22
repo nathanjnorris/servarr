@@ -159,7 +159,10 @@ else
 fi
 # The unit runs as root, so it must not execute a script from the user-writable checkout. Install a root-owned
 # copy (refreshed on every deploy) and run that instead.
-install -o root -g root -m 0755 /home/nathan/servarr/scripts/data-mount-guard.sh /usr/local/sbin/data-mount-guard
+if ! install -o root -g root -m 0755 /home/nathan/servarr/scripts/data-mount-guard.sh /usr/local/sbin/data-mount-guard; then
+  echo "ERROR: could not install /usr/local/sbin/data-mount-guard; leaving the existing guard unit untouched" >&2
+  exit 1
+fi
 cat > /etc/systemd/system/data-mount-guard.service <<'UNIT'
 [Unit]
 Description=Stop media containers if /mnt/data disappears
