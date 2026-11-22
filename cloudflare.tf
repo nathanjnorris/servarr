@@ -1177,18 +1177,6 @@ moved {
   to   = cloudflare_zero_trust_access_service_token.github_actions
 }
 
-# Create an service token for Uptime Kuma to authenticate
-resource "cloudflare_zero_trust_access_service_token" "uptime_kuma" {
-  account_id = var.account_id
-  name       = "Uptime Kuma"
-  duration   = "forever"
-}
-
-moved {
-  from = cloudflare_access_service_token.uptime_kuma
-  to   = cloudflare_zero_trust_access_service_token.uptime_kuma
-}
-
 # Create a service token for Google Assistant to authenticate with Home Assistant
 resource "cloudflare_zero_trust_access_service_token" "google_assistant" {
   account_id = var.account_id
@@ -1209,23 +1197,13 @@ resource "cloudflare_zero_trust_access_application" "sonarr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1248,23 +1226,13 @@ resource "cloudflare_zero_trust_access_application" "sonarr4k_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1287,23 +1255,13 @@ resource "cloudflare_zero_trust_access_application" "radarr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1326,23 +1284,13 @@ resource "cloudflare_zero_trust_access_application" "radarr4k_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1365,23 +1313,13 @@ resource "cloudflare_zero_trust_access_application" "bazarr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1404,23 +1342,13 @@ resource "cloudflare_zero_trust_access_application" "bazarr4k_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1443,23 +1371,13 @@ resource "cloudflare_zero_trust_access_application" "prowlarr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1482,23 +1400,13 @@ resource "cloudflare_zero_trust_access_application" "qbittorrent_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1521,23 +1429,13 @@ resource "cloudflare_zero_trust_access_application" "tautulli_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1560,23 +1458,13 @@ resource "cloudflare_zero_trust_access_application" "maintainerr_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }
@@ -1599,7 +1487,7 @@ resource "cloudflare_zero_trust_access_application" "kopia_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
@@ -1628,23 +1516,13 @@ resource "cloudflare_zero_trust_access_application" "matter_nathanjn_com" {
   auto_redirect_to_identity  = true
   allowed_idps               = ["97ed69f2-279d-4cef-bc29-65b6f7e915bf"]
   type                       = "self_hosted"
-  http_only_cookie_attribute = false
+  http_only_cookie_attribute = true
 
   policies = [
     {
-      name       = "Service auth"
-      decision   = "non_identity"
-      precedence = 1
-      include = [
-        {
-          service_token = { token_id = cloudflare_zero_trust_access_service_token.uptime_kuma.id }
-        }
-      ]
-    },
-    {
       name       = "User auth"
       decision   = "allow"
-      precedence = 2
+      precedence = 1
       include = [
         {
           email = { email = "nathan.james.norris@gmail.com" }

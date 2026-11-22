@@ -1,6 +1,6 @@
 ---
 name: servarr-cloudflare
-description: Work on servarr's Cloudflare setup (provider v5 Terraform in cloudflare.tf - DNS, tunnel, 12 Zero Trust Access apps with inline policies, service tokens, zone settings, WAF/mTLS) and verify live state read-only with the `cf` CLI. Use for any Cloudflare change, Access/tunnel troubleshooting, or post-apply verification.
+description: Work on servarr's Cloudflare setup (provider v5 Terraform in cloudflare.tf - DNS, tunnel, 12 Zero Trust Access apps with user-only inline policies, service tokens, zone settings, WAF/mTLS) and verify live state read-only with the `cf` CLI. Use for any Cloudflare change, Access/tunnel troubleshooting, or post-apply verification.
 ---
 
 # Cloudflare for servarr
@@ -31,10 +31,10 @@ Verification pattern for any Access/tunnel change:
 
 | Thing | Notes |
 | --- | --- |
-| 12 Access applications (`cloudflare_zero_trust_access_application`) | Inline `policies` only (no reusable policies, no groups). 11 apps: "Service auth" (`non_identity`, precedence 1, the `uptime_kuma` service token) plus "User auth" (`allow`, precedence 2, owner email). `kopia` has only "User auth". `http_only_cookie_attribute = false` is kept as it was live (debt). |
+| 12 Access applications (`cloudflare_zero_trust_access_application`) | Inline `policies` only (no reusable policies, no groups). Every app has a single "User auth" policy (`allow`, precedence 1, owner email). No service token is accepted: Uptime Kuma checks the apps directly on the Docker network (for example `http://gluetun:8989/ping`), not through Cloudflare. `http_only_cookie_attribute = true` on all 12 apps (AI Scan #10). |
 | Not behind Access | Plex, Seerr, Wizarr and Uptime Kuma (native auth; Kuma's status page is public by design). Home Assistant (`ha.`) uses an mTLS WAF rule (`require_ha_client_certificate`) with a dashboard-managed client certificate. |
 | Tunnel `servarr_tunnel` | `cloudflare_zero_trust_tunnel_cloudflared` plus `_config`; the token comes from data source `cloudflare_zero_trust_tunnel_cloudflared_token` and is pushed to the `SERVARR_TUNNEL_TOKEN` GitHub Actions secret by Terraform (`github.tf`). |
-| Service tokens | `uptime_kuma` (monitors Access apps), `github_actions`, `google_assistant` |
+| Service tokens | `github_actions`, `google_assistant`. The `uptime_kuma` token was removed on 2026-11-22 (AI Scan #13); do not reintroduce a token that bypasses Access for monitoring. |
 | Zone settings | one `cloudflare_zone_setting` per setting (8; `http3 = off` because of mTLS) |
 | Outside Terraform | the HA client certificate and its hostname association, zone SSL mode `flexible`, unrelated mail/Pages records (see `docs/NON_TERRAFORM_CONFIG.md`) |
 

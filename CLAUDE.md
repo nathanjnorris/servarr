@@ -119,8 +119,9 @@ the `servarr` workspace in org `nathanjnorris-org` (id `ws-XG6CTSfjg3x13dv6`) is
   plan.
 - Never set `config_src` on the Cloudflare tunnel: it forces a replacement (see `servarr-cloudflare`).
 - `setup.sh` has no `set -e`. Make any new critical step explicitly fatal before it changes anything that depends on it.
-- A bind mount of `docker.sock` with `:ro` does not restrict the Docker API. Kuma uses `docker-proxy` instead
-  (`CONTAINERS=1`, `POST=0`, internal network).
+- A bind mount of `docker.sock` with `:ro` does not restrict the Docker API, and even a read-only socket proxy exposes
+  `GET /containers/<id>/json`, which includes every container's env, secrets included. That's why Kuma has no Docker
+  access at all and uses direct health checks (`docs/HOST.md`).
 - Harness: a chained `sleep N && ...` is blocked. Wait with `run_in_background` until-loops. On macOS, `sed -i` needs
   `''`.
 - AI Scan's repository scan has no schedule or API. Ask the owner to start it after significant security changes.

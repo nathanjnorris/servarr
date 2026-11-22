@@ -16,7 +16,7 @@ Everything about the machine this repo deploys to that is **not** expressed in c
 | Backups taken by hand | `/home/nathan/backups/<date>-<reason>/` |
 | Media disk | 8 TB on USB (ASMedia `174c:55aa` bridge) at `/mnt/data` (`media/`, `optimised/`, `torrents/`, `recordings/`); canary file `/mnt/data/.mount-ok` |
 | Timers from `setup.sh` | `data-mount-guard.timer` (every minute), `optimised-cleanup.timer` (02:20 daily) |
-| Networks | `servarr_default` (bridge); `docker_proxy` (internal, Kuma to docker-proxy only); `macvlan0`; the arr apps share `gluetun`'s network namespace; Home Assistant, Traefik-HA and Matter use host networking |
+| Networks | `servarr_default` (bridge); `macvlan0` (the Tailscale exit node at 192.168.8.5, reachable from the host via the `macvlan.sh` shim); the arr apps share `gluetun`'s network namespace; Home Assistant, Traefik-HA and Matter use host networking |
 
 SSH from the deploy workflow goes over the tailnet as `tag:gha`. The tailnet policy file is **not** managed in this
 repo. Tailscale SSH still presents the host's own OpenSSH ed25519 key, so every workflow pins it
@@ -61,9 +61,30 @@ Extended self-tests take about 14 hours, and rebooting interrupts them.
 - **Radarr/Sonarr "Unmonitor Deleted"**: left ON on purpose. Turning it off would re-download everything after a disk
   dropout. The mount guard is the real protection.
 - **Maintainerr rules**: live in Maintainerr's DB. Never edit them without the owner's approval.
-- **Uptime Kuma**: monitors live in its SQLite DB. Read-only inspection only; the owner edits monitors in the UI. Its
-  Docker host is type TCP `http://docker-proxy:2375`. The status page `status.nathanjn.com` is public by design; the
-  dashboard needs the owner's login and MFA.
+- **Uptime Kuma**: monitors live in its SQLite DB. Read-only inspection only; the owner edits monitors in the UI (one-off,
+  owner-approved DB edits on 2026-11-22 moved every monitor to direct checks; backups in
+  `/home/nathan/backups/20261122-kuma-*`). Kuma has **no Docker API access and no Cloudflare Access credential**: it
+  checks each service directly on the compose network, or the host via `host.docker.internal`. Don't bring back a
+  Docker socket, socket proxy or Access service token for monitoring (AI Scan #11 and #13).
+
+  | Service | Check |
+  | --- | --- |
+  | Sonarr, Radarr (and 4K), Prowlarr | `http://gluetun:<port>/ping`, keyword `OK` |
+  | Bazarr (and 4K) | `/api/system/ping`, keyword `OK` (`/ping` is a single-page-app fallback page, not a health check) |
+  | Tautulli | `/status`, keyword `success` |
+  | Maintainerr | `/api/health`, keyword `"database":"ok"` |
+  | FlareSolverr | `http://gluetun:8191/health`, keyword `ok` |
+  | Gluetun | `http://gluetun:8000/v1/vpn/status`, keyword `running` |
+  | qBittorrent | `http://gluetun:8080/api/v2/app/version` (the subnet whitelist skips login), keyword `v` |
+  | Kopia | `http://kopia:51515/`, accepts HTTP 401 (it answers and requires login) |
+  | Home Assistant | `http://host.docker.internal:8123/manifest.json`, keyword `Home Assistant` |
+  | Matter | `http://host.docker.internal:5580/`, HTTP 200 |
+  | Traefik (HA) | TCP `host.docker.internal:443` |
+  | cloudflared | `https://status.nathanjn.com` (a working tunnel is exactly what this checks) |
+  | Tailscale exit node | `http://192.168.8.5:9002/healthz` (`TS_ENABLE_HEALTH_CHECK`; 200 while it has a tailnet IP) |
+  | Plex, Seerr, Wizarr | public URLs (no Access in front of them) |
+
+  The status page `status.nathanjn.com` is public by design; the dashboard needs the owner's login and MFA.
 - **Kopia**: the repository password is also the web UI password (`KOPIA_PASSWORD`). Rotating it means re-keying the
   repository. Do not rotate it casually.
 

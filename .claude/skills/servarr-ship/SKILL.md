@@ -105,5 +105,8 @@ MCP tools (`validate_config`, `lint_config`, `explain_config`, `test_package_rul
 - **Fixed** alerts must close through a rescan, never through dismissal: GitHub has no "fixed" dismiss reason, and
   "won't fix" mislabels them. The AI Scan repository scan has no schedule or API, so ask the owner to start it from
   Security > Code scanning after the fix deploys.
+- Linking an alert to a PR is web-UI only (alert page, Development, Link a pull request). The REST API rejects
+  `linked_pull_requests`, there is no endpoint or GraphQL mutation, and mentioning the alert URL in a PR doesn't link
+  it. Put the alert URLs in the PR description and ask the owner to link them.
 - Dismiss only real false positives (`false positive`) or risks the owner accepted (`won't fix`), always with a comment.
   Record accepted risks in `docs/TECH_DEBT.md`.
