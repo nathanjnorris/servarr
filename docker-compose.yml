@@ -381,8 +381,6 @@ services:
         - --disable-csrf-token-checks
         - --insecure
         - --address=0.0.0.0:51515
-        - --server-username=nathan
-        - --server-password=${KOPIA_PASSWORD}
       volumes:
         - /mnt/kopia:/tmp:shared
         - /home/nathan/kopia/config:/app/config
@@ -391,6 +389,10 @@ services:
         - /home/nathan/servarr/config:/data:ro
       environment:
         KOPIA_PASSWORD: ${KOPIA_PASSWORD}
+        # Web UI basic auth, passed as environment rather than command-line arguments so the password is not in
+        # the process list or the container command. The value is unchanged (it is not rotated).
+        KOPIA_SERVER_USERNAME: nathan
+        KOPIA_SERVER_PASSWORD: ${KOPIA_PASSWORD}
         TZ: Australia/Brisbane
         USER: "nathan"
       restart: "always"
