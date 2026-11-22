@@ -76,7 +76,7 @@ automatically.
 | `servarr-host` skill / `host-auditor` agent | live host health, diagnosis, post-deploy verification |
 | `servarr-cloudflare` skill | Cloudflare Terraform v5 changes and `cf` CLI verification |
 | `tailscale` skill (vendored, `skills-lock.json`) | tailnet, Tailscale SSH, GitHub Action `tag:gha` questions |
-| Terraform MCP (terraform plugin) | provider resource lookup before any config change. HCP tools need `TFE_TOKEN`. Never `create_run`/apply without the user's yes. |
+| Terraform MCP (terraform plugin) | provider resource lookup before any config change. With `TFE_TOKEN` it can also read TFC workspaces, runs and plan logs (org `nathanjnorris-org`). Its write tools are denied in `.claude/settings.json`: Terraform changes go through PRs only. |
 | Renovate MCP (`.mcp.json`, `npm i -g renovate-mcp`) | validate, lint and explain `renovate.json`. Never to run Renovate. |
 | `cf` CLI | read-only live Cloudflare checks (`cf cli search "<task>"` to discover commands) |
 | `gh` CLI | everything GitHub (the GitHub plugin's MCP server is not needed) |
