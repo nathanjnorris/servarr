@@ -428,7 +428,6 @@ services:
     container_name: uptime-kuma
     volumes:
       - /home/nathan/uptime-kuma/data:/app/data
-      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - default
       - docker_proxy
