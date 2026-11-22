@@ -99,7 +99,9 @@
       "mcp__plugin_terraform_terraform__update_team",
       "mcp__plugin_terraform_terraform__update_team_access",
       "mcp__plugin_terraform_terraform__update_variable_in_variable_set",
-      "mcp__plugin_terraform_terraform__update_variable_set"
+      "mcp__plugin_terraform_terraform__update_variable_set",
+      "mcp__plugin_terraform_terraform__cancel_run",
+      "mcp__plugin_terraform_terraform__discard_run"
     ]
   },
   "hooks": {
@@ -110,6 +112,18 @@
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/skills/servarr-doctor/scripts/doctor.sh\" --quick || true",
             "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "mcp__plugin_terraform_terraform__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/tfc-workspace-guard.sh\"",
+            "timeout": 10
           }
         ]
       }

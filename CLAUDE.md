@@ -89,12 +89,17 @@ TFC itself is **not** managed by HCL in this repo (no `hashicorp/tfe` provider).
 the `servarr` workspace in org `nathanjnorris-org` (id `ws-XG6CTSfjg3x13dv6`) is managed through the Terraform MCP:
 
 - **Allowed, on `servarr` only:** `update_workspace` (settings such as the Terraform version), workspace variables
-  (create, update, delete), workspace tags, lock/unlock, and cancel/discard of a stuck run. Never touch another
-  workspace, even if the token can.
+  (create, update, delete), workspace tags, lock/unlock. The org also holds `agentic-platform` and `tfc-agent`;
+  never touch them.
+- **Enforced** by the PreToolUse hook `.claude/hooks/tfc-workspace-guard.sh`. It blocks any mutating Terraform MCP
+  call unless the org is `nathanjnorris-org` and the workspace is `servarr` (name or `ws-XG6CTSfjg3x13dv6`). It also
+  blocks renames and fails closed on unknown argument shapes. Keep the hook if you change these tools.
 - **Denied in settings:**
   - `create_run`, `apply_run` and `action_run`. The workspace auto-applies, so a run would change Cloudflare and
     GitHub outside the PR and Plex-gated deploy path. Infrastructure changes stay PR → plan → merge → Deploy.
   - Creating or deleting workspaces, force-unlock, projects, teams, variable sets, policy sets and stacks.
+  - `cancel_run` and `discard_run`: they only take a run id, so the hook can't check which workspace the run belongs
+    to. The owner handles stuck runs in the TFC UI.
 - **Before a write:** read the current value first and tell the user the exact change. Get a yes for anything that
   affects runs: the Terraform version, execution or apply mode, or variables.
 - **Secret variables:**
