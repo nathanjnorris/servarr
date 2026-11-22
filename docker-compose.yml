@@ -396,6 +396,32 @@ services:
         TZ: Australia/Brisbane
         USER: "nathan"
       restart: "always"
+# Read-only view of the Docker API for Uptime Kuma's container monitors. Only container reads are allowed
+  # (CONTAINERS=1; every write endpoint such as POST, start, stop, exec and images stays off), and no port is
+  # published, so it is reachable only from containers on the compose network. In Uptime Kuma add a Docker host
+  # of type TCP with `http://docker-proxy:2375`, then repoint the Docker monitors at it.
+  docker-proxy:
+    image: tecnativa/docker-socket-proxy:v0.5.0
+    container_name: docker-proxy
+    # Kuma only calls GET /containers/json, so CONTAINERS is the only section left on. The image enables
+    # EVENTS, PING and VERSION by default, so they are switched off explicitly.
+    environment:
+      CONTAINERS: 1
+      EVENTS: 0
+      PING: 0
+      VERSION: 0
+      POST: 0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    read_only: true
+    # The entrypoint renders its HAProxy config into /tmp and writes runtime files under /run.
+    tmpfs:
+      - /run
+      - /tmp
+    # Only uptime-kuma can reach it: a dedicated internal network instead of the shared default one.
+    networks:
+      - docker_proxy
+    restart: always
 # Web monitoring
   uptime-kuma:
     image: louislam/uptime-kuma:2.5.12
@@ -403,11 +429,16 @@ services:
     volumes:
       - /home/nathan/uptime-kuma/data:/app/data
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - default
+      - docker_proxy
     # ports:
     #   - 3001:3001
     restart: always
 
 networks:
+  docker_proxy:
+    internal: true
   macvlan0:
     driver: macvlan
     driver_opts:
