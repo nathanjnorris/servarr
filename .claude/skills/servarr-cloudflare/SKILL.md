@@ -34,7 +34,7 @@ Verification pattern for any Access/tunnel change:
 | 12 Access applications (`cloudflare_zero_trust_access_application`) | Inline `policies` only (no reusable policies, no groups). Every app has a single "User auth" policy (`allow`, precedence 1, owner email). No service token is accepted: Uptime Kuma checks the apps directly on the Docker network (for example `http://gluetun:8989/ping`), not through Cloudflare. `http_only_cookie_attribute = true` on all 12 apps (AI Scan #10). |
 | Not behind Access | Plex, Seerr, Wizarr and Uptime Kuma (native auth; Kuma's status page is public by design). Home Assistant (`ha.`) uses an mTLS WAF rule (`require_ha_client_certificate`) with a dashboard-managed client certificate. |
 | Tunnel `servarr_tunnel` | `cloudflare_zero_trust_tunnel_cloudflared` plus `_config`; the token comes from data source `cloudflare_zero_trust_tunnel_cloudflared_token` and is pushed to the `SERVARR_TUNNEL_TOKEN` GitHub Actions secret by Terraform (`github.tf`). |
-| Service tokens | `github_actions`, `google_assistant`. The `uptime_kuma` token was removed on 2026-11-22 (AI Scan #13); do not reintroduce a token that bypasses Access for monitoring. |
+| Service tokens | `github_actions`, `google_assistant`. `uptime_kuma` is still declared but **no policy references it**: it's a temporary one-apply exception (#222) so the policy updates land before it's deleted. Only the follow-up PR, merged after #222 deploys, may remove it. Once deleted, don't reintroduce a token that bypasses Access for monitoring (AI Scan #13). |
 | Zone settings | one `cloudflare_zone_setting` per setting (8; `http3 = off` because of mTLS) |
 | Outside Terraform | the HA client certificate and its hostname association, zone SSL mode `flexible`, unrelated mail/Pages records (see `docs/NON_TERRAFORM_CONFIG.md`) |
 
@@ -44,6 +44,10 @@ Verification pattern for any Access/tunnel change:
   **replacement**: a new tunnel ID and token, which takes everything down. This is tracked in `docs/TECH_DEBT.md`.
 - Keep `http_host_header = ""` explicit in the tunnel config, and `is_robots_txt_managed = true` on bot management.
   Leaving these to defaults produces perpetual drift.
+- **Never remove a resource and its last references in the same PR.** For example, deleting a service token while also
+  removing it from Access policies: with no dependency edge left, Terraform runs the delete in parallel with the policy
+  updates, and Cloudflare rejects deleting an in-use token (`service_token_in_use`). That broke the #220 apply. Do it
+  in two PRs: first remove the references (keep the resource), apply, then delete the resource.
 - Removing a policy from an application makes Cloudflare garbage-collect it. Plan carefully, one app per PR when
   risky.
 - Resource names: `cloudflare_record` is now `cloudflare_dns_record`; zone settings moved from `zone_settings_override`
