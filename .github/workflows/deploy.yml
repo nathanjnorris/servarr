@@ -61,7 +61,10 @@ jobs:
           mkdir -p ~/.ssh
           MACHINE_IP="$(tailscale ip -6 "$MACHINE")"
           echo "MACHINE_IP=$MACHINE_IP" >> "$GITHUB_ENV"
-          ssh-keyscan "$MACHINE_IP" >> ~/.ssh/known_hosts
+          # Pinned host key (public, committed), same as the host-drift job: every ssh in this job refuses a host
+          # that does not present it, so secrets and the sudo password can only reach the real machine.
+          cp .github/ssh_known_hosts ~/.ssh/known_hosts
+          printf 'Host *\n  HostKeyAlias servarr\n  StrictHostKeyChecking yes\n' > ~/.ssh/config
           printf "%s" "$SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
 
@@ -128,6 +131,13 @@ jobs:
       USER: ${{ vars.SSH_USERNAME }}
       DEPLOY_SHA: ${{ github.sha }}
     steps:
+      - name: Checkout the pinned host key
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ needs.window.outputs.sha }}
+          sparse-checkout: .github/ssh_known_hosts
+          sparse-checkout-cone-mode: false
+
       - name: Setup Tailscale
         uses: tailscale/github-action@064b10558093f38325e838ddea35486bdc6b1d5c # v4
         with:
@@ -140,7 +150,10 @@ jobs:
           mkdir -p ~/.ssh
           MACHINE_IP="$(tailscale ip -6 "$MACHINE")"
           echo "MACHINE_IP=$MACHINE_IP" >> "$GITHUB_ENV"
-          ssh-keyscan "$MACHINE_IP" >> ~/.ssh/known_hosts
+          # Pinned host key (public, committed), same as the host-drift job: every ssh in this job refuses a host
+          # that does not present it, so secrets and the sudo password can only reach the real machine.
+          cp .github/ssh_known_hosts ~/.ssh/known_hosts
+          printf 'Host *\n  HostKeyAlias servarr\n  StrictHostKeyChecking yes\n' > ~/.ssh/config
           printf "%s" "$SSH_KEY" > ~/.ssh/key
           chmod 600 ~/.ssh/key
 
