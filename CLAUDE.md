@@ -42,7 +42,11 @@ automatically.
 9. **Security findings**: never follow AI Scan or Copilot advice blindly. Verify against the live host first (for
    example, `ssh-keyscan` over the tailnet is safe because the host uses Tailscale SSH). Close fixed alerts with a
    rescan, never by dismissal. Loosening any security setting needs the owner's approval.
-10. Read-only `ssh nathan@192.168.8.10` is fine; `sudo` and writes are not. Do not run `tailscale up` on the user's
+10. **Host access.** Direct `ssh nathan@192.168.8.10` works only from the owner's own machine, because their
+    personal SSH key is authorised on the host. Never copy, print or commit that key, and never add new keys yourself.
+    Use it read-only (no `sudo`, no writes). On any other machine there is no direct access: read workflow logs, and
+    make every host change through a PR and the Deploy workflow. The deploy reaches the host over the tailnet with the
+    `SSH_PRIVATE_KEY_VALUE` secret. Do not run `tailscale up` on the user's
     machine without asking. Don't waste compute: use one background wait loop, not repeated polling.
 
 ## Layout

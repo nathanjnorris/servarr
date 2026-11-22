@@ -10,6 +10,7 @@ Everything about the machine this repo deploys to that is **not** expressed in c
 | Address | `192.168.8.10` on the LAN; tailnet name `servarr` (Tailscale SSH, `RunSSH: true`) |
 | OS | Ubuntu 24.04 LTS |
 | Login | `nathan` (sudo needs a password; the deploy sends `SUDO_PASSWORD` on stdin) |
+| Who can SSH in | The owner's personal key, from their own machine (interactive and read-only use by Claude). The Deploy workflow uses the `SSH_PRIVATE_KEY_VALUE` secret over the tailnet as `tag:gha`. Nothing else. Without the owner's machine, the GitHub Actions deploy is the only way to change the host. |
 | Repo checkout | `/home/nathan/servarr` (deploys do a hard checkout of `main`; `.deployed-sha` marks the last good deploy) |
 | App config | `/home/nathan/servarr/config/<app>-config` (not in git); Kuma `/home/nathan/uptime-kuma/data`; Kopia `/home/nathan/kopia` |
 | Backups taken by hand | `/home/nathan/backups/<date>-<reason>/` |

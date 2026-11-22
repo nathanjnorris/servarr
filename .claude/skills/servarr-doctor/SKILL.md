@@ -25,7 +25,7 @@ prints tokens.
 | `docker` | `docker compose config -q`, the pinned terraform-docs image, the Terraform MCP server | README regeneration and Terraform MCP break. |
 | `shellcheck`, `actionlint` | Same checks as the required "Static checks" job | CI still checks. |
 | `cf` (Cloudflare CLI, `cf auth whoami`) | Read-only verification of Access apps, tunnels, DNS, zone settings | Use the Cloudflare dashboard via the user; never write with `cf`. |
-| `ssh nathan@192.168.8.10` | Read-only host inspection (`servarr-host` skill) | The host runs Tailscale SSH: be on the LAN or tailnet. Do not run `tailscale up` without asking. |
+| `ssh nathan@192.168.8.10` | Read-only host inspection (`servarr-host` skill) | Works only on the owner's machine (their personal key is authorised on the host; never copy or commit it). Elsewhere: no direct access. Read Actions logs and ship changes through a PR and the Deploy workflow. Do not run `tailscale up` without asking. |
 | `renovate-mcp` | Renovate MCP server: lint/explain/validate `renovate.json` | Edit `renovate.json` carefully by hand; never run Renovate itself. |
 | Terraform MCP (terraform plugin, Docker) | Provider resource lookup before any config change | Fall back to registry docs on the web; still record the lookup. |
 | `TFE_TOKEN` env var | Terraform MCP's HCP Terraform tools (workspaces, runs) | Registry tools still work; read runs with `plan-diff.sh` instead. |

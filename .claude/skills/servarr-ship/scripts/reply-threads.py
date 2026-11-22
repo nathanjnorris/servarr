@@ -21,9 +21,11 @@ def gh(*args):
 
 pr, replies = sys.argv[1], json.load(open(sys.argv[2]))
 q = """query($n:Int!){repository(owner:"nathanjnorris",name:"servarr"){pullRequest(number:$n){
-  reviewThreads(first:100){nodes{id isResolved comments(first:1){nodes{databaseId body}}}}}}}"""
-threads = [t for t in json.loads(gh("api", "graphql", "-f", "query=" + q, "-F", "n=" + pr))
-           ["data"]["repository"]["pullRequest"]["reviewThreads"]["nodes"] if not t["isResolved"]]
+  reviewThreads(first:100){pageInfo{hasNextPage} nodes{id isResolved comments(first:1){nodes{databaseId body}}}}}}}"""
+conn = json.loads(gh("api", "graphql", "-f", "query=" + q, "-F", "n=" + pr))["data"]["repository"]["pullRequest"]["reviewThreads"]
+if conn["pageInfo"]["hasNextPage"]:
+    sys.exit("More than 100 review threads: this script does not paginate; nothing posted")
+threads = [t for t in conn["nodes"] if not t["isResolved"]]
 if len(threads) != len(replies):
     sys.exit(f"{len(threads)} unresolved threads but {len(replies)} replies; nothing posted")
 

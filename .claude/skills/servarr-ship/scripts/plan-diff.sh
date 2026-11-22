@@ -14,9 +14,9 @@ conclusion() {
   gh api "repos/$REPO/commits/$head/check-runs" \
     --jq '[.check_runs[]|select(.name=="Terraform plan" and .status=="completed")|.conclusion]|first // empty'
 }
-until c=$(conclusion) && [ -n "$c" ] && [ "$c" != skipped ]; do sleep 20; done
+until c=$(conclusion) && [ -n "$c" ]; do sleep 20; done
 echo "Terraform plan check on ${head:0:7}: $c"
-[ "$c" = success ] || { echo "Plan did not succeed; read the job log: gh run view --log-failed"; exit 1; }
+[ "$c" = success ] || { echo "Plan did not succeed ($c). skipped = no Terraform change detected, or the README/fmt job failed first; otherwise read the job log: gh run view --log-failed"; exit 1; }
 
 job=$(gh api "repos/$REPO/commits/$head/check-runs" --jq '[.check_runs[]|select(.name=="Terraform plan")][0].id')
 run=$(gh api "repos/$REPO/actions/jobs/$job/logs" | grep -oE 'runs/run-[A-Za-z0-9]+' | head -1 | sed 's|runs/||')

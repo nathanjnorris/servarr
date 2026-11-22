@@ -9,7 +9,10 @@
     "superpowers@claude-plugins-official": true
   },
   "enableAllProjectMcpServers": false,
-  "enabledMcpjsonServers": ["renovate", "tailscale-docs"],
+  "enabledMcpjsonServers": [
+    "renovate",
+    "tailscale-docs"
+  ],
   "permissions": {
     "allow": [
       "Bash(bash .claude/skills/servarr-doctor/scripts/doctor.sh:*)",
@@ -46,13 +49,16 @@
     "deny": [
       "Read(./.env)",
       "Read(./.env.*)",
-      "Bash(git push --force:*)",
-      "Bash(git push -f:*)",
       "Bash(git add -A:*)",
       "Bash(renovate:*)",
       "Bash(npx renovate:*)",
-      "Bash(tailscale up:*)",
-      "mcp__plugin_terraform_terraform__create_run"
+      "mcp__plugin_terraform_terraform__create_run",
+      "Bash(git push*--force*)",
+      "Bash(git push* -f*)",
+      "Bash(git push*+*)",
+      "Bash(*tailscale up*)",
+      "Bash(*tailscale down*)",
+      "Bash(*tailscale set*)"
     ]
   },
   "hooks": {

@@ -75,7 +75,7 @@ if ssh -o BatchMode=yes -o ConnectTimeout=8 "nathan@$HOST" true 2>/dev/null; the
   check "host checkout == .deployed-sha" warn "host HEAD differs from .deployed-sha (deploy pending or failed?)" -- \
     ssh -o BatchMode=yes "nathan@$HOST" 'cd servarr && test "$(git rev-parse HEAD)" = "$(cat .deployed-sha)"'
 else
-  miss "ssh nathan@$HOST failed: the host uses Tailscale SSH, so this machine must be on the LAN or the tailnet and allowed by the tailnet SSH policy (try: tailscale status; ssh nathan@servarr)"
+  warn "ssh nathan@$HOST failed. Direct SSH only works from the owner's own machine (their personal SSH key is authorised on the host; never copy or commit it). Without it there is NO direct host access: inspect via workflow logs and ship every host change through a PR and the Deploy workflow"
 fi
 
 echo "== Claude Code extensions"
@@ -93,6 +93,8 @@ if have claude; then
   for p in terraform commit-commands pr-review-toolkit claude-md-management superpowers; do
     if grep -q "$p@" <<<"$plugins"; then ok "plugin $p"; else miss "plugin $p: accept the plugin prompt from .claude/settings.json, or claude plugin install $p@<marketplace>"; fi
   done
+else
+  warn "claude CLI not on PATH: MCP servers and plugins could not be checked (run 'claude mcp list' and 'claude plugin list' by hand)"
 fi
 
 [ "$missing" = 0 ] && echo "All required tooling present." || echo "Fix the MISSING items above before maintaining servarr."

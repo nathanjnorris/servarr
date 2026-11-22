@@ -9,6 +9,9 @@ Host facts, hand-applied settings and app-DB settings are in `docs/HOST.md`. Rea
 
 ## Golden rules
 
+- **SSH access exists only on the owner's machine.** It works because the owner's personal SSH key is authorised on
+  the host. Never copy, print or commit it, and never add keys. If `ssh nathan@192.168.8.10 true` fails, you have
+  no host access: use Actions logs (`gh run view --log`), and ship every change via a PR and the Deploy workflow.
 - **SSH is read-only.** `ssh nathan@192.168.8.10 '<command>'` is for looking. Every host change goes through a PR:
   `setup.sh` (runs as root on every deploy), `docker-compose.yml`, or a script the deploy runs. If something truly can
   only be done by hand with sudo, write the exact idempotent commands for the user to paste. Do not run sudo yourself.
