@@ -50,7 +50,7 @@ docker run --rm -v "$PWD":/w -w /w \
 ## 4. Gates (ruleset 8276307 on `main`, no bypass actors)
 
 Required: `Terraform plan`, `Static checks`, `Review replies` status (waits for the Copilot review, CodeQL and the AI
-Scan PR review check `github-advanced-security`, whose findings arrive as review threads), CodeQL, all threads resolved,
+Scan PR review check `github-advanced-security`, whose findings arrive as review threads), CodeQL, Copilot review, all threads resolved,
 branch up to date (strict). Each merge puts the other open PRs BEHIND.
 
 1. **Read the plan.** `bash .claude/skills/servarr-ship/scripts/plan-diff.sh <pr> <pushed-sha>`. Check every change:
