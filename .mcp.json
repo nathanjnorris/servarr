@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "renovate": {
+      "type": "stdio",
+      "command": "renovate-mcp",
+      "args": []
+    },
+    "tailscale-docs": {
+      "type": "http",
+      "url": "https://tailscale.mcp.kapa.ai/"
+    }
+  }
+}

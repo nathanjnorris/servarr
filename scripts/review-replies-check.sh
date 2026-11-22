@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # Publishes the "Review replies" commit status for ONE pull request and exits 1 only if that PR is in "failure".
 #   GH_TOKEN=... GITHUB_REPOSITORY=owner/repo [WAIT_MINUTES=15] bash scripts/review-replies-check.sh <pr-number> <head-sha>
-# States: pending  = Copilot has not reviewed yet, or CodeQL has not finished (blocks merge, not an error)
+# States: pending  = Copilot has not reviewed yet, or CodeQL / the AI Scan PR review ("github-advanced-security" check
+#                    run, which posts its findings as review threads) has not finished (blocks merge, not an error)
 #         failure  = a resolved review thread has no comment from anyone but its opener
-#         success  = Copilot reviewed, CodeQL finished, every resolved thread has a reply
+#         success  = Copilot reviewed, CodeQL finished, AI Scan PR review succeeded, every resolved thread has a reply
 # With WAIT_MINUTES > 0 (the pull_request job) a pending state is re-checked every 30 seconds until it resolves or the
-# time is up, so the status flips as soon as CodeQL or Copilot finishes instead of waiting for the next sweep.
+# time is up, so the status flips as soon as CodeQL, the AI Scan or Copilot finishes instead of waiting for the next sweep.
 # Any API/jq error aborts with a non-zero exit and posts state=error first (fails closed).
 set -euo pipefail
 
@@ -40,9 +41,20 @@ is_dependency_bot() {
   [[ "$author" =~ ^(dependabot|renovate)\[bot\]$ ]]
 }
 
+# Collapses a list of check-run statuses into missing | running | finished.
+scan_state() {
+  local statuses
+  statuses=$(sort -u <<<"$1" | sed '/^$/d' | tr '\n' ' ')
+  case "$statuses" in
+    "") echo missing ;;
+    "completed ") echo finished ;;
+    *) echo running ;;
+  esac
+}
+
 # Sets: state, desc
 evaluate() {
-  local unanswered copilot scanning bot=0
+  local unanswered copilot scanning ai_scan runs bot=0
   if is_dependency_bot; then bot=1; fi
   # shellcheck disable=SC2016  # $o/$r/$n/$endCursor are GraphQL variables, not shell
   unanswered=$(gh api graphql --paginate -f query='
@@ -63,18 +75,30 @@ evaluate() {
     -f o="$owner" -f r="$repo" -F n="$pr" \
     --jq '.data.repository.pullRequest.reviews.nodes[].author | select(.__typename == "Bot" and .login == "copilot-pull-request-reviewer") | .login' | wc -l | tr -d ' ')
 
-  scanning=$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$sha/check-runs?per_page=100" \
-    --jq '.check_runs[] | select(.name == "CodeQL" or (.name | startswith("Analyze"))) | .status' | sort -u | tr '\n' ' ')
-  case "$scanning" in
-    "") scanning=missing ;;
-    "completed ") scanning=finished ;;
-    *) scanning=running ;;
-  esac
+  runs=$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$sha/check-runs?per_page=100" --jq '.check_runs[] | "\(.name)\t\(.status)"')
+  scanning=$(scan_state "$(awk -F'\t' '$1 == "CodeQL" || $1 ~ /^Analyze/ {print $2}' <<<"$runs")")
+  # AI Scan PR review: it posts findings as review threads and stays silent when it finds nothing, so it must be
+  # seen to run AND succeed. It is identified by its GitHub-created dynamic workflow (event=dynamic, fixed path),
+  # which a workflow file in a PR cannot impersonate; matching the check-run name alone could be spoofed by any job
+  # called "github-advanced-security". The newest run on the head commit counts.
+  ai_scan=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$sha&event=dynamic&per_page=100" \
+    --jq '[.workflow_runs[] | select(.path == "dynamic/agents/github-advanced-security")] | first
+          | if . == null then "missing"
+            elif .status != "completed" then "running"
+            elif (.conclusion == "success" or .conclusion == "neutral") then "finished"
+            else "failed (\(.conclusion))" end')
 
   if [ "$bot" = 0 ] && [ "$copilot" = "0" ]; then
     state=pending; desc="Waiting for the Copilot review"
   elif [ "$bot" = 0 ] && [ "$scanning" != "finished" ]; then
     state=pending; desc="Waiting for CodeQL ($scanning)"
+  elif [ "$bot" = 0 ] && [ "$ai_scan" != "finished" ]; then
+    case "$ai_scan" in
+      missing) desc="AI Scan PR review has not run on this commit; push a commit (for example merge main) to trigger it" ;;
+      running) desc="Waiting for the AI Scan PR review" ;;
+      *) desc="AI Scan PR review $ai_scan; re-run it from the PR's checks" ;;
+    esac
+    state=pending
   elif [ -n "$unanswered" ]; then
     state=failure
     desc="Resolved without a reply: $(echo "$unanswered" | sort -u | tr '\n' ' ' | cut -c1-100)"
@@ -82,7 +106,7 @@ evaluate() {
     if [ "$bot" = 1 ]; then
       state=success; desc="Dependency bot PR: no unanswered resolved threads (Copilot and CodeQL do not apply)"
     else
-      state=success; desc="Copilot reviewed, CodeQL done, every resolved thread has a reply"
+      state=success; desc="Copilot reviewed, CodeQL and AI Scan done, every resolved thread has a reply"
     fi
   fi
 }

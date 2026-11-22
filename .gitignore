@@ -42,3 +42,8 @@ terraform.rc
 
 __pycache__/
 *.pyc
+
+# Claude Code: per-machine files (shared config lives in .claude/settings.json, .mcp.json, CLAUDE.md)
+.claude/settings.local.json
+.claude/worktrees/
+.remember/

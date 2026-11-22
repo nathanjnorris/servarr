@@ -5,8 +5,9 @@ name: Review replies
 # GitHub has no native "must reply" rule, so scripts/review-replies-check.sh publishes a commit status
 # "Review replies" on the PR head commit, and the ruleset requires that status.
 #
-# The status stays PENDING (blocking merge) until Copilot has reviewed the PR and CodeQL has finished, so it can
-# never pass just because nobody has looked yet. Copilot reviews once when the PR opens (review_on_push is off in
+# The status stays PENDING (blocking merge) until Copilot has reviewed the PR, CodeQL has finished and the AI Scan
+# PR review (GitHub's dynamic "github-advanced-security" workflow, silent when clean) has run and succeeded, so it
+# can never pass just because nobody has looked yet. Dependency-bot PRs are exempt from those three waits. Copilot reviews once when the PR opens (review_on_push is off in
 # the ruleset), so "reviewed" means at least one Copilot review exists on the PR.
 #
 # Triggers: the PR itself (opened/pushed) and a 5-minute sweep that refreshes every open PR, so a Copilot review, a

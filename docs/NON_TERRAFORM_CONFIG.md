@@ -19,3 +19,7 @@ Not enforceable by script (UI or no API), noted so they are not forgotten:
 | Scan for AI applications | organisation-level setting | not available on a personal-account repo |
 
 When a newer provider version adds a resource for one of these, move it into Terraform and delete its row.
+
+Cloudflare dashboard-only items (HA client certificate and hostname association, zone SSL mode) and settings that live in
+application databases on the host (qBittorrent whitelist, arr auth, Pushbullet, Plex optimise jobs, Kuma monitors) are
+listed in `HOST.md`.
