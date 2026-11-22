@@ -2,7 +2,7 @@
 # Idempotent: makes the GitHub repo settings that Terraform CANNOT manage match what is declared here.
 # Run by the deploy workflow on every deployment (job "Settings Terraform cannot manage"), and safe to run by hand:
 #   GH_TOKEN=<token> bash scripts/github-settings.sh
-# Only PATCHes when the live value differs. Every entry here must also be listed in NON_TERRAFORM_CONFIG.md.
+# Only PATCHes when the live value differs. Every entry here must also be listed in docs/NON_TERRAFORM_CONFIG.md.
 # Before adding anything, check the Terraform GitHub provider first (Terraform MCP: search_providers) and prefer a resource.
 set -euo pipefail
 

@@ -189,7 +189,7 @@ jobs:
 
   github_settings:
     name: Settings Terraform cannot manage
-    # Idempotent script (scripts/github-settings.sh), tracked in NON_TERRAFORM_CONFIG.md. Runs after the apply
+    # Idempotent script (scripts/github-settings.sh), tracked in docs/NON_TERRAFORM_CONFIG.md. Runs after the apply
     # so it never races Terraform, and does not touch the host or Plex.
     needs: [window, terraform_apply]
     if: needs.window.outputs.run == 'true'
