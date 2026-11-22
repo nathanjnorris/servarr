@@ -14,7 +14,12 @@ conclusion() {
   gh api "repos/$REPO/commits/$head/check-runs" \
     --jq '[.check_runs[]|select(.name=="Terraform plan" and .status=="completed")|.conclusion]|first // empty'
 }
-until c=$(conclusion) && [ -n "$c" ]; do sleep 20; done
+gh api "repos/$REPO/commits/$head" --jq .sha >/dev/null || { echo "Commit $head not found on GitHub (not pushed? typo?)"; exit 1; }
+deadline=$(( $(date +%s) + 1800 ))
+until c=$(conclusion) && [ -n "$c" ]; do
+  [ "$(date +%s)" -lt "$deadline" ] || { echo "No completed Terraform plan on ${head:0:7} after 30 minutes"; exit 1; }
+  sleep 20
+done
 echo "Terraform plan check on ${head:0:7}: $c"
 [ "$c" = success ] || { echo "Plan did not succeed ($c). skipped = no Terraform change detected, or the README/fmt job failed first; otherwise read the job log: gh run view --log-failed"; exit 1; }
 

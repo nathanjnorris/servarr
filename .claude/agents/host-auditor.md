@@ -17,7 +17,9 @@ Read `docs/HOST.md` and `.claude/skills/servarr-host/SKILL.md` first, then:
 3. Check the public endpoints without credentials:
    - `status.nathanjn.com` should redirect (302) to the public status page.
    - An Access-protected app should redirect to `*.cloudflareaccess.com`.
-   - Anything that answers 200 without Access, other than Plex, Seerr, Wizarr, Kuma or HA, is a finding.
+   - `ha.nathanjn.com` without a client certificate must be blocked by the mTLS WAF rule (expect 403). A 200 is a
+     FAIL.
+   - Anything that answers 200 without Access, other than Plex, Seerr, Wizarr or Kuma (native login), is a finding.
 4. Check for open "Deploy failed", drift or secrets issues (`gh issue list`) and open code-scanning alerts
    (`gh api 'repos/nathanjnorris/servarr/code-scanning/alerts?state=open'`).
 

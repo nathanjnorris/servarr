@@ -61,12 +61,12 @@ branch up to date (strict). Each merge puts the other open PRs BEHIND.
    `bash .claude/skills/servarr-ship/scripts/threads.sh <pr>`. Copilot findings are often
    right. Verify each one against the code or the live system, then fix it or explain why not. Do not agree just to
    be agreeable.
-3. **Answer every thread, then resolve it:** write the replies (one per unresolved thread, in order) to a JSON list and
-   run `python3 .claude/skills/servarr-ship/scripts/reply-threads.py <pr> replies.json`. It uses REST and confirms
+3. **Answer every thread, then resolve it:** write a JSON object mapping each unresolved thread's `id=` (from
+   `threads.sh`) to its reply, and run `python3 .claude/skills/servarr-ship/scripts/reply-threads.py <pr> replies.json`. It uses REST and confirms
    there are 0 PENDING reviews. Resolving without replying fails the `Review replies` gate.
 4. Merge when `mergeStateStatus` is `CLEAN`: `gh pr merge <n> --squash --subject "<conventional title> (#<n>)" --body ""`.
 
-Dependency bots (Renovate) are exempt from the Copilot/CodeQL wait but still need a green plan and Static checks.
+Dependency bots (Renovate) are exempt from the Copilot, CodeQL and AI Scan waits (AI Scan does not run on their PRs) but still need a green plan and Static checks.
 
 ## 5. Watch the deploy
 

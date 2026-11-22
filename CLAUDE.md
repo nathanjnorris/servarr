@@ -22,7 +22,7 @@ automatically.
    There is no maintenance window; the check is the gate. Never force a deploy past it.
 2. **Never skip the Terraform plan check**, for any actor. Fix the token or the cause instead.
 3. **Never merge** with unresolved review threads, or without reading every Copilot and human review. Reply to each
-   thread (REST, see `servarr-ship`) before resolving it. Dependency-bot PRs skip the Copilot/CodeQL wait only.
+   thread (REST, see `servarr-ship`) before resolving it. Dependency-bot PRs skip only the Copilot, CodeQL and AI Scan waits.
 4. **Do not edit Maintainerr without approval. Do not edit the Plex DB** (use the Plex API). Do not write to the Uptime
    Kuma SQLite DB (read-only inspection; the owner edits monitors in the UI). Back up before any change. Test before
    and after.

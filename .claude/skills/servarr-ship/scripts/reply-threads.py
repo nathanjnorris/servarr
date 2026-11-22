@@ -3,7 +3,9 @@
 
     python3 .claude/skills/servarr-ship/scripts/reply-threads.py <pr> <replies.json>
 
-replies.json is a JSON list of strings, one per unresolved thread, in the order threads.sh prints them.
+replies.json maps each unresolved thread's first-comment id (the `id=` that threads.sh prints) to the reply:
+    {"4656168391": "Fixed in abc123: ...", "4656168403": "Not changed because ..."}
+Every unresolved thread needs an entry and every entry must match an unresolved thread; otherwise nothing is posted.
 Replies go through the REST endpoint (POST /pulls/{pr}/comments/{id}/replies). Do NOT use GraphQL
 addPullRequestReviewThreadReply: it files the reply into an unsubmitted PENDING review that nobody else can see,
 and the "Review replies" gate then fails. Afterwards the script checks that no PENDING review remains.
@@ -25,11 +27,16 @@ q = """query($n:Int!){repository(owner:"nathanjnorris",name:"servarr"){pullReque
 conn = json.loads(gh("api", "graphql", "-f", "query=" + q, "-F", "n=" + pr))["data"]["repository"]["pullRequest"]["reviewThreads"]
 if conn["pageInfo"]["hasNextPage"]:
     sys.exit("More than 100 review threads: this script does not paginate; nothing posted")
-threads = [t for t in conn["nodes"] if not t["isResolved"]]
-if len(threads) != len(replies):
-    sys.exit(f"{len(threads)} unresolved threads but {len(replies)} replies; nothing posted")
+if not isinstance(replies, dict):
+    sys.exit("replies.json must be an object keyed by first-comment id (see threads.sh); nothing posted")
+threads = {str(t["comments"]["nodes"][0]["databaseId"]): t for t in conn["nodes"] if not t["isResolved"]}
+unknown, unanswered = set(replies) - set(threads), set(threads) - set(replies)
+if unknown or unanswered:
+    sys.exit(f"ids not matching an unresolved thread: {sorted(unknown)}; unresolved threads without a reply: "
+             f"{sorted(unanswered)}. Re-run threads.sh; nothing posted")
 
-for thread, body in zip(threads, replies):
+for cid, body in replies.items():
+    thread = threads[cid]
     first = thread["comments"]["nodes"][0]
     gh("api", "-X", "POST", f"repos/{REPO}/pulls/{pr}/comments/{first['databaseId']}/replies", "-f", "body=" + body)
     gh("api", "graphql", "-f", "query=mutation($id:ID!){resolveReviewThread(input:{threadId:$id}){thread{isResolved}}}",

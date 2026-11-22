@@ -90,7 +90,7 @@ if have claude; then
     esac
   done
   plugins=$(claude plugin list 2>/dev/null)
-  for p in terraform commit-commands pr-review-toolkit claude-md-management superpowers; do
+  for p in terraform commit-commands pr-review-toolkit claude-md-management security-guidance superpowers; do
     if grep -q "$p@" <<<"$plugins"; then ok "plugin $p"; else miss "plugin $p: accept the plugin prompt from .claude/settings.json, or claude plugin install $p@<marketplace>"; fi
   done
 else
