@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "enabledPlugins": {
+    "terraform@anthropic-plugin-directory": true,
+    "commit-commands@anthropic-plugin-directory": true,
+    "pr-review-toolkit@anthropic-plugin-directory": true,
+    "claude-md-management@anthropic-plugin-directory": true,
+    "security-guidance@anthropic-plugin-directory": true,
+    "superpowers@claude-plugins-official": true
+  },
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": ["renovate", "tailscale-docs"],
+  "permissions": {
+    "allow": [
+      "Bash(bash .claude/skills/servarr-doctor/scripts/doctor.sh:*)",
+      "Bash(bash .claude/skills/servarr-ship/scripts/threads.sh:*)",
+      "Bash(bash .claude/skills/servarr-ship/scripts/plan-diff.sh:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git fetch:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh run watch:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue view:*)",
+      "Bash(terraform fmt:*)",
+      "Bash(terraform validate:*)",
+      "Bash(docker compose config:*)",
+      "Bash(shellcheck:*)",
+      "Bash(actionlint:*)",
+      "Bash(cf cli search:*)",
+      "Bash(cf zero-trust access applications list:*)",
+      "Bash(cf tunnels list:*)",
+      "mcp__plugin_terraform_terraform__search_providers",
+      "mcp__plugin_terraform_terraform__get_provider_capabilities",
+      "mcp__plugin_terraform_terraform__get_provider_details",
+      "mcp__plugin_terraform_terraform__get_latest_provider_version",
+      "mcp__renovate__validate_config",
+      "mcp__renovate__lint_config",
+      "mcp__renovate__explain_config"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git add -A:*)",
+      "Bash(renovate:*)",
+      "Bash(npx renovate:*)",
+      "Bash(tailscale up:*)",
+      "mcp__plugin_terraform_terraform__create_run"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/skills/servarr-doctor/scripts/doctor.sh\" --quick || true",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}
