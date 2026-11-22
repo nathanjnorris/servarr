@@ -4,7 +4,7 @@ name: Scheduled checks
 # (GitHub mobile pushes it) when something needs attention:
 #   terraform_drift  speculative plan: live Cloudflare/GitHub/etc. no longer match the code
 #   host_drift       the media host no longer matches the repo (scripts/host-drift.sh)
-#   secrets_expiry   a secret in SECRETS.md is due for rotation within 30 days
+#   secrets_expiry   a secret in docs/SECRETS.md is due for rotation within 30 days
 # Run it by hand from the Actions tab after changing any of them.
 
 on:
@@ -134,7 +134,7 @@ jobs:
         id: check
         run: |
           set +e
-          bash scripts/secrets-expiry-check.sh SECRETS.md | tee /tmp/due.txt
+          bash scripts/secrets-expiry-check.sh docs/SECRETS.md | tee /tmp/due.txt
           status=${PIPESTATUS[0]}
           {
             echo "report<<EOF"
@@ -151,13 +151,13 @@ jobs:
           OWNER: ${{ github.repository_owner }}
         run: |
           title="Secrets need rotating or confirming"
-          body="@${OWNER} these secrets in SECRETS.md need attention:
+          body="@${OWNER} these secrets in docs/SECRETS.md need attention:
 
           \`\`\`
           ${REPORT}
           \`\`\`
 
-          Rotation steps are in SECRETS.md. Update the row's date when done."
+          Rotation steps are in docs/SECRETS.md. Update the row's date when done."
           existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$title\" in:title" --json number --jq '.[0].number // empty')
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "$body"

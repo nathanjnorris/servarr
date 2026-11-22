@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Reads the inventory table in SECRETS.md and reports any secret whose "Review by" date is within
+# Reads the inventory table in docs/SECRETS.md and reports any secret whose "Review by" date is within
 # WARN_DAYS (default 30) or already past, and any row whose date is not a real date.
 # Exit 0: nothing due. Exit 1: something is due (report on stdout). Read-only.
 set -euo pipefail
 
-FILE="${1:-SECRETS.md}"
+FILE="${1:-docs/SECRETS.md}"
 WARN_DAYS="${WARN_DAYS:-30}"
 [ -r "$FILE" ] || { echo "ERROR: cannot read $FILE"; exit 2; }
 rows=$(grep -cE '^\| `' "$FILE" || true)
