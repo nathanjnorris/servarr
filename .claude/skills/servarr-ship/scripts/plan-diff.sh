@@ -8,7 +8,8 @@ set -euo pipefail
 REPO=nathanjnorris/servarr
 pr=${1:?pr number}
 head=${2:-$(gh pr view "$pr" -R "$REPO" --json headRefOid --jq .headRefOid)}
-out=${TMPDIR:-/tmp}/servarr-plan-$pr-${head:0:7}.json
+umask 077   # the plan JSON holds infrastructure identifiers: keep it private to this user
+out=$(mktemp "${TMPDIR:-/tmp}/servarr-plan-$pr-XXXXXX")
 
 conclusion() {
   gh api "repos/$REPO/commits/$head/check-runs" \

@@ -41,7 +41,7 @@ for cid, body in replies.items():
     gh("api", "-X", "POST", f"repos/{REPO}/pulls/{pr}/comments/{first['databaseId']}/replies", "-f", "body=" + body)
     gh("api", "graphql", "-f", "query=mutation($id:ID!){resolveReviewThread(input:{threadId:$id}){thread{isResolved}}}",
        "-f", "id=" + thread["id"])
-    print("replied + resolved:", first["body"][:70].replace("\n", " "))
+    print("replied + resolved: thread", cid)
 
 pending = gh("api", "graphql", "-F", "n=" + pr, "-f",
              'query=query($n:Int!){repository(owner:"nathanjnorris",name:"servarr"){pullRequest(number:$n){'
