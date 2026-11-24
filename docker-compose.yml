@@ -320,7 +320,7 @@ services:
     restart: always
 
   home-assistant:
-    image: ghcr.io/linuxserver/homeassistant:2026.11.2-ls267
+    image: ghcr.io/linuxserver/homeassistant:2026.11.3-ls268
     container_name: home-assistant
     network_mode: host
     environment:
