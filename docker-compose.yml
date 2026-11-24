@@ -267,7 +267,7 @@ services:
     restart: always
 # Networking
   cloudflared:
-    image: cloudflare/cloudflared:2026.11.1
+    image: cloudflare/cloudflared:2026.11.2
     container_name: cloudflared
     command: tunnel run --protocol http2
     extra_hosts:
