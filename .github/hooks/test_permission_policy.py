@@ -85,6 +85,23 @@ class Paths(unittest.TestCase):
         self.assertIsNone(decide({"tool_name": "Read", "tool_input": {"path": os.path.join(ROOT, "README.md")}}))
 
 
+class ToolAliases(unittest.TestCase):
+    def test_shell_aliases(self):
+        for name in ["bash", "execute", "shell", "powershell", "Execute"]:
+            self.assertEqual(decide({"tool_name": name, "tool_input": {"command": "git add -A"}}), "deny", name)
+
+    def test_read_aliases(self):
+        for name in ["view", "read", "Read"]:
+            self.assertEqual(decide({"tool_name": name, "tool_input": {"path": ".env"}}), "deny", name)
+        for name in ["rg", "grep", "search"]:
+            self.assertEqual(decide({"tool_name": name, "tool_input": {"pattern": "x", "paths": [".env"]}}), "deny",
+                             name)
+        self.assertEqual(decide({"tool_name": "glob", "tool_input": {"pattern": ".env*"}}), "deny")
+
+    def test_camel_case_runtime_name(self):
+        self.assertEqual(decide({"toolName": "bash", "toolArgs": {"command": "git add -A"}}), "deny")
+
+
 class Mcp(unittest.TestCase):
     def test_renovate(self):
         self.assertEqual(decide({"tool_name": "renovate-validate_config", "tool_input": {}}), "allow")

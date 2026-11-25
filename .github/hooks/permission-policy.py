@@ -38,6 +38,10 @@ FLAG_ARGS = {"sudo": {"-u", "-g", "-C", "-h", "-p", "-D", "-r", "-t", "-U"},
 # Package runners: "<runner> <sub> [flags] <tool>" runs <tool>, so "pnpm dlx renovate" is a renovate command.
 RUNNER_SUBCOMMANDS = {"npm": {"exec", "x"}, "pnpm": {"dlx", "exec"}, "yarn": {"dlx", "exec"}}
 READ_LIKE = ("Read", "Grep", "Glob")
+# Copilot reports Claude tool names for the PascalCase PreToolUse event, but runtime names (camelCase event) and
+# custom-agent aliases must hit the same rules.
+TOOL_ALIASES = {"bash": "Bash", "powershell": "Bash", "shell": "Bash", "execute": "Bash", "view": "Read",
+                "read": "Read", "grep": "Grep", "rg": "Grep", "search": "Grep", "glob": "Glob"}
 
 
 def emit(decision=None, reason=""):
@@ -194,6 +198,7 @@ def allowed(rule, tool, args):
 def main(raw):
     event = json.loads(raw)
     tool = event.get("tool_name") or event.get("toolName") or ""
+    tool = TOOL_ALIASES.get(tool.lower(), tool)
     args = event.get("tool_input", event.get("toolArgs")) or {}
     if isinstance(args, str):
         try:
