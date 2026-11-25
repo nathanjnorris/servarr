@@ -43,7 +43,8 @@ docker run --rm -v "$PWD":/w -w /w \
 - Conventional Commits on the PR title **and** every commit: `feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert`,
   optional `(scope)`, optional `!`. Enforced by `scripts/conventional-check.sh` in Static checks.
 - `git add <explicit paths>`; never `git add -A` (local-only docs and tool dirs sit in the tree).
-- End commits with the Co-Authored-By trailer the harness gives you. End PR bodies with the Claude Code line.
+- End commits with the Co-Authored-By trailer the harness gives you, and PR bodies with its attribution line (Claude
+  Code or GitHub Copilot).
 - Never force-push an open PR branch. Merge `main` in instead (`gh pr update-branch <n>` is fine on your own PRs).
 - Terraform or Docker **major** upgrades: assign the PR to `nathanjnorris` and tell the user.
 

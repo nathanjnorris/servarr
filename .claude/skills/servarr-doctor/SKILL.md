@@ -9,11 +9,12 @@ Run the check and report what is missing to the user, with the fix for each item
 
 ```bash
 bash .claude/skills/servarr-doctor/scripts/doctor.sh          # full: logins, TFC token, host SSH, MCP, plugins
-bash .claude/skills/servarr-doctor/scripts/doctor.sh --quick  # presence only (the SessionStart hook runs this)
+bash .claude/skills/servarr-doctor/scripts/doctor.sh --quick  # presence only (the session-start hooks run this)
 ```
 
 `MISSING` blocks maintenance work. `warn` limits it (say what is degraded). The script is read-only and never
-prints tokens.
+prints tokens. `! <command>` below means: ask the user to run it themselves (Claude Code and Copilot CLI accept the
+`!` prefix in the prompt; in VS Code they use the terminal).
 
 ## What each tool is for, and what to do without it
 
@@ -27,10 +28,11 @@ prints tokens.
 | `cf` (Cloudflare CLI, `cf auth whoami`) | Read-only verification of Access apps, tunnels, DNS, zone settings | Use the Cloudflare dashboard via the user; never write with `cf`. |
 | `ssh nathan@192.168.8.10` | Read-only host inspection (`servarr-host` skill) | Works only on the owner's machine (their personal key is authorised on the host; never copy or commit it). Elsewhere: no direct access. Read Actions logs and ship changes through a PR and the Deploy workflow. Do not run `tailscale up` without asking. |
 | `renovate-mcp` | Renovate MCP server: lint/explain/validate `renovate.json` | Edit `renovate.json` carefully by hand; never run Renovate itself. |
-| Terraform MCP (terraform plugin, Docker) | Provider resource lookup before any config change | Fall back to registry docs on the web; still record the lookup. |
-| `TFE_TOKEN` env var | Terraform MCP's HCP Terraform tools: reads, plus managing the `servarr` workspace (rules in CLAUDE.md, "Terraform Cloud workspace") | Add to `~/.zshrc`: `export TFE_TOKEN="$(jq -r '.credentials["app.terraform.io"].token // empty' ~/.terraform.d/credentials.tfrc.json)"`. Then quit **every** Claude Code session, background jobs included: they run under a daemon that keeps the environment it started with. Run `claude` from a new terminal; the desktop app doesn't read `.zshrc` either. Test with the MCP `list_workspaces` for `nathanjnorris-org`. Never put the token in settings.json or .mcp.json. Without it, registry tools still work; read runs with `plan-diff.sh`. |
+| Terraform MCP (terraform plugin, Docker) | Provider resource lookup before any config change. Claude Code enables the plugin in `.claude/settings.json`; Copilot in `.github/copilot/settings.json`, through the pinned in-repo marketplace `.github/plugin/marketplace.json` | Fall back to registry docs on the web; still record the lookup. |
+| `TFE_TOKEN` env var | Terraform MCP's HCP Terraform tools: reads, plus managing the `servarr` workspace (rules in CLAUDE.md, "Terraform Cloud workspace") | Add to `~/.zshrc`: `export TFE_TOKEN="$(jq -r '.credentials["app.terraform.io"].token // empty' ~/.terraform.d/credentials.tfrc.json)"`. Then restart the agent so it inherits it. Claude Code: quit **every** session, background jobs included (they run under a daemon that keeps the environment it started with), and run `claude` from a new terminal; the desktop app doesn't read `.zshrc`. Copilot: quit VS Code completely and reopen it (or start `copilot` from a new terminal). Test with the MCP `list_workspaces` for `nathanjnorris-org`. Never put the token in settings.json, .mcp.json or a plugin file. Without it, registry tools still work; read runs with `plan-diff.sh`. |
 | tailscale skill (`.claude/skills/tailscale`, vendored) | Tailscale SSH / tailnet questions | `npx skills add https://github.com/tailscale/tailscale-skill` |
-| `tailscale-docs` MCP (`.mcp.json`) | Tailscale docs search | Optional; it often fails with ECONNRESET. Use the tailscale skill or WebFetch tailscale.com/docs. |
+| `tailscale-docs` MCP (`.mcp.json`) | Tailscale docs search | Optional; it often fails with ECONNRESET. Use the tailscale skill or fetch tailscale.com/docs. |
+| `copilot` CLI (optional) | Lets the doctor check Copilot's MCP view; Copilot CLI sessions | VS Code's Copilot chat runs the same runtime and doesn't need it. If the doctor says the folder is not trusted, start `copilot` in the repo once and trust it, or repo MCP, hooks and plugins are skipped. |
 
 The GitHub plugin's MCP server is not required. Use `gh` instead; that MCP usually fails with "Authorization header is
 badly formatted" unless a Copilot token is configured.

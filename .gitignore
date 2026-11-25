@@ -47,3 +47,6 @@ __pycache__/
 .claude/settings.local.json
 .claude/worktrees/
 .remember/
+
+# GitHub Copilot: per-machine overrides (shared config lives in .github/copilot/settings.json, .github/hooks/)
+.github/copilot/settings.local.json

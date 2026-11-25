@@ -35,6 +35,9 @@ jobs:
       - name: ShellCheck
         run: shellcheck deploy.sh setup.sh macvlan.sh scripts/*.sh
 
+      - name: Copilot permission hook tests
+        run: python3 -m unittest discover -s .github/hooks -p 'test_*.py'
+
       - name: Actionlint
         run: |
           # Pinned: the installer script and the binary are both fixed to this release, not whatever main holds today.

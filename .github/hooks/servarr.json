@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "bash .github/hooks/session-start.sh",
+        "cwd": ".",
+        "timeoutSec": 15
+      }
+    ],
+    "PreToolUse": [
+      {
+        "type": "command",
+        "bash": "python3 .github/hooks/permission-policy.py",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ]
+  }
+}

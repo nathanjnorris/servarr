@@ -12,8 +12,8 @@ every change reproducible from this repo.
 ## First thing on a new machine
 
 Run the `servarr-doctor` skill (`bash .claude/skills/servarr-doctor/scripts/doctor.sh`). Tell the user about every
-MISSING or warn item and how to fix it before doing maintenance work. The SessionStart hook runs its `--quick` mode
-automatically.
+MISSING or warn item and how to fix it before doing maintenance work. The session-start hooks (Claude Code and
+GitHub Copilot) run its `--quick` mode automatically.
 
 ## Hard rules (owner instructions; do not relax without explicit approval)
 
@@ -78,11 +78,33 @@ automatically.
 | `servarr-host` skill / `host-auditor` agent | live host health, diagnosis, post-deploy verification |
 | `servarr-cloudflare` skill | Cloudflare Terraform v5 changes and `cf` CLI verification |
 | `tailscale` skill (vendored, `skills-lock.json`) | tailnet, Tailscale SSH, GitHub Action `tag:gha` questions |
-| Terraform MCP (terraform plugin) | provider resource lookup before any config change. With `TFE_TOKEN` it also reads TFC workspaces, runs and plan logs, and **manages the `servarr` workspace** (see "Terraform Cloud workspace" below). Org-wide and run-starting tools are denied in `.claude/settings.json`. If a server upgrade adds a new write tool, decide which side it belongs on. |
+| Terraform MCP (terraform plugin) | provider resource lookup before any config change. With `TFE_TOKEN` it also reads TFC workspaces, runs and plan logs, and **manages the `servarr` workspace** (see "Terraform Cloud workspace" below). Org-wide and run-starting tools are denied in `.claude/settings.json` (Copilot enforces the same list through its hook). If a server upgrade adds a new write tool, decide which side it belongs on. |
 | Renovate MCP (`.mcp.json`, `npm i -g renovate-mcp`) | validate, lint and explain `renovate.json`. Never to run Renovate. |
 | `cf` CLI | read-only live Cloudflare checks (`cf cli search "<task>"` to discover commands) |
 | `gh` CLI | everything GitHub (the GitHub plugin's MCP server is not needed) |
 | `claude-md-management` plugin | keep this file current: update it in the same PR when a rule or workflow changes |
+
+## GitHub Copilot parity
+
+This file is the instruction file for **both** Claude Code and GitHub Copilot (VS Code chat, Copilot CLI and the
+cloud agent all read `CLAUDE.md`; there is deliberately no `AGENTS.md` copy). Every rule above applies to Copilot
+too. VS Code's Copilot harness and Copilot CLI share one runtime. Where each Claude piece lives for Copilot:
+
+| Claude Code | GitHub Copilot |
+| --- | --- |
+| `.claude/skills/*`, `.agents/skills/*` | read as-is (also by the cloud agent) |
+| `.claude/agents/host-auditor.md` | `.github/agents/host-auditor.agent.md`, a thin wrapper that loads the Claude file's body (single source) |
+| `.mcp.json` (Renovate, tailscale-docs) | read as-is locally (the folder must be trusted). Cloud agent: not read |
+| plugins in `.claude/settings.json` | `.github/copilot/settings.json` enables the same plugins (minus `security-guidance`) from `.github/plugin/marketplace.json`, which pins them to upstream commits. Copilot can't read `anthropics/claude-plugins-official` itself: one Claude-only entry makes it reject the whole file. Bump the `sha`s to update; Copilot doesn't auto-update them. |
+| `security-guidance` plugin | not enabled (it needs Anthropic credentials). Use Copilot's built-in `security-review` agent; AI Scan and CodeQL still gate PRs |
+| `permissions.allow` / `deny` | `.github/hooks/permission-policy.py` (PreToolUse) reads the **same** lists from `.claude/settings.json`: deny always wins, shell allows only apply to commands without shell operators. Edit the rules only in `.claude/settings.json` |
+| `tfc-workspace-guard.sh` hook | the same script, called from the Copilot policy hook (Copilot names the tools `terraform-<tool>`) |
+| SessionStart doctor hook | `.github/hooks/session-start.sh` (wraps the output as `additionalContext`) |
+
+Cloud agent: `.github/workflows/copilot-setup-steps.yml` preinstalls terraform, actionlint and renovate-mcp
+(shellcheck, gh, jq, docker are on the runner). It has no host SSH, no `cf` login, no Terraform Cloud token and a
+firewalled network, so it works like "any other machine" in rule 10. MCP servers beyond the plugins would need the
+repository's Copilot MCP setting (web UI only, owner); none is configured.
 
 ## Terraform Cloud workspace
 
@@ -92,10 +114,11 @@ the `servarr` workspace in org `nathanjnorris-org` (id `ws-XG6CTSfjg3x13dv6`) is
 - **Allowed, on `servarr` only:** `update_workspace` (settings such as the Terraform version), workspace variables
   (create, update, delete), workspace tags, lock/unlock. The org also holds `agentic-platform` and `tfc-agent`;
   never touch them.
-- **Enforced** by the PreToolUse hook `.claude/hooks/tfc-workspace-guard.sh`. It blocks any mutating Terraform MCP
+- **Enforced** by the PreToolUse hook `.claude/hooks/tfc-workspace-guard.sh` (Claude Code directly; Copilot through
+  `.github/hooks/permission-policy.py`). It blocks any mutating Terraform MCP
   call unless the org is `nathanjnorris-org` and the workspace is `servarr` (name or `ws-XG6CTSfjg3x13dv6`). It also
   blocks renames and fails closed on unknown argument shapes. Keep the hook if you change these tools.
-- **Denied in settings:**
+- **Denied in settings** (`.claude/settings.json`; the Copilot hook applies the same list):
   - `create_run`, `apply_run` and `action_run`. The workspace auto-applies, so a run would change Cloudflare and
     GitHub outside the PR and Plex-gated deploy path. Infrastructure changes stay PR → plan → merge → Deploy.
   - Creating or deleting workspaces, force-unlock, projects, teams, variable sets, policy sets and stacks.
@@ -123,6 +146,6 @@ the `servarr` workspace in org `nathanjnorris-org` (id `ws-XG6CTSfjg3x13dv6`) is
 - A bind mount of `docker.sock` with `:ro` does not restrict the Docker API, and even a read-only socket proxy exposes
   `GET /containers/<id>/json`, which includes every container's env, secrets included. That's why Kuma has no Docker
   access at all and uses direct health checks (`docs/HOST.md`).
-- Harness: a chained `sleep N && ...` is blocked. Wait with `run_in_background` until-loops. On macOS, `sed -i` needs
-  `''`.
+- Harness: a chained `sleep N && ...` is blocked. Wait with background until-loops (Claude Code `run_in_background`,
+  Copilot an `async` shell). On macOS, `sed -i` needs `''`.
 - AI Scan's repository scan has no schedule or API. Ask the owner to start it after significant security changes.

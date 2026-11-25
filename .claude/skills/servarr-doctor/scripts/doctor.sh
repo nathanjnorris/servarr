@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Checks that this machine has every tool, login and connection Claude needs to maintain servarr.
+# Checks that this machine has every tool, login and connection an agent (Claude Code or GitHub Copilot) needs to
+# maintain servarr.
 #   bash .claude/skills/servarr-doctor/scripts/doctor.sh          # full check (logins, network, host SSH)
-#   bash .claude/skills/servarr-doctor/scripts/doctor.sh --quick  # presence only, no network (SessionStart hook)
+#   bash .claude/skills/servarr-doctor/scripts/doctor.sh --quick  # presence only, no network (session-start hooks)
 # Read-only. Never prints a token. Exit 0 = all good, 1 = something is missing (the report says what and how to fix).
 set -u
 quick=false; [ "${1:-}" = "--quick" ] && quick=true
@@ -21,7 +22,7 @@ tool() { # name, why, install hint
 tool git        "everything"                                "xcode-select --install / apt install git"
 tool gh         "PRs, reviews, Actions, code scanning API"  "brew install gh && gh auth login"
 tool jq         "parsing gh/API output"                     "brew install jq"
-tool python3    "helper scripts"                            "brew install python"
+tool python3    "helper scripts, Copilot permission hook"   "brew install python"
 tool terraform  "fmt/validate locally (CI pins 1.17.2)"     "brew install hashicorp/tap/terraform"
 tool docker     "compose config check, terraform-docs image, Terraform MCP server" "Docker Desktop / OrbStack"
 tool shellcheck "Static checks parity"                      "brew install shellcheck"
@@ -78,7 +79,7 @@ else
   warn "ssh nathan@$HOST failed. Direct SSH only works from the owner's own machine (their personal SSH key is authorised on the host; never copy or commit it). Without it there is NO direct host access: inspect via workflow logs and ship every host change through a PR and the Deploy workflow"
 fi
 
-echo "== Claude Code extensions"
+echo "== Claude Code"
 if have claude; then
   mcp=$(claude mcp list 2>/dev/null)
   for s in renovate tailscale-docs terraform; do
@@ -94,7 +95,24 @@ if have claude; then
     if grep -q "$p@" <<<"$plugins"; then ok "plugin $p"; else miss "plugin $p: accept the plugin prompt from .claude/settings.json, or claude plugin install $p@<marketplace>"; fi
   done
 else
-  warn "claude CLI not on PATH: MCP servers and plugins could not be checked (run 'claude mcp list' and 'claude plugin list' by hand)"
+  warn "claude CLI not on PATH: Claude Code MCP servers and plugins not checked (fine if you only use GitHub Copilot)"
+fi
+
+echo "== GitHub Copilot"
+# VS Code's Copilot harness and Copilot CLI share one runtime and read the same repo files: .mcp.json, .claude/skills,
+# .github/agents, .github/hooks/servarr.json and .github/copilot/settings.json (plugins, incl. the Terraform MCP).
+if have copilot; then
+  cmcp=$(copilot mcp list 2>&1)
+  if grep -q 'not trusted' <<<"$cmcp"; then
+    warn "Copilot CLI does not trust this folder: repo MCP servers, hooks and plugins are skipped (start 'copilot' here once and trust it)"
+  else
+    for s in renovate tailscale-docs; do
+      if grep -qE "^[[:space:]]+$s " <<<"$cmcp"; then ok "Copilot MCP $s configured"; else warn "Copilot MCP $s not listed by 'copilot mcp list'"; fi
+    done
+  fi
+  ok "Copilot plugins (Terraform MCP, pr-review-toolkit, ...) install per session from .github/copilot/settings.json; check with /plugin in a session"
+else
+  warn "copilot CLI not on PATH: optional (VS Code's Copilot chat has the same runtime); npm i -g @github/copilot to check MCP from the shell"
 fi
 
 [ "$missing" = 0 ] && echo "All required tooling present." || echo "Fix the MISSING items above before maintaining servarr."

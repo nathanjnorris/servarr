@@ -1,0 +1,52 @@
+name: Copilot Setup Steps
+
+# Prepares the GitHub Copilot cloud agent's sandbox with the same CLIs a local session uses (servarr-doctor), so it can
+# run the servarr-ship validation suite. Runs on its own when this file changes, and by hand from the Actions tab.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+permissions:
+  contents: read
+
+jobs:
+  # Copilot only picks up a job with exactly this name.
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Terraform setup
+        uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4
+        with:
+          terraform_version: 1.17.2
+          terraform_wrapper: false
+
+      - name: Actionlint
+        run: |
+          # Same pinned installer and release as validate.yml. The installer needs the target directory to exist.
+          mkdir -p "$HOME/.local/bin"
+          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.12/scripts/download-actionlint.bash) 1.7.12 "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Renovate MCP server (config lint/explain only; never runs Renovate)
+        run: npm install --global renovate-mcp@2.2.1
+
+      - name: Tool check
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          terraform version
+          actionlint --version
+          shellcheck --version | head -2
+          command -v renovate-mcp gh jq python3 docker
+          bash .claude/skills/servarr-doctor/scripts/doctor.sh --quick || true

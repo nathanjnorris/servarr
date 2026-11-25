@@ -1,0 +1,60 @@
+{
+  "name": "servarr-plugins",
+  "owner": {
+    "name": "nathanjnorris"
+  },
+  "metadata": {
+    "description": "The Claude Code plugins servarr enables (.claude/settings.json), repackaged for GitHub Copilot. Copilot cannot read anthropics/claude-plugins-official directly: its marketplace.json has a Claude-only \"command\" source, and Copilot rejects the whole file. Pinned to exact commits."
+  },
+  "plugins": [
+    {
+      "name": "terraform",
+      "description": "HashiCorp Terraform MCP server (registry lookups; HCP Terraform tools with TFE_TOKEN).",
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official",
+        "path": "external_plugins/terraform",
+        "sha": "73c8cf3ea7e296057b467990f2f5d61b4c922260"
+      }
+    },
+    {
+      "name": "commit-commands",
+      "description": "Commit, push and PR slash commands.",
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official",
+        "path": "plugins/commit-commands",
+        "sha": "73c8cf3ea7e296057b467990f2f5d61b4c922260"
+      }
+    },
+    {
+      "name": "pr-review-toolkit",
+      "description": "PR review agents: code, tests, silent failures, comments, types, simplification.",
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official",
+        "path": "plugins/pr-review-toolkit",
+        "sha": "73c8cf3ea7e296057b467990f2f5d61b4c922260"
+      }
+    },
+    {
+      "name": "claude-md-management",
+      "description": "Audit and update CLAUDE.md, the instructions file Claude Code and Copilot both read.",
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official",
+        "path": "plugins/claude-md-management",
+        "sha": "73c8cf3ea7e296057b467990f2f5d61b4c922260"
+      }
+    },
+    {
+      "name": "superpowers",
+      "description": "Skills library: TDD, systematic debugging, planning, verification before completion.",
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers",
+        "sha": "22f0b463e7a5e579904dd6211a520321035526f7"
+      }
+    }
+  ]
+}

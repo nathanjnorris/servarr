@@ -1,0 +1,17 @@
+{
+  "extraKnownMarketplaces": {
+    "servarr-plugins": {
+      "source": {
+        "source": "directory",
+        "path": "."
+      }
+    }
+  },
+  "enabledPlugins": {
+    "terraform@servarr-plugins": true,
+    "commit-commands@servarr-plugins": true,
+    "pr-review-toolkit@servarr-plugins": true,
+    "claude-md-management@servarr-plugins": true,
+    "superpowers@servarr-plugins": true
+  }
+}
