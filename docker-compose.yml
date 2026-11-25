@@ -2,7 +2,7 @@ name: servarr
 services:
 # Media server  
   plex:
-    image: ghcr.io/linuxserver/plex:1.43.5.11079-b3b13e506-ls333
+    image: ghcr.io/linuxserver/plex:1.43.5.11079-b3b13e506-ls334
     container_name: plex
     environment:
       - PUID=13001
@@ -267,7 +267,7 @@ services:
     restart: always
 # Networking
   cloudflared:
-    image: cloudflare/cloudflared:2026.11.1
+    image: cloudflare/cloudflared:2026.11.2
     container_name: cloudflared
     command: tunnel run --protocol http2
     extra_hosts:
@@ -320,7 +320,7 @@ services:
     restart: always
 
   home-assistant:
-    image: ghcr.io/linuxserver/homeassistant:2026.11.2-ls267
+    image: ghcr.io/linuxserver/homeassistant:2026.11.3-ls268
     container_name: home-assistant
     network_mode: host
     environment:
