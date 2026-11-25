@@ -97,7 +97,7 @@ too. VS Code's Copilot harness and Copilot CLI share one runtime. Where each Cla
 | --- | --- |
 | `.claude/skills/*`, `.agents/skills/*` | read as-is (also by the cloud agent) |
 | `.claude/agents/host-auditor.md` | `.github/agents/host-auditor.agent.md`, a thin wrapper that loads the Claude file's body (single source) |
-| pr-review-toolkit `silent-failure-hunter` agent | upstream's frontmatter isn't valid YAML, so Copilot skips it and upstream takes no outside PRs. `.github/agents/silent-failure-hunter.agent.md` is a thin wrapper that loads the plugin file's body |
+| pr-review-toolkit `silent-failure-hunter` agent | upstream's frontmatter isn't valid YAML, so Copilot skips it and upstream takes no outside PRs. `.github/agents/silent-failure-hunter.agent.md` is a thin read-only wrapper that loads the installed plugin file's body (no remote fetch) |
 | `.mcp.json` (Renovate, tailscale-docs) | read as-is locally (the folder must be trusted). Cloud agent: not read |
 | plugins in `.claude/settings.json` | `.github/copilot/settings.json` enables the same plugins (minus `security-guidance`) from `.github/plugin/marketplace.json`, which pins them to upstream commits. Copilot can't read `anthropics/claude-plugins-official` itself: one Claude-only entry makes it reject the whole file. Renovate bumps the `sha`s in one grouped PR on the first of each month and automerges it (owner, 2026-11-25). |
 | `security-guidance` plugin | not enabled (it needs Anthropic credentials). Use Copilot's built-in `security-review` agent; AI Scan and CodeQL still gate PRs |
