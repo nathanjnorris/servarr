@@ -45,6 +45,13 @@
       "mcp__renovate__validate_config",
       "mcp__renovate__lint_config",
       "mcp__renovate__explain_config",
+      "mcp__renovate__preview_custom_manager",
+      "mcp__renovate__test_package_rules",
+      "mcp__renovate__explain_dependency",
+      "mcp__renovate__write_config",
+      "mcp__renovate__annotate_dry_run",
+      "mcp__renovate__dry_run_diff",
+      "mcp__renovate__dry_run",
       "mcp__plugin_terraform_terraform__list_terraform_orgs",
       "mcp__plugin_terraform_terraform__list_workspaces",
       "mcp__plugin_terraform_terraform__get_workspace_details",
@@ -123,6 +130,16 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/tfc-workspace-guard.sh\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__renovate__dry_run",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/renovate-guard.sh\"",
             "timeout": 10
           }
         ]

@@ -4,7 +4,8 @@
 Copilot has no repository-level allow/deny list, so the rules Claude Code enforces natively are enforced here, from the
 same file (single source of truth):
   - deny rules always win: Bash(...) command rules, Read(...) path rules (also applied to Grep/Glob), mcp__... rules;
-  - Terraform MCP calls (Copilot names them terraform-<tool>) then go through .claude/hooks/tfc-workspace-guard.sh;
+  - Terraform MCP calls (Copilot names them terraform-<tool>) then go through .claude/hooks/tfc-workspace-guard.sh,
+    and renovate-dry_run through .claude/hooks/renovate-guard.sh (local dry runs only);
   - allow rules auto-approve a call, but a shell command only when it has no shell operators (no chaining, pipes,
     substitution or redirection), so an approved prefix can't smuggle a second command in.
 Anything else gets no decision and falls through to Copilot's normal permission flow.
@@ -24,6 +25,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SETTINGS = os.path.join(ROOT, ".claude", "settings.json")
 GUARD = os.path.join(ROOT, ".claude", "hooks", "tfc-workspace-guard.sh")
+RENOVATE_GUARD = os.path.join(ROOT, ".claude", "hooks", "renovate-guard.sh")
 RULE = re.compile(r"^([A-Za-z_][\w-]*)(?:\((.*)\))?$", re.S)
 SHELL_SPLIT = re.compile(r"&&|\|\||\$\(|[;&|\n`()]")
 SHELL_OPERATORS = re.compile(r"[;&|`<>\n\r]|\$\(")
@@ -214,11 +216,12 @@ def main(raw):
         if denied(rule, tool, args):
             emit("deny", f"Denied by the .claude/settings.json rule {rule} (CLAUDE.md hard rules).")
 
-    if tool.startswith("terraform-"):
+    guard = GUARD if tool.startswith("terraform-") else RENOVATE_GUARD if tool == "renovate-dry_run" else None
+    if guard:
         payload = json.dumps({"tool_name": tool, "tool_input": args})
-        r = subprocess.run(["bash", GUARD], input=payload, capture_output=True, text=True, timeout=8, check=False)
+        r = subprocess.run(["bash", guard], input=payload, capture_output=True, text=True, timeout=8, check=False)
         if r.returncode != 0:
-            emit("deny", r.stderr.strip() or "tfc-workspace-guard blocked this call")
+            emit("deny", r.stderr.strip() or f"{os.path.basename(guard)} blocked this call")
 
     for rule in perms.get("allow", []):
         if allowed(rule, tool, args):

@@ -95,7 +95,7 @@ The hosted **Mend Renovate app** is the only updater (Dependency Dashboard: issu
 or with the user's token. Do not `gh pr update-branch` a Renovate PR; tick the rebase box on #192 instead.
 Minor/patch and GitHub Actions majors automerge (one per run, hourly). Terraform and Docker majors open PRs assigned to
 the owner. The Mend dashboard must stay at Silent mode OFF / Automated PRs ON (web-only setting). Use the Renovate
-MCP tools (`validate_config`, `lint_config`, `explain_config`, `test_package_rules`) for `renovate.json` edits.
+MCP tools (`validate_config`, `lint_config`, `explain_config`, `explain_dependency`, `test_package_rules`, and a local `dry_run` with `dryRunMode: lookup`) to diagnose and for `renovate.json` edits.
 
 ## Code scanning (CodeQL, Copilot AI Scan)
 

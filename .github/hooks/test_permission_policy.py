@@ -105,7 +105,20 @@ class ToolAliases(unittest.TestCase):
 class Mcp(unittest.TestCase):
     def test_renovate(self):
         self.assertEqual(decide({"tool_name": "renovate-validate_config", "tool_input": {}}), "allow")
-        self.assertIsNone(decide({"tool_name": "renovate-write_config", "tool_input": {}}))
+
+    def test_renovate_dry_run_local_allowed(self):
+        self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": "/x"}}), "allow")
+        self.assertEqual(decide({"tool_name": "renovate-dry_run",
+                                 "tool_input": {"repoPath": "/x", "platform": "local"}}), "allow")
+
+    def test_renovate_dry_run_remote_denied(self):
+        for extra in [{"platform": "github"}, {"platform": "gitlab"}, {"token": "x"}, {"repository": "a/b"},
+                      {"endpoint": "https://x"}]:
+            self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": "/x", **extra}}),
+                             "deny", extra)
+
+    def test_renovate_write_config_allowed(self):
+        self.assertEqual(decide({"tool_name": "renovate-write_config", "tool_input": {}}), "allow")
 
     def test_terraform(self):
         ws = {"terraform_org_name": "nathanjnorris-org", "workspace_name": "servarr"}

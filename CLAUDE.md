@@ -33,7 +33,10 @@ GitHub Copilot) run its `--quick` mode automatically.
 6. **Secrets**: never print or commit them. Set GitHub secrets from stdin. Tokens are secrets, never plain variables.
    Use purpose-named credentials. Leave `TF_API_TOKEN` (Actions and Dependabot copies) alone. Do not rotate the Kopia
    password: it is also the repository key. Keep `docs/SECRETS.md` dates current when anything rotates.
-7. **Renovate** (hosted Mend app) is the only updater. Never run Renovate yourself or with the user's token. Never
+7. **Renovate** (hosted Mend app) is the only updater. Never run Renovate against the repo or with anyone's token.
+   renovate-mcp's `dry_run` in **local mode** (no token, no PRs) is allowed for diagnosis (owner, 2026-11-25); the
+   PreToolUse guard `.claude/hooks/renovate-guard.sh` blocks remote runs (Claude Code directly, Copilot through
+   `.github/hooks/permission-policy.py`). Never
    `gh pr update-branch` a Renovate PR (use the rebase checkbox on Dependency Dashboard #192). Terraform and Docker
    majors are PRs assigned to `nathanjnorris`; minor/patch and GitHub Actions majors automerge. The "servarr deploy failed [HH:mm DD/MM/YY]" issue (Brisbane time) only @-mentions the owner, with no
    assignee: the owner assigns it, possibly to another account. Drift and secrets-expiry issues still mention and assign.
@@ -79,7 +82,7 @@ GitHub Copilot) run its `--quick` mode automatically.
 | `servarr-cloudflare` skill | Cloudflare Terraform v5 changes and `cf` CLI verification |
 | `tailscale` skill (vendored, `skills-lock.json`) | tailnet, Tailscale SSH, GitHub Action `tag:gha` questions |
 | Terraform MCP (terraform plugin) | provider resource lookup before any config change. With `TFE_TOKEN` it also reads TFC workspaces, runs and plan logs, and **manages the `servarr` workspace** (see "Terraform Cloud workspace" below). Org-wide and run-starting tools are denied in `.claude/settings.json` (Copilot enforces the same list through its hook). If a server upgrade adds a new write tool, decide which side it belongs on. |
-| Renovate MCP (`.mcp.json`, `npm i -g renovate-mcp`) | validate, lint and explain `renovate.json`. Never to run Renovate. |
+| Renovate MCP (`.mcp.json`, `npm i -g renovate-mcp`) | validate, lint and explain `renovate.json`, and diagnose updates with a local `dry_run` (`dryRunMode: lookup`). Never a remote run (blocked by `renovate-guard.sh`). |
 | `cf` CLI | read-only live Cloudflare checks (`cf cli search "<task>"` to discover commands) |
 | `gh` CLI | everything GitHub (the GitHub plugin's MCP server is not needed) |
 | `claude-md-management` plugin | keep this file current: update it in the same PR when a rule or workflow changes |
