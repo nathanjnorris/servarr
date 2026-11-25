@@ -8,9 +8,10 @@ HOOK = os.path.join(os.path.dirname(os.path.abspath(__file__)), "permission-poli
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def decide(event):
+def decide(event, env=None):
     raw = event if isinstance(event, str) else json.dumps(event)
-    r = subprocess.run([sys.executable, HOOK], input=raw, capture_output=True, text=True, timeout=20)
+    r = subprocess.run([sys.executable, HOOK], input=raw, capture_output=True, text=True, timeout=20,
+                       env={**os.environ, **(env or {})})
     assert r.returncode == 0, r.stderr
     return json.loads(r.stdout).get("permissionDecision")
 
@@ -116,6 +117,16 @@ class Mcp(unittest.TestCase):
                       {"endpoint": "https://x"}]:
             self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": "/x", **extra}}),
                              "deny", extra)
+
+    def test_renovate_dry_run_host_rules_denied(self):
+        rules = [{"matchHost": "ghcr.io", "token": "x"}]
+        self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": "/x", "hostRules": rules}}),
+                         "deny")
+
+    def test_renovate_dry_run_ambient_remote_platform_denied(self):
+        ev = {"tool_name": "renovate-dry_run", "tool_input": {"repoPath": "/x"}}
+        self.assertEqual(decide(ev, {"RENOVATE_PLATFORM": "github"}), "deny")
+        self.assertEqual(decide(ev, {"RENOVATE_PLATFORM": "local"}), "allow")
 
     def test_renovate_write_config_allowed(self):
         self.assertEqual(decide({"tool_name": "renovate-write_config", "tool_input": {}}), "allow")
