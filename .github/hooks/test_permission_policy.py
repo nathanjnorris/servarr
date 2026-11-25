@@ -108,25 +108,29 @@ class Mcp(unittest.TestCase):
         self.assertEqual(decide({"tool_name": "renovate-validate_config", "tool_input": {}}), "allow")
 
     def test_renovate_dry_run_local_allowed(self):
-        self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": "/x"}}), "allow")
+        self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": ROOT}}), "allow")
         self.assertEqual(decide({"tool_name": "renovate-dry_run",
-                                 "tool_input": {"repoPath": "/x", "platform": "local"}}), "allow")
+                                 "tool_input": {"repoPath": ROOT, "platform": "local"}}), "allow")
 
     def test_renovate_dry_run_remote_denied(self):
         for extra in [{"platform": "github"}, {"platform": "gitlab"}, {"token": "x"}, {"repository": "a/b"},
                       {"endpoint": "https://x"}]:
-            self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": "/x", **extra}}),
+            self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": ROOT, **extra}}),
                              "deny", extra)
 
     def test_renovate_dry_run_host_rules_denied(self):
         rules = [{"matchHost": "ghcr.io", "token": "x"}]
-        self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": "/x", "hostRules": rules}}),
+        self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": ROOT, "hostRules": rules}}),
                          "deny")
 
     def test_renovate_dry_run_ambient_remote_platform_denied(self):
-        ev = {"tool_name": "renovate-dry_run", "tool_input": {"repoPath": "/x"}}
+        ev = {"tool_name": "renovate-dry_run", "tool_input": {"repoPath": ROOT}}
         self.assertEqual(decide(ev, {"RENOVATE_PLATFORM": "github"}), "deny")
         self.assertEqual(decide(ev, {"RENOVATE_PLATFORM": "local"}), "allow")
+
+    def test_renovate_dry_run_outside_repo_denied(self):
+        for path in [os.path.expanduser("~/.ssh"), "/", os.path.dirname(ROOT), os.path.join(ROOT, ".."), ""]:
+            self.assertEqual(decide({"tool_name": "renovate-dry_run", "tool_input": {"repoPath": path}}), "deny", path)
 
     def test_renovate_write_config_allowed(self):
         self.assertEqual(decide({"tool_name": "renovate-write_config", "tool_input": {}}), "allow")
