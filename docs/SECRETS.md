@@ -39,6 +39,7 @@ re-confirmed. Names are the exact secret or variable names.
 | `HOME_ASSISTANT_DNS_TOKEN` | GitHub Actions | Home Assistant DNS challenge | provider dashboard; `gh secret set` | 2027-11-15 |
 | `GLUETUN_PRIVATE_KEY`, `GLUETUN_PRESHARED_KEY`, `GLUETUN_WIREGUARD_ADDRESS`, `GLUETUN_PORT` | GitHub Actions and TFC (`gluetun_*`) | VPN for qBittorrent | generate a new WireGuard config at the VPN provider, set all four in both stores | 2027-10-18 |
 | `KOPIA_PASSWORD` | GitHub Actions and TFC (`kopia_password`) | backup repository password | **do not rotate casually**: changing it needs `kopia repository change-password`, otherwise backups become unreadable | 2027-04-01 |
+| `CLOUDFLARE_API_TOKEN_READONLY` (account token `servarr-readonly-agents`) | GitHub Actions and GitHub Agents (`--app agents`) | read-only Cloudflare checks by agents (Copilot cloud agent, SRE workflows) | `cf accounts tokens create` with the same read-only policies (see `NON_TERRAFORM_CONFIG.md`), pipe the value into `gh secret set CLOUDFLARE_API_TOKEN_READONLY` and again with `--app agents`, then delete the old token. Expires on the date shown. | 2027-11-25 |
 
 ## App-level credentials (not in GitHub)
 

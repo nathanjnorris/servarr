@@ -33,7 +33,7 @@ jobs:
         run: docker compose config --quiet
 
       - name: ShellCheck
-        run: shellcheck deploy.sh setup.sh macvlan.sh scripts/*.sh
+        run: shellcheck deploy.sh setup.sh macvlan.sh scripts/*.sh .claude/hooks/*.sh .github/hooks/*.sh
 
       - name: Copilot permission hook tests
         run: python3 -m unittest discover -s .github/hooks -p 'test_*.py'

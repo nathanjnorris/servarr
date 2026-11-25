@@ -33,7 +33,10 @@ GitHub Copilot) run its `--quick` mode automatically.
 6. **Secrets**: never print or commit them. Set GitHub secrets from stdin. Tokens are secrets, never plain variables.
    Use purpose-named credentials. Leave `TF_API_TOKEN` (Actions and Dependabot copies) alone. Do not rotate the Kopia
    password: it is also the repository key. Keep `docs/SECRETS.md` dates current when anything rotates.
-7. **Renovate** (hosted Mend app) is the only updater. Never run Renovate yourself or with the user's token. Never
+7. **Renovate** (hosted Mend app) is the only updater. Never run Renovate against the repo or with anyone's token.
+   renovate-mcp's `dry_run` in **local mode** (no token, no PRs) is allowed for diagnosis (owner, 2026-11-25); the
+   PreToolUse guard `.claude/hooks/renovate-guard.sh` blocks remote runs (Claude Code directly, Copilot through
+   `.github/hooks/permission-policy.py`). Never
    `gh pr update-branch` a Renovate PR (use the rebase checkbox on Dependency Dashboard #192). Terraform and Docker
    majors are PRs assigned to `nathanjnorris`; minor/patch and GitHub Actions majors automerge. The "servarr deploy failed [HH:mm DD/MM/YY]" issue (Brisbane time) only @-mentions the owner, with no
    assignee: the owner assigns it, possibly to another account. Drift and secrets-expiry issues still mention and assign.
@@ -79,7 +82,7 @@ GitHub Copilot) run its `--quick` mode automatically.
 | `servarr-cloudflare` skill | Cloudflare Terraform v5 changes and `cf` CLI verification |
 | `tailscale` skill (vendored, `skills-lock.json`) | tailnet, Tailscale SSH, GitHub Action `tag:gha` questions |
 | Terraform MCP (terraform plugin) | provider resource lookup before any config change. With `TFE_TOKEN` it also reads TFC workspaces, runs and plan logs, and **manages the `servarr` workspace** (see "Terraform Cloud workspace" below). Org-wide and run-starting tools are denied in `.claude/settings.json` (Copilot enforces the same list through its hook). If a server upgrade adds a new write tool, decide which side it belongs on. |
-| Renovate MCP (`.mcp.json`, `npm i -g renovate-mcp`) | validate, lint and explain `renovate.json`. Never to run Renovate. |
+| Renovate MCP (`.mcp.json`, `npm i -g renovate-mcp`) | validate, lint and explain `renovate.json`, and diagnose updates with a local `dry_run` (`dryRunMode: lookup`). Never a remote run (blocked by `renovate-guard.sh`). |
 | `cf` CLI | read-only live Cloudflare checks (`cf cli search "<task>"` to discover commands) |
 | `gh` CLI | everything GitHub (the GitHub plugin's MCP server is not needed) |
 | `claude-md-management` plugin | keep this file current: update it in the same PR when a rule or workflow changes |
@@ -94,17 +97,19 @@ too. VS Code's Copilot harness and Copilot CLI share one runtime. Where each Cla
 | --- | --- |
 | `.claude/skills/*`, `.agents/skills/*` | read as-is (also by the cloud agent) |
 | `.claude/agents/host-auditor.md` | `.github/agents/host-auditor.agent.md`, a thin wrapper that loads the Claude file's body (single source) |
+| pr-review-toolkit `silent-failure-hunter` agent | not available: upstream's frontmatter isn't valid YAML, so Copilot skips it, and upstream takes no outside PRs. A wrapper that loaded the plugin file was dropped (#232 review: unverified plugin text steering file reads). Use Copilot's `code-review` agent or the other pr-review-toolkit agents; it reappears by itself when upstream fixes the YAML |
 | `.mcp.json` (Renovate, tailscale-docs) | read as-is locally (the folder must be trusted). Cloud agent: not read |
-| plugins in `.claude/settings.json` | `.github/copilot/settings.json` enables the same plugins (minus `security-guidance`) from `.github/plugin/marketplace.json`, which pins them to upstream commits. Copilot can't read `anthropics/claude-plugins-official` itself: one Claude-only entry makes it reject the whole file. Bump the `sha`s to update; Copilot doesn't auto-update them. |
+| plugins in `.claude/settings.json` | `.github/copilot/settings.json` enables the same plugins (minus `security-guidance`) from `.github/plugin/marketplace.json`, which pins them to upstream commits. Copilot can't read `anthropics/claude-plugins-official` itself: one Claude-only entry makes it reject the whole file. Renovate bumps the `sha`s in one grouped PR on the first of each month and automerges it (owner, 2026-11-25). |
 | `security-guidance` plugin | not enabled (it needs Anthropic credentials). Use Copilot's built-in `security-review` agent; AI Scan and CodeQL still gate PRs |
 | `permissions.allow` / `deny` | `.github/hooks/permission-policy.py` (PreToolUse) reads the **same** lists from `.claude/settings.json`: deny always wins, shell allows only apply to commands without shell operators. Edit the rules only in `.claude/settings.json` |
 | `tfc-workspace-guard.sh` hook | the same script, called from the Copilot policy hook (Copilot names the tools `terraform-<tool>`) |
 | SessionStart doctor hook | `.github/hooks/session-start.sh` (wraps the output as `additionalContext`) |
 
 Cloud agent: `.github/workflows/copilot-setup-steps.yml` preinstalls terraform, actionlint and renovate-mcp
-(shellcheck, gh, jq, docker are on the runner). It has no host SSH, no `cf` login, no Terraform Cloud token and a
-firewalled network, so it works like "any other machine" in rule 10. MCP servers beyond the plugins would need the
-repository's Copilot MCP setting (web UI only, owner); none is configured.
+(shellcheck, gh, jq, docker are on the runner). It has no host SSH and no Terraform Cloud token (it reads plans from
+the PR flow). Its network is firewalled, so it works like "any other machine" in rule 10. For Cloudflare it has the
+read-only `CLOUDFLARE_API_TOKEN_READONLY` Agents secret (use the API with it; `cf` login isn't available). Its
+firewall allowlist and its Renovate MCP config are web-only repo settings, listed in `docs/NON_TERRAFORM_CONFIG.md`.
 
 ## Terraform Cloud workspace
 
