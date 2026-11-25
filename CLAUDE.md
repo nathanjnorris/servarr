@@ -105,9 +105,10 @@ too. VS Code's Copilot harness and Copilot CLI share one runtime. Where each Cla
 | SessionStart doctor hook | `.github/hooks/session-start.sh` (wraps the output as `additionalContext`) |
 
 Cloud agent: `.github/workflows/copilot-setup-steps.yml` preinstalls terraform, actionlint and renovate-mcp
-(shellcheck, gh, jq, docker are on the runner). It has no host SSH, no `cf` login, no Terraform Cloud token and a
-firewalled network, so it works like "any other machine" in rule 10. MCP servers beyond the plugins would need the
-repository's Copilot MCP setting (web UI only, owner); none is configured.
+(shellcheck, gh, jq, docker are on the runner). It has no host SSH and no Terraform Cloud token (it reads plans from
+the PR flow). Its network is firewalled, so it works like "any other machine" in rule 10. For Cloudflare it has the
+read-only `CLOUDFLARE_API_TOKEN_READONLY` Agents secret (use the API with it; `cf` login isn't available). Its
+firewall allowlist and its Renovate MCP config are web-only repo settings, listed in `docs/NON_TERRAFORM_CONFIG.md`.
 
 ## Terraform Cloud workspace
 
