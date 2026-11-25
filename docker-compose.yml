@@ -340,7 +340,7 @@ services:
     restart: always
 
   traefik-home-assistant:
-    image: traefik:v3.7.19
+    image: traefik:v3.8.0
     container_name: traefik-home-assistant
     network_mode: host
     command:
