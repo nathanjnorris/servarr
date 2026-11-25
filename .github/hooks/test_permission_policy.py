@@ -48,6 +48,15 @@ class Bash(unittest.TestCase):
     def test_camel_case_string_args(self):
         self.assertEqual(decide({"toolName": "Bash", "toolArgs": "{\"command\":\"git log --oneline -3\"}"}), "allow")
 
+    def test_quoted_text_is_not_a_command(self):
+        self.assertIsNone(bash('git commit -q -m "build(renovate): track pins"'))
+        self.assertIsNone(bash("gh pr create --title 'fix: (renovate) x' --body 'npx renovate is banned'"))
+
+    def test_command_substitution_denied(self):
+        for cmd in ['echo "$(git add -A)"', "echo `git add -A`", 'bash -c "echo hi; git add -A"',
+                    "git commit -m \"$(npx renovate --dry-run)\""]:
+            self.assertEqual(bash(cmd), "deny", cmd)
+
 
 class Paths(unittest.TestCase):
     def test_env_reads_denied(self):

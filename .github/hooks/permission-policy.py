@@ -17,6 +17,7 @@ import fnmatch
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 
@@ -26,9 +27,12 @@ GUARD = os.path.join(ROOT, ".claude", "hooks", "tfc-workspace-guard.sh")
 RULE = re.compile(r"^([A-Za-z_][\w-]*)(?:\((.*)\))?$", re.S)
 SHELL_SPLIT = re.compile(r"&&|\|\||\$\(|[;&|\n`()]")
 SHELL_OPERATORS = re.compile(r"[;&|`<>\n\r]|\$\(")
-# Leading words that run the rest of the segment as a command: "bash -c 'git add -A'" must still hit the deny rules.
-WRAPPER = re.compile(r"^(?:(?:ba|z|da|k)?sh\s+(?:-\w+\s+)*|eval\s+|exec\s+|command\s+|nohup\s+|time\s+"
-                     r"|xargs\s+(?:-\S+\s+)*|sudo\s+(?:-\S+\s+)*|env\s+(?:-\S+\s+)*|\w+=\S*\s+)")
+SUBSTITUTION = re.compile(r"\$\(([^()]*)\)|`([^`]*)`")
+SHELLS = {"sh", "bash", "zsh", "dash", "ksh"}
+PASS_THROUGH = {"exec", "command", "nohup", "time", "builtin"}
+FLAG_ARGS = {"sudo": {"-u", "-g", "-C", "-h", "-p", "-D", "-r", "-t", "-U"},
+             "xargs": {"-I", "-n", "-L", "-P", "-d", "-s", "-E", "-a"},
+             "env": {"-u", "-C", "-S"}}
 READ_LIKE = ("Read", "Grep", "Glob")
 
 
@@ -62,13 +66,60 @@ def segments(command):
     return [s.strip() for s in SHELL_SPLIT.split(command) if s.strip()]
 
 
-def unwrapped_segments(command):
-    """Segments with quotes removed and wrapper words (bash -c, eval, sudo, env, ...) stripped from the front."""
+def _strip_wrappers(words, depth):
+    """Drop leading words that just run the rest (sudo, env, VAR=x, xargs, ...). A shell -c or eval string is parsed
+    as its own command line. Returns (remaining words, nested commands)."""
+    nested = []
+    while words:
+        w = os.path.basename(words[0])
+        if w in SHELLS:
+            i = 1
+            while i < len(words) and words[i].startswith("-"):
+                if "c" in words[i][1:] and i + 1 < len(words):
+                    return [], nested + executed_commands(words[i + 1], depth + 1)
+                i += 1
+            words = words[i:]
+        elif w == "eval":
+            return [], nested + executed_commands(" ".join(words[1:]), depth + 1)
+        elif w in PASS_THROUGH:
+            words = words[1:]
+        elif w in FLAG_ARGS:
+            i = 1
+            while i < len(words) and (words[i].startswith("-") or (w == "env" and "=" in words[i])):
+                i += 2 if words[i] in FLAG_ARGS[w] else 1
+            words = words[i:]
+        elif re.match(r"^[A-Za-z_]\w*=", words[0]):
+            words = words[1:]
+        else:
+            break
+    return words, nested
+
+
+def executed_commands(command, depth=0):
+    """Every simple command the shell would run, as space-joined words: quoted text stays one word (so a commit
+    message mentioning "renovate" is not a renovate command), while sh -c / eval strings, $(...) and `...` are parsed
+    too. Falls back to the quote-blind splitter if the line can't be tokenised."""
+    if depth > 5:
+        return []
     out = []
-    for seg in segments(re.sub(r"[\"'\\]", "", command)):
-        while (m := WRAPPER.match(seg)) and m.end() < len(seg):
-            seg = seg[m.end():].lstrip()
-        out.append(seg)
+    for m in SUBSTITUTION.finditer(command):
+        out += executed_commands(m.group(1) if m.group(1) is not None else m.group(2), depth + 1)
+    try:
+        lex = shlex.shlex(command, posix=True, punctuation_chars=";&|()")
+        lex.whitespace_split = True
+        tokens = list(lex)
+    except ValueError:
+        return out + segments(re.sub(r"[\"'\\]", "", command))
+    current = []
+    for tok in tokens + [";"]:
+        if tok and set(tok) <= set(";&|()"):
+            words, nested = _strip_wrappers(current, depth)
+            out += nested
+            if words:
+                out.append(" ".join(words))
+            current = []
+        else:
+            current.append(tok)
     return out
 
 
@@ -103,7 +154,7 @@ def denied(rule, tool, args):
         return True
     if tool == "Bash":
         command = str(args.get("command", ""))
-        candidates = [command, *segments(command), *unwrapped_segments(command)]
+        candidates = [command, *executed_commands(command)]
         return any(bash_matches(content, c) for c in candidates)
     if tool in READ_LIKE:
         return any(path_matches(content, p, tool == "Glob") for p in tool_paths(tool, args))
