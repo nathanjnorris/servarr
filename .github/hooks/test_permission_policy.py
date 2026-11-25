@@ -45,6 +45,16 @@ class Bash(unittest.TestCase):
                     "time bash -c \"tailscale up\""]:
             self.assertEqual(bash(cmd), "deny", cmd)
 
+    def test_package_runners_denied(self):
+        for cmd in ["npx --yes renovate --dry-run", "npx -y renovate@latest", "npx -p renovate renovate",
+                    "npm exec -- renovate", "npm x renovate", "pnpm dlx renovate", "pnpm exec renovate",
+                    "yarn dlx renovate", "bunx renovate", "/usr/local/bin/renovate --dry-run",
+                    "./node_modules/.bin/renovate", "env -i npx --yes renovate"]:
+            self.assertEqual(bash(cmd), "deny", cmd)
+
+    def test_other_npx_tools_not_denied(self):
+        self.assertIsNone(bash("npx --yes prettier --check ."))
+
     def test_camel_case_string_args(self):
         self.assertEqual(decide({"toolName": "Bash", "toolArgs": "{\"command\":\"git log --oneline -3\"}"}), "allow")
 

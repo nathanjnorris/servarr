@@ -32,7 +32,11 @@ SHELLS = {"sh", "bash", "zsh", "dash", "ksh"}
 PASS_THROUGH = {"exec", "command", "nohup", "time", "builtin"}
 FLAG_ARGS = {"sudo": {"-u", "-g", "-C", "-h", "-p", "-D", "-r", "-t", "-U"},
              "xargs": {"-I", "-n", "-L", "-P", "-d", "-s", "-E", "-a"},
-             "env": {"-u", "-C", "-S"}}
+             "env": {"-u", "-C", "-S"},
+             "npx": {"-p", "--package", "--cache", "--userconfig"},
+             "bunx": {"-p", "--package"}}
+# Package runners: "<runner> <sub> [flags] <tool>" runs <tool>, so "pnpm dlx renovate" is a renovate command.
+RUNNER_SUBCOMMANDS = {"npm": {"exec", "x"}, "pnpm": {"dlx", "exec"}, "yarn": {"dlx", "exec"}}
 READ_LIKE = ("Read", "Grep", "Glob")
 
 
@@ -81,6 +85,12 @@ def _strip_wrappers(words, depth):
             words = words[i:]
         elif w == "eval":
             return [], nested + executed_commands(" ".join(words[1:]), depth + 1)
+        elif w in ("npx", "bunx") and "-c" in words[1:2]:
+            return [], nested + executed_commands(" ".join(words[2:]), depth + 1)
+        elif w in RUNNER_SUBCOMMANDS and len(words) > 1 and words[1] in RUNNER_SUBCOMMANDS[w]:
+            words = ["npx"] + words[2:]
+        elif w == "--":
+            words = words[1:]
         elif w in PASS_THROUGH:
             words = words[1:]
         elif w in FLAG_ARGS:
@@ -116,7 +126,9 @@ def executed_commands(command, depth=0):
             words, nested = _strip_wrappers(current, depth)
             out += nested
             if words:
-                out.append(" ".join(words))
+                # "/usr/local/bin/renovate" and "renovate@latest" are the renovate command too.
+                head = re.sub(r"^((?:@[^/@]+/)?[^@]+)@.*$", r"\1", os.path.basename(words[0]))
+                out.append(" ".join([head, *words[1:]]))
             current = []
         else:
             current.append(tok)
