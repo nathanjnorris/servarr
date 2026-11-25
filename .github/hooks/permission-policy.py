@@ -11,7 +11,7 @@ Anything else gets no decision and falls through to Copilot's normal permission 
 
 Registered as the PascalCase "PreToolUse" event in .github/hooks/servarr.json, so the input uses Claude-style field
 and tool names (tool_name "Bash"/"Read"/..., tool_input). MCP tools keep Copilot's <server>-<tool> runtime name.
-Errors: Terraform MCP calls fail closed (deny); everything else fails open to the normal permission prompt.
+Errors (malformed input, unreadable settings, a crash) deny the call: the hook fails closed, like Claude Code.
 """
 import fnmatch
 import json
@@ -26,6 +26,9 @@ GUARD = os.path.join(ROOT, ".claude", "hooks", "tfc-workspace-guard.sh")
 RULE = re.compile(r"^([A-Za-z_][\w-]*)(?:\((.*)\))?$", re.S)
 SHELL_SPLIT = re.compile(r"&&|\|\||\$\(|[;&|\n`()]")
 SHELL_OPERATORS = re.compile(r"[;&|`<>\n\r]|\$\(")
+# Leading words that run the rest of the segment as a command: "bash -c 'git add -A'" must still hit the deny rules.
+WRAPPER = re.compile(r"^(?:(?:ba|z|da|k)?sh\s+(?:-\w+\s+)*|eval\s+|exec\s+|command\s+|nohup\s+|time\s+"
+                     r"|xargs\s+(?:-\S+\s+)*|sudo\s+(?:-\S+\s+)*|env\s+(?:-\S+\s+)*|\w+=\S*\s+)")
 READ_LIKE = ("Read", "Grep", "Glob")
 
 
@@ -59,15 +62,29 @@ def segments(command):
     return [s.strip() for s in SHELL_SPLIT.split(command) if s.strip()]
 
 
-def path_matches(pattern, path):
+def unwrapped_segments(command):
+    """Segments with quotes removed and wrapper words (bash -c, eval, sudo, env, ...) stripped from the front."""
+    out = []
+    for seg in segments(re.sub(r"[\"'\\]", "", command)):
+        while (m := WRAPPER.match(seg)) and m.end() < len(seg):
+            seg = seg[m.end():].lstrip()
+        out.append(seg)
+    return out
+
+
+def path_matches(pattern, path, glob=False):
     rel = os.path.relpath(os.path.realpath(os.path.join(ROOT, path)), os.path.realpath(ROOT))
-    return fnmatch.fnmatchcase(rel, pattern[2:] if pattern.startswith("./") else pattern)
+    pattern = pattern[2:] if pattern.startswith("./") else pattern
+    # A Glob pattern is itself a wildcard: it is denied if it could match a denied path, e.g. ".env*" vs ".env".
+    return fnmatch.fnmatchcase(rel, pattern) or (glob and fnmatch.fnmatchcase(pattern, rel))
 
 
-def tool_paths(args):
+def tool_paths(tool, args):
     paths = [args.get("file_path"), args.get("path")]
     extra = args.get("paths")
     paths += extra if isinstance(extra, list) else [extra]
+    if tool == "Glob":
+        paths.append(args.get("pattern"))
     return [p for p in paths if isinstance(p, str) and p]
 
 
@@ -79,16 +96,17 @@ def denied(rule, tool, args):
     if kind.startswith("mcp__"):
         return tool in (kind, mcp_runtime_name(kind))
     if kind == "Read" and tool in READ_LIKE:
-        return content is None or any(path_matches(content, p) for p in tool_paths(args))
+        return content is None or any(path_matches(content, p, tool == "Glob") for p in tool_paths(tool, args))
     if kind != tool:
         return False
     if content is None:
         return True
     if tool == "Bash":
         command = str(args.get("command", ""))
-        return bash_matches(content, command) or any(bash_matches(content, s) for s in segments(command))
+        candidates = [command, *segments(command), *unwrapped_segments(command)]
+        return any(bash_matches(content, c) for c in candidates)
     if tool in READ_LIKE:
-        return any(path_matches(content, p) for p in tool_paths(args))
+        return any(path_matches(content, p, tool == "Glob") for p in tool_paths(tool, args))
     return False
 
 
@@ -105,7 +123,7 @@ def allowed(rule, tool, args):
         command = str(args.get("command", ""))
         return not SHELL_OPERATORS.search(command) and bash_matches(content, command)
     if tool in READ_LIKE:
-        paths = tool_paths(args)
+        paths = tool_paths(tool, args)
         return bool(paths) and all(path_matches(content, p) for p in paths)
     return False
 
@@ -144,8 +162,7 @@ if __name__ == "__main__":
     raw = sys.stdin.read()
     try:
         main(raw)
-    except Exception as e:  # noqa: BLE001 - report every failure, then decide fail-closed or fail-open
+    except Exception as e:  # noqa: BLE001 - any failure denies, like Claude Code's own deny rules would
         print(f"permission-policy: {type(e).__name__}: {e}", file=sys.stderr)
-        if '"terraform-' in raw:
-            emit("deny", f"permission-policy hook error ({type(e).__name__}); Terraform MCP calls fail closed")
-        emit()
+        emit("deny", f"permission-policy hook error ({type(e).__name__}); failing closed. Fix .github/hooks or "
+                     ".claude/settings.json before continuing.")
