@@ -357,7 +357,7 @@ services:
     restart: always
 
   matter-server:
-    image: ghcr.io/matter-js/matterjs-server:1.6.0
+    image: ghcr.io/matter-js/matterjs-server:1.6.1
     container_name: matter-server
     network_mode: host
     security_opt:
